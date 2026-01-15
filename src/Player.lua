@@ -16,7 +16,7 @@ function player:init()
   self.jump_vertical = -4.4 -- -3.6
   self.jump_vertical_small = -2.4
 
-  self.on_plate = false
+  self.on_plat= false
   self.alive = true
 
   self.last_landed_y = 120
@@ -33,7 +33,7 @@ function player:jump()
     jump = self.jump_vertical_small
   end
   self.vy = jump
-  self.on_plate = false
+  self.on_plat= false
 end
 
 function player:shoot(dx, dy)
@@ -112,9 +112,10 @@ function player:update(plats_ref, cam_y)
   if self.x < -self.width then self.x = 128 end
   if self.x > 128 then self.x = -self.width end
 
-  -- one-way landings (einmal prüfen, mit gültigem prev_y)
-  self.on_plate = false
-  local landed_y = plats_ref:check_landing(self, prev_y)
+    -- one-way landings (einmal prüfen, mit gültigem prev_y)
+    selon_platt = false
+    local landed_y = plats_ref:check_landing(self, prev_y)
+
   if landed_y then
     self.last_landed_y = landed_y
     if landed_y < self.best_landed_y then
