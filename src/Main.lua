@@ -9,8 +9,7 @@ function _init()
   poke(0x5f2d, 1) -- keyboard input enable
   cartdata("doodlejump_hs")
   cam:init()
-  plats.diff = game.diff
-  plats:init()
+  plats = PlatformManager.new(game.diff)
   player:init()
 
   game.state = "menu"
@@ -20,8 +19,7 @@ end
 
 function reset_game()
   cam:init()
-  plats.diff = game.diff
-  plats:init()
+  plats = PlatformManager.new(game.diff)
   player:init()
 
   game.state="play"
