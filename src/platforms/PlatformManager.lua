@@ -55,19 +55,30 @@ function PlatformManager.new(diff)
     return self
 end
 
-function PlatformManager:add_platform(pos_x, pos_y, width, is_ground)
-    add(self.list, {
-        pos_x = pos_x,
-        pos_y = pos_y,
-        width = width,
-        height = 4,
-        ground = is_ground or false,
-        is_dead = false,                     -- für BreakablePlatform später
-        on_land = function(p, player) end -- default: nichts tun
-    })
+--function PlatformManager:add_platform(pos_x, pos_y, width, is_ground)
+--    add(self.list, {
+--        pos_x = pos_x,
+--        pos_y = pos_y,
+--        width = width,
+--        height = 4,
+--        ground = is_ground or false,
+--        is_dead = false,                     -- für BreakablePlatform später
+--        on_land = function(p, player) end -- default: nichts tun
+--    })
+--    if pos_y < self.highest_pos_y then
+--        self.highest_pos_y = pos_y
+--    end
+--end
+
+function PlatformManager:add_platform(kind, pos_x, pos_y, width, is_ground)
+    local plat = PlatformFactory.create(kind or "default", pos_x, pos_y, width)
+    plat.ground = is_ground or false
+    add(self.list, plat)
+
     if pos_y < self.highest_pos_y then
         self.highest_pos_y = pos_y
     end
+
 end
 
 -- difficulty: je höher, desto weniger / weiter auseinander
