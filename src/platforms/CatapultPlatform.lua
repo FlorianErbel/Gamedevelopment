@@ -13,8 +13,8 @@ CatapultPlatform.__index = CatapultPlatform
 ---Constructor
 ---@param name string
 ---@return CatapultPlatform
-function CatapultPlatform.new(x, y, w)
-    local self = Platform.new(x, y, w)
+function CatapultPlatform.new(pos_x, pos_y, width)
+    local self = Platform.new(pos_x, pos_y, width)
     self.boost = -6.8
     return setmetatable(self, CatapultPlatform)
 end
