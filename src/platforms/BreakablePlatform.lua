@@ -13,11 +13,10 @@ BreakablePlatform.__index = BreakablePlatform
 ---Constructor
 ---@param name string
 ---@return BreakablePlatform
----function BreakablePlatform.new(name)
----local self = setmetatable({}, BreakablePlatform)
----self.name = name or "BreakablePlatform"
---- return self
----end
+function BreakablePlatform.new(pos_x, pos_y, width)
+    local self = Platform.new(pos_x, pos_y, width)
+    return setmetatable(self, BreakablePlatform)
+end
 
 function BreakablePlatform:on_land(player)
     self.is_dead = true
