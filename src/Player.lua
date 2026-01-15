@@ -52,7 +52,7 @@ function player:update_shots(cam_y)
   for i=#self.shots,1,-1 do
     local s = self.shots[i]
     s.x = s.x + s.vx
-    s.y = s.x +s.vy
+    s.y = s.y +s.vy
     s.life = s.life - 1
 
     -- screen bounds in world coords
