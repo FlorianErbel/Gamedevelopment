@@ -14,7 +14,7 @@ catapultPlatform.__index = catapultPlatform
 ---@return catapultPlatform
 function catapultPlatform.new(name)
     local self = setmetatable({}, catapultPlatform)
-    self.name = name or "jumpPlatform"
+    self.name = name or "catapultPlatform"
     return self
 end
 

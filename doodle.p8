@@ -1,13 +1,13 @@
 pico-8 cartridge // http://www.pico-8.com
 version 42
 __lua__
-#include src/util.lua
-#include src/camera.lua
-#include src/platforms/platform.lua
-#include src/platforms/breakablePlatform.lua
-#include src/platforms/catapultPlatform.lua
-#include src/player.lua
-#include src/main.lua
+#include src/Util.lua
+#include src/Camera.lua
+#include src/platforms/Platform.lua
+#include src/platforms/BreakablePlatform.lua
+#include src/platforms/CatapultPlatform.lua
+#include src/Player.lua
+#include src/Main.lua
 
 __gfx__
 __label__
