@@ -22,5 +22,3 @@ end
 function CatapultPlatform:on_land(player)
     player.vy = self.boost
 end
-
----return CatapultPlatform

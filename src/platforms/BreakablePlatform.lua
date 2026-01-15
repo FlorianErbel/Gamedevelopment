@@ -26,5 +26,3 @@ end
 function BreakablePlatform:draw()
     rectfill(self.x, self.y, self.x + self.w - 1, self.y + self.h - 1, 8)
 end
-
----return BreakablePlatform

@@ -17,5 +17,3 @@ function DefaultPlatform.new(x, y, w)
     local self = Platform.new(x, y, w)
     return setmetatable(self, DefaultPlatform)
 end
-
----return DefaultPlatform

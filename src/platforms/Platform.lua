@@ -34,5 +34,3 @@ function Platform:draw()
     rectfill(self.x, self.y, self.x + self.w - 1, self.y + self.h - 1, 11)
     rect(self.x, self.y, self.x + self.w - 1, self.y + self.h - 1, 3)
 end
-
----return Platform

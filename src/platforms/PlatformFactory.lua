@@ -27,5 +27,3 @@ function PlatformFactory.create(kind, x, y, w)
         return BreakablePlatform.new(x, y, w)
     end
 end
-
----return PlatformFactory
