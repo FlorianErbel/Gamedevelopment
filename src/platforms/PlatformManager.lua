@@ -19,7 +19,7 @@ function PlatformManager:init(diff)
     self.last_pos_x = nil
 
     -- ground
-    self:add(-64, 120, 256, true)
+    self:add_platform(-64, 120, 256, true)
 
     -- startplattformen
     local y = 104
@@ -45,7 +45,7 @@ function PlatformManager.new(diff)
     self.highest_pos_y = 112
     self.last_pos_x = nil
 
-    self:add(-64, 120, 256, true)
+    self:add_platform(-64, 120, 256, true)
 
     local y = 104
     for i = 1, 14 do
@@ -55,7 +55,7 @@ function PlatformManager.new(diff)
     return self
 end
 
-function PlatformManager:add(pos_x, pos_y, width, is_ground)
+function PlatformManager:add_platform(pos_x, pos_y, width, is_ground)
     add(self.list, {
         pos_x = pos_x,
         pos_y = pos_y,
@@ -140,7 +140,7 @@ function PlatformManager:spawn_platform(at_pos_y, easy)
     new_pos_x = clamp(new_pos_x, 0, 128 - width)
 
     self.last_pos_x = new_pos_x + width / 2
-    self:add(new_pos_x, at_pos_y, width, false)
+    self:add_platform(new_pos_x, at_pos_y, width, false)
 end
 
 function PlatformManager:update(camera_pos_y)
