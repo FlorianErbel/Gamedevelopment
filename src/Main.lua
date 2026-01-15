@@ -55,13 +55,13 @@ function _update60()
     end
 
 
-    player:update(plats, cam.y)
+    player:update(plats, cam.pos_y)
 
     -- kamera folgt (nur nach oben)
     cam:update(player)
 
     -- plattformen nachspawnen abhängig von kamera
-    plats:update(cam.y)
+    plats:update(cam.pos_y)
 
     -- höhe messen: je kleiner player.y, desto höher
     -- baseline ist start bei ~100..120 => wir nehmen 120 als null
@@ -72,7 +72,7 @@ function _update60()
 
     -- gameover: fällt unter unteren screenrand
     -- unterer sichtbarer rand in welt: cam.y + 128
-    if player.pos_y > cam.y + 140 then
+    if player.pos_y > cam.pos_y + 140 then
         game.state = "over"
         player.is_alive = false
         local hs = load_hs(game.diff)
