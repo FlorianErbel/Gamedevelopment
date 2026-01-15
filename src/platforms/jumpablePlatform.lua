@@ -1,21 +1,21 @@
 ---
---- jumpPlatform class
+--- jumpablePlatform class
 --- Created by florianerbel
 --- DateTime: 15.01.26 12:36
 ---
 
----@class jumpPlatform
+---@class jumpablePlatform
 ---@field public name string
-local jumpPlatform = {}
-jumpPlatform.__index = jumpPlatform
+local jumpablePlatform = {}
+jumpablePlatform.__index = jumpablePlatform
 
 ---Constructor
 ---@param name string
----@return jumpPlatform
-function jumpPlatform.new(name)
-    local self = setmetatable({}, jumpPlatform)
+---@return jumpablePlatform
+function jumpablePlatform.new(name)
+    local self = setmetatable({}, jumpablePlatform)
     self.name = name or "jumpPlatform"
     return self
 end
 
-return jumpPlatform
+return jumpablePlatform
