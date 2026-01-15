@@ -51,9 +51,9 @@ end
 function player:update_shots(cam_y)
   for i=#self.shots,1,-1 do
     local s = self.shots[i]
-    s.x += s.vx
-    s.y += s.vy
-    s.life -= 1
+    s.x = s.x + s.vx
+    s.y = s.x +s.vy
+    s.life = s.life - 1
 
     -- screen bounds in world coords
     local left = 0
@@ -83,8 +83,8 @@ function player:update(plats_ref, cam_y)
 
   -- input
   local ax = 0
-  if btn(0) then ax -= self.move_acc end -- left
-  if btn(1) then ax += self.move_acc end -- right
+  if btn(0) then ax = ax - self.move_acc end -- left
+  if btn(1) then ax = ax + self.move_acc end -- right
 
   self.vx = self.vx + ax
   self.vx = clamp(self.vx, -self.max_vx, self.max_vx)
@@ -99,14 +99,14 @@ function player:update(plats_ref, cam_y)
 
 
   -- luftwiderstand
-  self.vx *= 0.90
+  self.vx = self.vx * 0.90
 
   -- gravity
-  self.vy += self.g
+  self.vy = self.vy + self.g
 
   -- move
-  self.x += self.vx
-  self.y += self.vy
+  self.x = self.x + self.vx
+  self.y = self.y + self.vy
 
   -- wrap-around
   if self.x < -self.width then self.x = 128 end
