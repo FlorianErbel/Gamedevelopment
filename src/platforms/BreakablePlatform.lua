@@ -14,9 +14,9 @@ BreakablePlatform.__index = BreakablePlatform
 ---@param name string
 ---@return BreakablePlatform
 ---function BreakablePlatform.new(name)
-    ---local self = setmetatable({}, BreakablePlatform)
-    ---self.name = name or "BreakablePlatform"
-   --- return self
+---local self = setmetatable({}, BreakablePlatform)
+---self.name = name or "BreakablePlatform"
+--- return self
 ---end
 
 function BreakablePlatform:on_land(player)
@@ -26,6 +26,5 @@ end
 function BreakablePlatform:draw()
     rectfill(self.x, self.y, self.x + self.w - 1, self.y + self.h - 1, 8)
 end
-
 
 ---return BreakablePlatform

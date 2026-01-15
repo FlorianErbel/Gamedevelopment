@@ -15,16 +15,16 @@ Platform.__index = Platform
 ---@return Platform
 function Platform.new(name)
     local self = setmetatable({}, Platform)
-      self.x = x
-      self.y = y
-      self.w = w
-      self.h = 4
-      self.dead = false
-      return self
+    self.x = x
+    self.y = y
+    self.w = w
+    self.h = 4
+    self.dead = false
+    return self
 end
 
 function Platform:on_land(player)
-  -- Default: nichts
+    -- Default: nichts
 end
 
 function Platform:update()
