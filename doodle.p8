@@ -3,7 +3,9 @@ version 42
 __lua__
 #include src/util.lua
 #include src/camera.lua
-#include src/platforms.lua
+#include src/platforms/platform.lua
+#include src/platforms/breakablePlatform.lua
+#include src/platforms/jumpablePlatform.lua
 #include src/player.lua
 #include src/main.lua
 
