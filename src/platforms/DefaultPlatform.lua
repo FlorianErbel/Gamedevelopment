@@ -13,7 +13,7 @@ DefaultPlatform.__index = DefaultPlatform
 ---Constructor
 ---@param name string
 ---@return DefaultPlatform
-function DefaultPlatform.new(x, y, w)
-    local self = Platform.new(x, y, w)
+function DefaultPlatform.new(pos_x, pos_y, width)
+    local self = Platform.new(pos_x, pos_y, width)
     return setmetatable(self, DefaultPlatform)
 end
