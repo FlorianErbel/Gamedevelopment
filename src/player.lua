@@ -3,8 +3,8 @@ player = {}
 function player:init()
   self.x = 64
   self.y = 100
-  self.w = 6
-  self.h = 8
+  self.width = 6
+  self.height = 8
 
   self.vx = 0
   self.vy = 0
@@ -13,10 +13,10 @@ function player:init()
   self.move_acc = 0.35
   self.max_vx = 1.8
 
-  self.jump_v = -4.4 -- -3.6
-  self.jump_v_small = -2.4
+  self.jump_vertical = -4.4 -- -3.6
+  self.jump_vertical_small = -2.4
 
-  self.on_plat = false
+  self.on_plate = false
   self.alive = true
 
   self.last_landed_y = 120
@@ -28,19 +28,19 @@ function player:init()
 end
 
 function player:jump()
-  local j = self.jump_v
+  local jump = self.jump_vertical
   if btn(3) then -- down
-    j = self.jump_v_small
+    jump = self.jump_vertical_small
   end
-  self.vy = j
-  self.on_plat = false
+  self.vy = jump
+  self.on_plate = false
 end
 
 function player:shoot(dx, dy)
   local sp = self.shot_speed
   add(self.shots, {
-    x = self.x + self.w/2,
-    y = self.y + self.h/2,
+    x = self.x + self.width/2,
+    y = self.y + self.height/2,
     vx = dx * sp,
     vy = dy * sp,
     life = 60
@@ -109,11 +109,11 @@ function player:update(plats_ref, cam_y)
   self.y += self.vy
 
   -- wrap-around
-  if self.x < -self.w then self.x = 128 end
-  if self.x > 128 then self.x = -self.w end
+  if self.x < -self.width then self.x = 128 end
+  if self.x > 128 then self.x = -self.width end
 
   -- one-way landings (einmal prüfen, mit gültigem prev_y)
-  self.on_plat = false
+  self.on_plate = false
   local landed_y = plats_ref:check_landing(self, prev_y)
   if landed_y then
     self.last_landed_y = landed_y
@@ -129,7 +129,7 @@ end
 function player:draw()
   self:draw_shots()
   -- einfache figur: body + augen
-  rectfill(self.x, self.y, self.x+self.w-1, self.y+self.h-1, 7)
+  rectfill(self.x, self.y, self.x+self.width-1, self.y+self.height-1, 7)
   pset(self.x+1, self.y+2, 0)
   pset(self.x+4, self.y+2, 0)
 end
