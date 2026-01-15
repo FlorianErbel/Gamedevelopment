@@ -15,6 +15,8 @@ BreakablePlatform.__index = BreakablePlatform
 ---@return BreakablePlatform
 function BreakablePlatform.new(pos_x, pos_y, width)
     local self = Platform.new(pos_x, pos_y, width)
+    self.fill_color = 4
+    self.border_color = 5
     return setmetatable(self, BreakablePlatform)
 end
 
@@ -23,5 +25,5 @@ function BreakablePlatform:on_land(player)
 end
 
 function BreakablePlatform:draw()
-    rectfill(self.pos_x, self.pos_y, self.pos_x + self.width - 1, self.pos_y + self.height - 1, 8)
+    rectfill(self.pos_x, self.pos_y, self.pos_x + self.width - 1, self.pos_y + self.height - 1, self.fill_color)
 end
