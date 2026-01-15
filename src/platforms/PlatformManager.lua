@@ -20,7 +20,7 @@ function PlatformManager:init(diff)
 
     -- ground
     --self:add_platform(-64, 120, 256, true)
-    self:add_platform("starting", -64, 120, 256, true)
+    self:add_platform("default", -64, 120, 256, true)
 
     -- startplattformen
     local y = 104
@@ -40,7 +40,7 @@ function PlatformManager.new(diff)
     self.highest_pos_y = 112
     self.last_pos_x = nil
 
-    self:add_platform("starting", -64, 120, 256, true)
+    self:add_platform("default", -64, 120, 256, true)
 
     local y = 104
     for i = 1, 14 do
