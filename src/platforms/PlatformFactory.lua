@@ -25,7 +25,7 @@ function PlatformFactory.create(kind, pos_x, pos_y, width)
         return CatapultPlatform.new(pos_x, pos_y, width)
     elseif kind == "breakable" then
         return BreakablePlatform.new(pos_x, pos_y, width)
-    elseif kind == "starting" then
-        return StartingPlatform.new(pos_x, pos_y, width)
+    elseif kind == "ground" then
+        return GroundPlatform.new(pos_x, pos_y, width)
     end
 end
