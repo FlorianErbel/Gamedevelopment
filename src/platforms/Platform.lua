@@ -13,7 +13,7 @@ Platform.__index = Platform
 ---Constructor
 ---@param name string
 ---@return Platform
-function Platform.new(name)
+function Platform.new(pos_x, pos_y, width)
     local self = setmetatable({}, Platform)
     self.pos_x = pos_x
     self.pos_y = pos_y
