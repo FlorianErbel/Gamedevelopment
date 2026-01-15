@@ -5,9 +5,10 @@ __lua__
 #include src/Camera.lua
 #include src/platforms/Platform.lua
 #include src/platforms/DefaultPlatform.lua
-#include src/platforms/PlatformManager.lua
 #include src/platforms/BreakablePlatform.lua
 #include src/platforms/CatapultPlatform.lua
+#include src/platforms/PlatformFactory.lua
+#include src/platforms/PlatformManager.lua
 #include src/Player.lua
 #include src/Main.lua
 
