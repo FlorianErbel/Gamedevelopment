@@ -9,7 +9,7 @@ end
 -- 20% von 128 ≈ 26
 function cam:update(player)
     local target_screen_pos_y = 90
-    local desired = player.best_landed_y - target_screen_pos_y
+    local desired = player.best_landed_pos_y - target_screen_pos_y
 
     if desired < self.target_pos_y then
         self.target_pos_y = desired
