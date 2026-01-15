@@ -6,7 +6,6 @@
 ---@field jump_v number
 ---@field g number
 local PlatformManager = {}
-PlatformManager.__index = PlatformManager
 
 function PlatformManager.new(diff)
     local self = setmetatable({}, PlatformManager)
