@@ -19,7 +19,7 @@ function plats:init()
     local y = 104
   for i=1,14 do
     self:spawn_platform(y, true) -- easy start
-    y -= 10
+    y = y - 10
   end
 end
 
