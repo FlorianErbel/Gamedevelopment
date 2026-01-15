@@ -32,12 +32,6 @@ end
 
 function PlatformManager.new(diff)
     local self = setmetatable({}, PlatformManager)
-    self:init(diff)
-    return self
-end
-
-function PlatformManager.new(diff)
-    local self = setmetatable({}, PlatformManager)
 
     self.diff = diff or 1
     self.jump_vertical = 4.4
@@ -46,7 +40,7 @@ function PlatformManager.new(diff)
     self.highest_pos_y = 112
     self.last_pos_x = nil
 
-    self:add_platform(-64, 120, 256, true)
+    self:add_platform("default", -64, 120, 256, true)
 
     local y = 104
     for i = 1, 14 do
@@ -56,24 +50,10 @@ function PlatformManager.new(diff)
     return self
 end
 
---function PlatformManager:add_platform(pos_x, pos_y, width, is_ground)
---    add(self.list, {
---        pos_x = pos_x,
---        pos_y = pos_y,
---        width = width,
---        height = 4,
---        ground = is_ground or false,
---        is_dead = false,                     -- für BreakablePlatform später
---        on_land = function(p, player) end -- default: nichts tun
---    })
---    if pos_y < self.highest_pos_y then
---        self.highest_pos_y = pos_y
---    end
---end
-
 function PlatformManager:add_platform(kind, pos_x, pos_y, width, is_ground)
     local plat = PlatformFactory.create(kind or "default", pos_x, pos_y, width)
-    plat.ground = is_ground or false
+
+    plat.is_ground = is_ground or false
     add(self.list, plat)
 
     if pos_y < self.highest_pos_y then
@@ -131,28 +111,6 @@ function PlatformManager:max_per_level(easy)
     if self.diff == 2 then return 2 end
     return 1
 end
-
---function PlatformManager:spawn_platform(at_pos_y, easy)
---    local height = max(0, 120 - at_pos_y)
---
---    local width
---    if easy then
---        width = 34
---    else
---        width = clamp(28 - flr(height / 90) * 4, 12, 28)
---    end
---
---    local ax = self.last_pos_x or 64
---    local dx = self:get_dx_reach(at_pos_y, easy)
---
----- new_pos_x vorher x
---    local new_pos_x = flr(rnd(dx * 2 + 1) + (ax - dx))
---    new_pos_x = (new_pos_x % 128 + 128) % 128
---    new_pos_x = clamp(new_pos_x, 0, 128 - width)
---
---    self.last_pos_x = new_pos_x + width / 2
---    self:add_platform(new_pos_x, at_pos_y, width, false)
---end
 
 function PlatformManager:spawn_platform(at_pos_y, easy)
     local height = max(0, 120 - at_pos_y)
