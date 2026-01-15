@@ -132,6 +132,28 @@ function PlatformManager:max_per_level(easy)
     return 1
 end
 
+--function PlatformManager:spawn_platform(at_pos_y, easy)
+--    local height = max(0, 120 - at_pos_y)
+--
+--    local width
+--    if easy then
+--        width = 34
+--    else
+--        width = clamp(28 - flr(height / 90) * 4, 12, 28)
+--    end
+--
+--    local ax = self.last_pos_x or 64
+--    local dx = self:get_dx_reach(at_pos_y, easy)
+--
+---- new_pos_x vorher x
+--    local new_pos_x = flr(rnd(dx * 2 + 1) + (ax - dx))
+--    new_pos_x = (new_pos_x % 128 + 128) % 128
+--    new_pos_x = clamp(new_pos_x, 0, 128 - width)
+--
+--    self.last_pos_x = new_pos_x + width / 2
+--    self:add_platform(new_pos_x, at_pos_y, width, false)
+--end
+
 function PlatformManager:spawn_platform(at_pos_y, easy)
     local height = max(0, 120 - at_pos_y)
 
@@ -145,13 +167,22 @@ function PlatformManager:spawn_platform(at_pos_y, easy)
     local ax = self.last_pos_x or 64
     local dx = self:get_dx_reach(at_pos_y, easy)
 
--- new_pos_x vorher x
     local new_pos_x = flr(rnd(dx * 2 + 1) + (ax - dx))
     new_pos_x = (new_pos_x % 128 + 128) % 128
     new_pos_x = clamp(new_pos_x, 0, 128 - width)
-
     self.last_pos_x = new_pos_x + width / 2
-    self:add_platform(new_pos_x, at_pos_y, width, false)
+
+    local kind = "default"
+    if not easy then
+        local r = rnd()
+        if r < 0.2 then
+            kind = "catapult"
+        elseif r < 0.35 then
+            kind = "breakable"
+        end
+    end
+
+    self:add_platform(kind, new_pos_x, at_pos_y, width, false)
 end
 
 function PlatformManager:update(camera_pos_y)
