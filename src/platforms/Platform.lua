@@ -15,11 +15,11 @@ Platform.__index = Platform
 ---@return Platform
 function Platform.new(name)
     local self = setmetatable({}, Platform)
-    self.x = x
-    self.y = y
-    self.w = w
-    self.h = 4
-    self.dead = false
+    self.pos_x = pos_x
+    self.pos_y = pos_y
+    self.width = width
+    self.height = 4
+    self.is_dead = false
     return self
 end
 
@@ -28,9 +28,10 @@ function Platform:on_land(player)
 end
 
 function Platform:update()
+    -- Default: nichts
 end
 
 function Platform:draw()
-    rectfill(self.x, self.y, self.x + self.w - 1, self.y + self.h - 1, 11)
-    rect(self.x, self.y, self.x + self.w - 1, self.y + self.h - 1, 3)
+    rectfill(self.pos_x, self.pos_y, self.pos_x + self.width - 1, self.pos_y + self.height - 1, 11)
+    rect(self.pos_x, self.pos_y, self.pos_x + self.width - 1, self.pos_y + self.height - 1, 3)
 end
