@@ -4,6 +4,7 @@ __lua__
 #include src/Util.lua
 #include src/Camera.lua
 #include src/platforms/Platform.lua
+#include src/platforms/StartingPlatform.lua
 #include src/platforms/DefaultPlatform.lua
 #include src/platforms/BreakablePlatform.lua
 #include src/platforms/CatapultPlatform.lua
