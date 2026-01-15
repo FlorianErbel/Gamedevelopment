@@ -20,6 +20,8 @@ function Platform.new(pos_x, pos_y, width)
     self.width = width
     self.height = 4
     self.is_dead = false
+    self.fill_color = 11
+    self.border_color = 3
     return self
 end
 
@@ -32,6 +34,6 @@ function Platform:update()
 end
 
 function Platform:draw()
-    rectfill(self.pos_x, self.pos_y, self.pos_x + self.width - 1, self.pos_y + self.height - 1, 11)
-    rect(self.pos_x, self.pos_y, self.pos_x + self.width - 1, self.pos_y + self.height - 1, 3)
+    rectfill(self.pos_x, self.pos_y, self.pos_x + self.width - 1, self.pos_y + self.height - 1, self.fill_color)
+    rect(self.pos_x, self.pos_y, self.pos_x + self.width - 1, self.pos_y + self.height - 1, self.border_color)
 end
