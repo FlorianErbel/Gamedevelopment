@@ -75,55 +75,56 @@ function player:draw_shots()
   end
 end
 
-
 function player:update(plats_ref, cam_y)
-  if not self.alive then return end
+    if not self.alive then return end
 
-  local prev_y = self.y
+    local prev_y = self.y
+    local landed_plat = plats_ref:check_landing(self, prev_y)
 
-  -- input
-  local ax = 0
-  if btn(0) then ax = ax - self.move_acc end -- left
-  if btn(1) then ax = ax + self.move_acc end -- right
+    -- input
+    local ax = 0
+    if btn(0) then ax = ax - self.move_acc end -- left
+    if btn(1) then ax = ax + self.move_acc end -- right
 
-  self.vx = self.vx + ax
-  self.vx = clamp(self.vx, -self.max_vx, self.max_vx)
+    self.vx = self.vx + ax
+    self.vx = clamp(self.vx, -self.max_vx, self.max_vx)
 
-  -- shoot only while holding UP
-  if btn(2) then
-    if btnp(2) then self:shoot( 0,-1) end -- up shoots up
-    if btnp(3) then self:shoot( 0, 1) end -- down shoots down
-    if btnp(0) then self:shoot(-1, 0) end -- left shoots left
-    if btnp(1) then self:shoot( 1, 0) end -- right shoots right
-  end
+    -- shoot only while holding UP
+    if btn(2) then
+        if btnp(2) then self:shoot(0, -1) end -- up shoots up
+        if btnp(3) then self:shoot(0, 1) end  -- down shoots down
+        if btnp(0) then self:shoot(-1, 0) end -- left shoots left
+        if btnp(1) then self:shoot(1, 0) end  -- right shoots right
+    end
 
 
-  -- luftwiderstand
-  self.vx = self.vx * 0.90
+    -- luftwiderstand
+    self.vx = self.vx * 0.90
 
-  -- gravity
-  self.vy = self.vy + self.g
+    -- gravity
+    self.vy = self.vy + self.g
 
-  -- move
-  self.x = self.x + self.vx
-  self.y = self.y + self.vy
+    -- move
+    self.x = self.x + self.vx
+    self.y = self.y + self.vy
 
-  -- wrap-around
-  if self.x < -self.width then self.x = 128 end
-  if self.x > 128 then self.x = -self.width end
+    -- wrap-around
+    if self.x < -self.width then self.x = 128 end
+    if self.x > 128 then self.x = -self.width end
 
     -- one-way landings (einmal prüfen, mit gültigem prev_y)
     selon_platt = false
-    local landed_y = plats_ref:check_landing(self, prev_y)
+    local landed_plat = plats_ref:check_landing(self, prev_y)
 
-  if landed_y then
-    self.last_landed_y = landed_y
-    if landed_y < self.best_landed_y then
-      self.best_landed_y = landed_y
+    if landed_plat then
+        self.last_landed_y = landed_plat.y
+        if landed_plat.y < self.best_landed_y then
+            self.best_landed_y = landed_plat.y
+        end
+        self:jump()
     end
-    self:jump() -- doodlejump: direkt wieder hoch
-  end
-  self:update_shots(cam_y)
+
+    self:update_shots(cam_y)
 end
 
 
