@@ -20,9 +20,9 @@ BreakablePlatform.__index = BreakablePlatform
 ---end
 
 function BreakablePlatform:on_land(player)
-    self.dead = true
+    self.is_dead = true
 end
 
 function BreakablePlatform:draw()
-    rectfill(self.x, self.y, self.x + self.w - 1, self.y + self.h - 1, 8)
+    rectfill(self.pos_x, self.pos_y, self.pos_x + self.width - 1, self.pos_y + self.height - 1, 8)
 end
