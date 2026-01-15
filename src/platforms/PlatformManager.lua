@@ -193,9 +193,9 @@ function PlatformManager:draw()
         if plat.ground then
             rectfill(plat.pos_x, plat.pos_y, plat.pos_x + plat.width - 1, plat.pos_y + plat.height - 1, 5)
         else
-            rectfill(plat.pos_x, plat.pos_y, plat.pos_x + plat.width - 1, plat.pos_y + plat.height - 1, 11)
+            rectfill(plat.pos_x, plat.pos_y, plat.pos_x + plat.width - 1, plat.pos_y + plat.height - 1, plat.fill_color)
             -- kleine kanten
-            rect(plat.pos_x, plat.pos_y, plat.pos_x + plat.width - 1, plat.pos_y + plat.height - 1, 3)
+            rect(plat.pos_x, plat.pos_y, plat.pos_x + plat.width - 1, plat.pos_y + plat.height - 1, plat.border_color)
         end
     end
 end
