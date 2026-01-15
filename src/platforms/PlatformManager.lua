@@ -194,10 +194,9 @@ function PlatformManager:update(camera_y)
   -- alte plattformen weit unter dem bildschirm entfernen
   for i=#self.list,1,-1 do
     local p = self.list[i]
-    if p.y > camera_y + 200 then
-      del(self.list, p)
-    end
+    if p.dead then del(self.list, p) end
   end
+
 end
 
 function PlatformManager:draw()
@@ -214,31 +213,19 @@ end
 
 -- one-way collision: nur wenn player von oben kommt (fallend) und über der plattform war
 function PlatformManager:check_landing(player, prev_y)
-  if player.vy <= 0 then return false end -- nur beim fallen (vy positiv)
-  local px = player.x
-  local py = player.y
-  local pw = player.w
-  local ph = player.h
+  if player.vy <= 0 then return false end
 
-  -- player "füße"
-  local foot_y_prev = prev_y + ph
-  local foot_y_now  = py + ph
+  local foot_prev = prev_y + player.h
+  local foot_now  = player.y + player.h
 
   for p in all(self.list) do
-    -- x-overlap
-    if px+pw > p.x and px < p.x+p.w then
-      local plat_y = p.y
-
-      -- war vorher über der plattform und ist jetzt drunter/gleich => landen
-      if foot_y_prev <= plat_y and foot_y_now >= plat_y then
-        -- auf plattform setzen
-        player.y = plat_y - ph
+    if player.x+player.w > p.x and player.x < p.x+p.w then
+      if foot_prev <= p.y and foot_now >= p.y then
+        player.y = p.y - player.h
         player.vy = 0
-     --   player.on_plat = true
-        return p.y
+        p:on_land(player)
+        return p
       end
     end
   end
-
-  return false
 end

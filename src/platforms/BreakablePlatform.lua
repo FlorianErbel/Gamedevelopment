@@ -1,21 +1,31 @@
 ---
---- breakablePlatform class
+--- BreakablePlatform class
 --- Created by florianerbel
---- DateTime: 15.01.26 12:36
+--- DateTime: 15.01.26 16:04
 ---
 
----@class breakablePlatform
+---@class BreakablePlatform
 ---@field public name string
-local breakablePlatform = {}
-breakablePlatform.__index = breakablePlatform
+local BreakablePlatform = {}
+BreakablePlatform = setmetatable({}, Platform)
+BreakablePlatform.__index = BreakablePlatform
 
 ---Constructor
 ---@param name string
----@return breakablePlatform
-function breakablePlatform.new(name)
-    local self = setmetatable({}, breakablePlatform)
-    self.name = name or "breakablePlatform"
-    return self
+---@return BreakablePlatform
+---function BreakablePlatform.new(name)
+    ---local self = setmetatable({}, BreakablePlatform)
+    ---self.name = name or "BreakablePlatform"
+   --- return self
+---end
+
+function BreakablePlatform:on_land(player)
+    self.dead = true
 end
 
-return breakablePlatform
+function BreakablePlatform:draw()
+    rectfill(self.x, self.y, self.x + self.w - 1, self.y + self.h - 1, 8)
+end
+
+
+---return BreakablePlatform

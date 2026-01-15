@@ -1,21 +1,26 @@
 ---
---- catapultPlatform class
+--- CatapultPlatform class
 --- Created by florianerbel
---- DateTime: 15.01.26 12:36
+--- DateTime: 15.01.26 16:00
 ---
 
----@class catapultPlatform
+---@class CatapultPlatform
 ---@field public name string
-local catapultPlatform = {}
-catapultPlatform.__index = catapultPlatform
+local CatapultPlatform = {}
+CatapultPlatform = setmetatable({}, Platform)
+CatapultPlatform.__index = CatapultPlatform
 
 ---Constructor
 ---@param name string
----@return catapultPlatform
-function catapultPlatform.new(name)
-    local self = setmetatable({}, catapultPlatform)
-    self.name = name or "catapultPlatform"
-    return self
+---@return CatapultPlatform
+function CatapultPlatform.new(x, y, w)
+    local self = Platform.new(x, y, w)
+    self.boost = -6.8
+    return setmetatable(self, CatapultPlatform)
 end
 
-return catapultPlatform
+function CatapultPlatform:on_land(player)
+    player.vy = self.boost
+end
+
+---return CatapultPlatform
