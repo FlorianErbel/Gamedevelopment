@@ -78,7 +78,6 @@ function PlatformManager:add_platform(kind, pos_x, pos_y, width, is_ground)
     if pos_y < self.highest_pos_y then
         self.highest_pos_y = pos_y
     end
-
 end
 
 -- difficulty: je höher, desto weniger / weiter auseinander
@@ -104,7 +103,7 @@ function PlatformManager:get_reach_factor(at_pos_y, easy)
     local height = max(0, 120 - at_pos_y)
 
     -- alle ~80px höhe ein +5% step
-    local step = flr(height / 80) -- 0,1,2,...
+    local step = flr(height / 80)     -- 0,1,2,...
     local factor = 0.60 + step * 0.05 -- 0.60, 0.65, 0.70, ...
     return clamp(factor, 0.60, 0.90)
 end
@@ -247,7 +246,7 @@ function PlatformManager:check_landing(player, previous_pos_y)
     if player.vy <= 0 then return false end
 
     local foot_previous = previous_pos_y + player.height
-    local foot_now  = player.pos_y + player.height
+    local foot_now      = player.pos_y + player.height
 
     for plat in all(self.list) do
         if player.pos_x + player.width > plat.pos_x and player.pos_x < plat.pos_x + plat.width then
