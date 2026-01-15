@@ -65,16 +65,16 @@ function _update60()
 
     -- höhe messen: je kleiner player.y, desto höher
     -- baseline ist start bei ~100..120 => wir nehmen 120 als null
-    game.height = max(0, flr(120 - player.y))
+    game.height = max(0, flr(120 - player.pos_y))
     if game.height > game.best_height then
         game.best_height = game.height
     end
 
     -- gameover: fällt unter unteren screenrand
     -- unterer sichtbarer rand in welt: cam.y + 128
-    if player.y > cam.y + 140 then
+    if player.pos_y > cam.y + 140 then
         game.state = "over"
-        player.alive = false
+        player.is_alive = false
         local hs = load_hs(game.diff)
         if game.height > hs then
             save_hs(game.diff, game.height)

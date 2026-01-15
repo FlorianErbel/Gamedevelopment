@@ -1,8 +1,8 @@
 player = {}
 
 function player:init()
-    self.x = 64
-    self.y = 100
+    self.pos_x = 64
+    self.pos_y = 100
     self.width = 6
     self.height = 8
 
@@ -17,10 +17,10 @@ function player:init()
     self.jump_vertical_small = -2.4
 
     self.on_plat = false
-    self.alive = true
+    self.is_alive = true
 
-    self.last_landed_y = 120
-    self.best_landed_y = 120 -- kleinste y (höchste plattform)
+    self.last_landed_pos_y = 120
+    self.best_landed_pos_y = 120 -- kleinste y (höchste plattform)
 
     self.shots = {}
     self.shot_speed = 18
@@ -36,47 +36,47 @@ function player:jump()
 end
 
 function player:shoot(dx, dy)
-    local sp = self.shot_speed
+    local shot_speed = self.shot_speed
     add(self.shots, {
-        x = self.x + self.width / 2,
-        y = self.y + self.height / 2,
-        vx = dx * sp,
-        vy = dy * sp,
+        pos_x = self.pos_x + self.width / 2,
+        pos_y = self.pos_y + self.height / 2,
+        vx = dx * shot_speed,
+        vy = dy * shot_speed,
         life = 60
     })
 end
 
-function player:update_shots(cam_y)
+function player:update_shots(cam_pos_y)
     for i = #self.shots, 1, -1 do
-        local s = self.shots[i]
-        s.x = s.x + s.vx
-        s.y = s.y + s.vy
-        s.life = s.life - 1
+        local shots = self.shots[i]
+        shots.pos_x = shots.pos_x + shots.vx
+        shots.pos_y = shots.pos_y + shots.vy
+        shots.life = shots.life - 1
 
         -- screen bounds in world coords
-        local left = 0
-        local right = 128
-        local top = cam_y
-        local bot = cam_y + 128
+        local left_bound = 0
+        local right_bound = 128
+        local top_bound = cam_pos_y
+        local bottom_bound = cam_pos_y + 128
 
-        if s.x < left - 4 or s.x > right + 4 or s.y < top - 4 or s.y > bot + 4 or s.life <= 0 then
-            del(self.shots, s)
+        if shots.pos_x < left_bound - 4 or shots.pos_x > right_bound + 4 or shots.pos_y < top_bound - 4 or shots.pos_y > bottom_bound + 4 or shots.life <= 0 then
+            del(self.shots, shots)
         end
     end
 end
 
 function player:draw_shots()
-    for s in all(self.shots) do
-        circfill(s.x, s.y, 2, 10) -- feuerball
-        pset(s.x + 1, s.y, 7)     -- glanzpunkt
+    for shot in all(self.shots) do
+        circfill(shot.pos_x, shot.pos_y, 2, 10) -- feuerball
+        pset(shot.pos_x + 1, shot.pos_y, 7)     -- glanzpunkt
     end
 end
 
-function player:update(plats_ref, cam_y)
-    if not self.alive then return end
+function player:update(plats_ref, cam_pos_y)
+    if not self.is_alive then return end
 
-    local prev_y = self.y
-    local landed_plat = plats_ref:check_landing(self, prev_y)
+    local previous_y = self.pos_y
+    local landed_plat = plats_ref:check_landing(self, previous_y)
 
     -- input
     local ax = 0
@@ -102,32 +102,32 @@ function player:update(plats_ref, cam_y)
     self.vy = self.vy + self.g
 
     -- move
-    self.x = self.x + self.vx
-    self.y = self.y + self.vy
+    self.pos_x = self.pos_x + self.vx
+    self.pos_y = self.pos_y + self.vy
 
     -- wrap-around
-    if self.x < -self.width then self.x = 128 end
-    if self.x > 128 then self.x = -self.width end
+    if self.pos_x < -self.width then self.pos_x = 128 end
+    if self.pos_x > 128 then self.pos_x = -self.width end
 
-    -- one-way landings (einmal prüfen, mit gültigem prev_y)
+    -- one-way landings (einmal prüfen, mit gültigem previous_y)
     selon_platt = false
-    local landed_plat = plats_ref:check_landing(self, prev_y)
+    local landed_plat = plats_ref:check_landing(self, previous_y)
 
     if landed_plat then
-        self.last_landed_y = landed_plat.y
-        if landed_plat.y < self.best_landed_y then
-            self.best_landed_y = landed_plat.y
+        self.last_landed_pos_y = landed_plat.pos_y
+        if landed_plat.pos_y < self.best_landed_pos_y then
+            self.best_landed_pos_y = landed_plat.pos_y
         end
         self:jump()
     end
 
-    self:update_shots(cam_y)
+    self:update_shots(cam_pos_y)
 end
 
 function player:draw()
     self:draw_shots()
     -- einfache figur: body + augen
-    rectfill(self.x, self.y, self.x + self.width - 1, self.y + self.height - 1, 7)
-    pset(self.x + 1, self.y + 2, 0)
-    pset(self.x + 4, self.y + 2, 0)
+    rectfill(self.pos_x, self.pos_y, self.pos_x + self.width - 1, self.pos_y + self.height - 1, 7)
+    pset(self.pos_x + 1, self.pos_y + 2, 0)
+    pset(self.pos_x + 4, self.pos_y + 2, 0)
 end
