@@ -19,8 +19,9 @@ function PlatformManager:init(diff)
     self.last_pos_x = nil
     self.camera_pos_y = 0
 
+
+
     -- ground
-    --self:add_platform(-64, 120, 256, true)
     self:add_platform("ground", 0, 120, 128, true)
 
     -- startplattformen
