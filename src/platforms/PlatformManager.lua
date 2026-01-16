@@ -1,11 +1,31 @@
 ---@class PlatformManager
----@field list table
----@field topmost_platform_y number
----@field last_platform_anchor_x number
----@field difficulty number
----@field default_jump_velocity number
----@field gravity number
+---@field list table                 -- Liste aller Plattformen
+---@field topmost_platform_y number  -- y-Koordinate der höchstgelegenen Plattform
+---@field last_platform_anchor_x number -- Letzte x-Koordinate als Anker für neue Plattformen
+---@field difficulty number           -- Schwierigkeitsgrad
+---@field default_jump_velocity number -- Standard-Sprunggeschwindigkeit des Spielers
+---@field gravity number             -- Schwerkraft
+---@field camera_pos_y number        -- Aktuelle Kameraposition Y
+---@field minimum_height_catapult_platform number -- Mindesthöhe für Katapult-Plattformen
+---@field minimum_height_breakable_platform number -- Mindesthöhe für zerstörbare Plattformen
+---@field random_generation_limit_catapult_platform number -- Spawnwahrscheinlichkeit Katapult-Plattform
+---@field random_generation_limit_breakable_platform number -- Spawnwahrscheinlichkeit Breakable-Plattform
+---@field screen_height number       -- Höhe des sichtbaren Bildschirms
+---@field screen_width number        -- Breite des sichtbaren Bildschirms
+---@field spawn_buffer_y number      -- Mindestabstand für Spawn-Lücken
+---@field platform_default_height number -- Standardhöhe einer Plattform
+---@field cleanup_margin number      -- Extra-Margin für das Entfernen unterer Plattformen
+---@field default_ground_y number    -- y-Koordinate der Bodenplattform
+---@field anchor_spread number       -- Abstand zwischen mehreren Plattformen auf gleicher Höhe
+---@field max_spawn_attempts number  -- Maximale Versuche zur Platzierung einer Plattform
+---@field max_platforms_easy number  -- Max Plattformen pro Level (leicht)
+---@field max_platforms_medium number -- Max Plattformen pro Level (mittel)
+---@field max_platforms_hard number -- Max Plattformen pro Level (schwer)
+---@field difficulty_easy number     -- Index für leicht
+---@field difficulty_medium number   -- Index für mittel
+---@field difficulty_hard number     -- Index für schwer
 local PlatformManager = {}
+
 PlatformManager.__index = PlatformManager
 
 function PlatformManager:init(difficulty)
