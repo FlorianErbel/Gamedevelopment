@@ -16,6 +16,9 @@ function player:init()
     self.jump_vertical = -4.4 -- -3.6
     self.jump_vertical_small = -2.4
 
+    self.jump_boost_factor = 1.0
+    self.is_jump_boost_used = false
+
     self.on_plat = false
     self.is_alive = true
 
@@ -27,11 +30,19 @@ function player:init()
 end
 
 function player:jump()
-    local jump = self.jump_vertical
+    local base_jump = self.jump_vertical
     if btn(3) then -- down
-        jump = self.jump_vertical_small
+        base_jump = self.jump_vertical_small
     end
-    self.vy = jump
+    if self.is_jump_boost_used == true then
+        local final_jump_height = base_jump * self.jump_boost_factor
+
+        self.vy = final_jump_height
+        self.jump_boost_factor = 1.0
+        self.is_jump_boost_used = false
+    else
+        self.vy = base_jump
+    end
     self.on_plat = false
 end
 
