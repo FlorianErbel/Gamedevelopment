@@ -112,23 +112,55 @@ function PlatformManager:max_per_level(easy)
     return 1
 end
 
+function PlatformManager:platform_overlaps_existing(pos_x, pos_y, width, height)
+    local min_vertical_gap = height or 6
+
+    for plat in all(self.list) do
+        if pos_y < plat.pos_y + plat.height
+            and pos_y + height > plat.pos_y then
+            -- horizontale Überlappung
+            if pos_x < plat.pos_x + plat.width
+                and pos_x + width > plat.pos_x then
+                return true
+            end
+        end
+    end
+    return false
+end
+
 function PlatformManager:spawn_platform(at_pos_y, easy)
     local height = max(0, 120 - at_pos_y)
 
-    local width
-    if easy then
+    local width = easy and 34 or clamp(28 - flr(height / 90) * 4, 12, 28)
+    --[[if easy then
         width = 34
     else
         width = clamp(28 - flr(height / 90) * 4, 12, 28)
-    end
+    end]]
 
     local ax = self.last_pos_x or 64
     local dx = self:get_dx_reach(at_pos_y, easy)
 
-    local new_pos_x = flr(rnd(dx * 2 + 1) + (ax - dx))
-    new_pos_x = (new_pos_x % 128 + 128) % 128
-    new_pos_x = clamp(new_pos_x, 0, 128 - width)
-    self.last_pos_x = new_pos_x + width / 2
+    local max_tries = 8
+    local pos_x = nil
+
+    for i = 1, max_tries do
+        local new_pos_x = flr(rnd(dx * 2 + 1) + (ax - dx))
+        new_pos_x = (new_pos_x % 128 + 128) % 128
+        new_pos_x = clamp(new_pos_x, 0, 128 - width)
+
+        if not self:platform_overlaps_existing(new_pos_x, at_pos_y, width, 6) then
+            pos_x = new_pos_x
+            break
+        end
+    end
+
+    if not pos_x then
+        self.highest_pos_y = at_pos_y
+        return
+    end
+
+    self.last_pos_x = pos_x + width / 2
 
     local kind = "default"
     if not easy then
@@ -140,7 +172,7 @@ function PlatformManager:spawn_platform(at_pos_y, easy)
         end
     end
 
-    self:add_platform(kind, new_pos_x, at_pos_y, width, false)
+    self:add_platform(kind, pos_x, at_pos_y, width, false)
 end
 
 function PlatformManager:update(camera_pos_y)
