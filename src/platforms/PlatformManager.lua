@@ -1,20 +1,20 @@
 ---@class PlatformManager
 ---@field list table
----@field highest_pos_y number
+---@field topmost_platform_y number
 ---@field last_pos_x number
----@field diff number
+---@field difficulty number
 ---@field jump_vertical number
----@field g number
+---@field gravity number
 local PlatformManager = {}
 PlatformManager.__index = PlatformManager
 
-function PlatformManager:init(diff)
-    self.diff = diff or 1
+function PlatformManager:init(difficulty)
+    self.difficulty = difficulty or 1
     self.jump_vertical = 4.4
-    self.g = 0.22
+    self.gravity = 0.22
 
     self.list = {}
-    self.highest_pos_y = 112
+    self.topmost_platform_y = 112
     self.last_pos_x = nil
     self.camera_pos_y = 0
 
@@ -28,9 +28,9 @@ function PlatformManager:init(diff)
     self:add_platform("ground", 0, 120, 128, true)
 end
 
-function PlatformManager.new(diff)
+function PlatformManager.new(difficulty)
     local self = setmetatable({}, PlatformManager)
-    self:init(diff)
+    self:init(difficulty)
     return self
 end
 
@@ -40,8 +40,8 @@ function PlatformManager:add_platform(kind, pos_x, pos_y, width, is_ground)
     plat.is_ground = is_ground or false
     add(self.list, plat)
 
-    if pos_y < self.highest_pos_y then
-        self.highest_pos_y = pos_y
+    if pos_y < self.topmost_platform_y then
+        self.topmost_platform_y = pos_y
     end
 end
 
@@ -56,14 +56,14 @@ end
 -- wir nehmen default-werte passend zu Player.lua (jump_v=-3.6, g=0.22)
 function PlatformManager:get_max_jump_height()
     local vertical = self.jump_vertical or 3.6
-    local g = self.g or 0.22
+    local g = self.gravity or 0.22
     return (vertical * vertical) / (2 * g)
 end
 
 -- difficulty in 5%-schritten bis max 90% der reach
--- am anfang sehr easy (z.B. 55-65%), später höher
-function PlatformManager:get_reach_factor(at_pos_y, easy)
-    if easy then return 0.55 end
+-- am anfang sehr is_easy_mode (z.B. 55-65%), später höher
+function PlatformManager:get_reach_factor(at_pos_y, is_easy_mode)
+    if is_easy_mode then return 0.55 end
 
     local height = max(0, 120 - at_pos_y)
 
@@ -73,26 +73,26 @@ function PlatformManager:get_reach_factor(at_pos_y, easy)
     return clamp(factor, 0.60, 0.90)
 end
 
-function PlatformManager:get_dy_reach(at_pos_y, easy)
+function PlatformManager:get_vertical_spawn_gap_reach(at_pos_y, is_easy_mode)
     local max_height = self:get_max_jump_height()
-    local factor = self:get_reach_factor(at_pos_y, easy)
+    local factor = self:get_reach_factor(at_pos_y, is_easy_mode)
     -- 90% von max height (oder weniger im early game)
     return max_height * factor
 end
 
-function PlatformManager:get_dx_reach(at_pos_y, easy)
+function PlatformManager:get_horizontal_reach_reach(at_pos_y, is_easy_mode)
     -- simple "radius" um den anchor x
     -- am anfang großzügig, später etwas strenger
     local height = max(0, 120 - at_pos_y)
-    local base = easy and 44 or 38
+    local base = is_easy_mode and 44 or 38
     local shrink = flr(height / 140) * 4
     return clamp(base - shrink, 22, 44)
 end
 
-function PlatformManager:max_per_level(easy)
-    if easy then return 3 end
-    if self.diff == 1 then return 3 end
-    if self.diff == 2 then return 2 end
+function PlatformManager:max_per_level(is_easy_mode)
+    if is_easy_mode then return 3 end
+    if self.difficulty == 1 then return 3 end
+    if self.difficulty == 2 then return 2 end
     return 1
 end
 
@@ -112,19 +112,19 @@ function PlatformManager:platform_overlaps_existing(pos_x, pos_y, width, height)
     return false
 end
 
-function PlatformManager:spawn_platform(at_pos_y, easy)
+function PlatformManager:spawn_platform(at_pos_y, is_easy_mode)
     local height = max(0, 120 - at_pos_y)
 
-    local width = easy and 34 or clamp(28 - flr(height / 90) * 4, 12, 28)
+    local width = is_easy_mode and 34 or clamp(28 - flr(height / 90) * 4, 12, 28)
 
     local ax = self.last_pos_x or 64
-    local dx = self:get_dx_reach(at_pos_y, easy)
+    local horizontal_reach = self:get_horizontal_reach_reach(at_pos_y, is_easy_mode)
 
     local max_tries = 8
     local pos_x = nil
 
     for i = 1, max_tries do
-        local new_pos_x = flr(rnd(dx * 2 + 1) + (ax - dx))
+        local new_pos_x = flr(rnd(horizontal_reach * 2 + 1) + (ax - horizontal_reach))
         new_pos_x = (new_pos_x % 128 + 128) % 128
         new_pos_x = clamp(new_pos_x, 0, 128 - width)
 
@@ -135,14 +135,14 @@ function PlatformManager:spawn_platform(at_pos_y, easy)
     end
 
     if not pos_x then
-        self.highest_pos_y = at_pos_y
+        self.topmost_platform_y = at_pos_y
         return
     end
 
     self.last_pos_x = pos_x + width / 2
 
     local kind = "default"
-    if not easy then
+    if not is_easy_mode then
         local height_from_ground = max(0, 120 - at_pos_y)
         local random_number = rnd()
 
@@ -161,21 +161,21 @@ function PlatformManager:update(camera_pos_y)
     -- sichtbarer top ist camera_y, wir wollen bis camera_y - 128 (eine screenhöhe darüber) auffüllen
     local top_needed = camera_pos_y - 140
 
-    while self.highest_pos_y > top_needed do
-        local dy = self:get_dy_reach(self.highest_pos_y, false)
+    while self.topmost_platform_y > top_needed do
+        local vertical_spawn_gap = self:get_vertical_spawn_gap_reach(self.topmost_platform_y, false)
 
-        -- dy soll nie zu klein werden (sonst zu viele plattformen)
-        dy = clamp(dy, 10, 28)
+        -- vertical_spawn_gap soll nie zu klein werden (sonst zu viele plattformen)
+        vertical_spawn_gap = clamp(vertical_spawn_gap, 10, 28)
 
-        local next_pos_y = self.highest_pos_y - flr(dy)
+        local next_pos_y = self.topmost_platform_y - flr(vertical_spawn_gap)
 
         local number_of_max_per_level = self:max_per_level(false)
         -- etwas randomness, aber begrenzt:
-        -- easy: oft 2-3, medium: 1-2, hard: 1
-        if self.diff == 1 then
+        -- is_easy_mode: oft 2-3, medium: 1-2, hard: 1
+        if self.difficulty == 1 then
             number_of_max_per_level = 1 + flr(rnd(number_of_max_per_level)) -- 1..3
             if rnd() < 0.55 then number_of_max_per_level = min(3, number_of_max_per_level + 1) end
-        elseif self.diff == 2 then
+        elseif self.difficulty == 2 then
             number_of_max_per_level = 1 + flr(rnd(number_of_max_per_level)) -- 1..2
         else
             number_of_max_per_level = 1
@@ -191,7 +191,7 @@ function PlatformManager:update(camera_pos_y)
         end
         self.last_pos_x = saved_anchor
 
-        self.highest_pos_y = next_pos_y
+        self.topmost_platform_y = next_pos_y
     end
 
     local screen_bottom = camera_pos_y + 128
