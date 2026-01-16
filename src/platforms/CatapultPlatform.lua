@@ -2,6 +2,7 @@
 --- CatapultPlatform class
 --- Created by florianerbel
 --- DateTime: 15.01.26 16:00
+---Class to create platforms which enable a jump-boost to the player
 ---
 
 ---@class CatapultPlatform
