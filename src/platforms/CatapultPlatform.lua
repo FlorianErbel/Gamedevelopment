@@ -19,10 +19,10 @@ function CatapultPlatform.new(pos_x, pos_y, width)
     local self = Platform.new(pos_x, pos_y, width)
     self.fill_color = 12
     self.border_color = 12
-    self.boost = -6.8
+    self.boost_factor = 1.5
     return setmetatable(self, CatapultPlatform)
 end
 
 function CatapultPlatform:on_land(player)
-    player.vy = self.boost
+    player:boost_once(boost_factor)
 end
