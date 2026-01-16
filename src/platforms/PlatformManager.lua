@@ -27,17 +27,7 @@ end
 
 function PlatformManager.new(diff)
     local self = setmetatable({}, PlatformManager)
-
-    self.diff = diff or 1
-    self.jump_vertical = 4.4
-    self.g = 0.22
-    self.list = {}
-    self.highest_pos_y = 112
-    self.last_pos_x = nil
-    self.camera_pos_y = 0
-
-    self:add_platform("ground", 0, 120, 128, true)
-
+    self:init(diff)
     return self
 end
 
