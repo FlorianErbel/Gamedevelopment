@@ -5,13 +5,14 @@
 ---
 
 ---@class BreakablePlatform
----@field public name string
 local BreakablePlatform = {}
 BreakablePlatform = setmetatable({}, Platform)
 BreakablePlatform.__index = BreakablePlatform
 
 ---Constructor
----@param name string
+---@param pos_x number
+---@param pos_y number
+---@param width number
 ---@return BreakablePlatform
 function BreakablePlatform.new(pos_x, pos_y, width)
     local self = Platform.new(pos_x, pos_y, width)
