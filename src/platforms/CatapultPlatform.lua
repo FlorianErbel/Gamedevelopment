@@ -5,13 +5,14 @@
 ---
 
 ---@class CatapultPlatform
----@field public name string
 local CatapultPlatform = {}
 CatapultPlatform = setmetatable({}, Platform)
 CatapultPlatform.__index = CatapultPlatform
 
 ---Constructor
----@param name string
+---@param pos_x number
+---@param pos_y number
+---@param width number
 ---@return CatapultPlatform
 function CatapultPlatform.new(pos_x, pos_y, width)
     local self = Platform.new(pos_x, pos_y, width)
