@@ -28,6 +28,8 @@ local PlatformManager = {}
 
 PlatformManager.__index = PlatformManager
 
+---Initialisiert den PlatformManager
+---@param difficulty number? optionaler Schwierigkeitsgrad
 function PlatformManager:init(difficulty)
     -- Allgemeine Spiel-Parameter
     self.difficulty = difficulty or 1
@@ -67,18 +69,28 @@ function PlatformManager:init(difficulty)
     self:add_platform("ground", 0, self.default_ground_y, self.screen_width, true)
 end
 
+---Erzeugt eine neue Instanz des PlatformManagers
+---@param difficulty number? optionaler Schwierigkeitsgrad
+---@return PlatformManager
 function PlatformManager.new(difficulty)
     local self = setmetatable({}, PlatformManager)
     self:init(difficulty)
     return self
 end
 
--- Berechnet die Höhe über dem Boden
+---Berechnet die Höhe eines Punkts relativ zum Boden
+---@param pos_y number
+---@return number
 function PlatformManager:get_height_from_ground(pos_y)
     return max(0, self.default_ground_y - pos_y)
 end
 
--- Neue Plattform hinzufügen
+---Fügt eine Plattform hinzu
+---@param kind string Plattformtyp ("default", "breakable", "catapult")
+---@param pos_x number x-Koordinate
+---@param pos_y number y-Koordinate
+---@param width number Plattformbreite
+---@param is_ground boolean? ob es sich um den Boden handelt
 function PlatformManager:add_platform(kind, pos_x, pos_y, width, is_ground)
     local plat = PlatformFactory.create(kind or "default", pos_x, pos_y, width)
     plat.is_ground = is_ground or false
@@ -89,19 +101,25 @@ function PlatformManager:add_platform(kind, pos_x, pos_y, width, is_ground)
     end
 end
 
--- Schwierigkeit/Gap abhängig von Höhe
+---Gibt den minimalen vertikalen Abstand zwischen Plattformen in Abhängigkeit von Höhe zurück
+---@param pos_y number
+---@return number
 function PlatformManager:difficulty_at(pos_y)
     local height = self:get_height_from_ground(pos_y)
     local gap = self.spawn_buffer_y + flr(height / 60)
     return clamp(gap, self.spawn_buffer_y, 26)
 end
 
--- Maximale Sprunghöhe
+---Berechnet die maximale Sprunghöhe basierend auf Gravitation und Standard-Jump
+---@return number
 function PlatformManager:get_max_jump_height()
     return (self.default_jump_velocity ^ 2) / (2 * self.gravity)
 end
 
--- Reach-Faktor abhängig von Höhe (für Spawn-Gap)
+---Bestimmt einen Faktor für die vertikale Reichweite abhängig von Höhe und Schwierigkeit
+---@param at_pos_y number
+---@param is_easy_mode boolean
+---@return number
 function PlatformManager:get_reach_factor(at_pos_y, is_easy_mode)
     if is_easy_mode then return 0.55 end
     local height = self:get_height_from_ground(at_pos_y)
@@ -110,10 +128,18 @@ function PlatformManager:get_reach_factor(at_pos_y, is_easy_mode)
     return clamp(factor, 0.60, 0.90)
 end
 
+---Berechnet vertikale Spawn-Lücke für Plattformen
+---@param at_pos_y number
+---@param is_easy_mode boolean
+---@return number
 function PlatformManager:get_vertical_spawn_gap_reach(at_pos_y, is_easy_mode)
     return self:get_max_jump_height() * self:get_reach_factor(at_pos_y, is_easy_mode)
 end
 
+---Berechnet horizontale Reichweite für Spawn-Positionen
+---@param at_pos_y number
+---@param is_easy_mode boolean
+---@return number
 function PlatformManager:get_horizontal_reach(at_pos_y, is_easy_mode)
     local height = self:get_height_from_ground(at_pos_y)
     local base = is_easy_mode and 44 or 38
@@ -121,6 +147,9 @@ function PlatformManager:get_horizontal_reach(at_pos_y, is_easy_mode)
     return clamp(base - shrink, 22, 44)
 end
 
+---Maximale Plattformen pro Level je nach Schwierigkeitsgrad
+---@param is_easy_mode boolean
+---@return number
 function PlatformManager:max_per_level(is_easy_mode)
     if is_easy_mode then return self.max_platforms_easy end
     if self.difficulty == self.difficulty_easy then return self.max_platforms_easy end
@@ -128,7 +157,12 @@ function PlatformManager:max_per_level(is_easy_mode)
     return self.max_platforms_hard
 end
 
--- Prüft, ob neue Plattform bestehende Plattformen überlappt
+---Prüft, ob eine neue Plattform mit existierenden kollidiert
+---@param pos_x number
+---@param pos_y number
+---@param width number
+---@param height number
+---@return boolean
 function PlatformManager:platform_overlaps_existing(pos_x, pos_y, width, height)
     height = height or self.platform_default_height
     for plat in all(self.list) do
@@ -141,7 +175,9 @@ function PlatformManager:platform_overlaps_existing(pos_x, pos_y, width, height)
     return false
 end
 
--- Spawnlogik für eine Plattform
+---Erzeugt eine neue Plattform basierend auf Höhe, Schwierigkeitsgrad und Zufall
+---@param at_pos_y number
+---@param is_easy_mode boolean
 function PlatformManager:spawn_platform(at_pos_y, is_easy_mode)
     local height_from_ground = self:get_height_from_ground(at_pos_y)
     local width = is_easy_mode and 34 or clamp(28 - flr(height_from_ground / 90) * 4, 12, 28)
@@ -181,7 +217,8 @@ function PlatformManager:spawn_platform(at_pos_y, is_easy_mode)
     self:add_platform(kind, pos_x, at_pos_y, width, false)
 end
 
--- Update-Plattformen und entferne nicht mehr sichtbare
+---Aktualisiert Plattformen: erzeugt neue und entfernt alte
+---@param camera_pos_y number
 function PlatformManager:update(camera_pos_y)
     local top_needed = camera_pos_y - (self.screen_height + self.spawn_buffer_y)
 
@@ -193,7 +230,8 @@ function PlatformManager:update(camera_pos_y)
         local saved_anchor = self.last_platform_anchor_x
         for i = 1, number_of_max_per_level do
             if saved_anchor then
-                self.last_platform_anchor_x = saved_anchor + (i - ((number_of_max_per_level + 1) / 2)) * self.anchor_spread
+                self.last_platform_anchor_x = saved_anchor +
+                    (i - ((number_of_max_per_level + 1) / 2)) * self.anchor_spread
             end
             self:spawn_platform(next_pos_y, false)
         end
@@ -210,7 +248,7 @@ function PlatformManager:update(camera_pos_y)
     end
 end
 
--- Zeichnen der Plattformen
+---Zeichnet alle Plattformen auf den Bildschirm
 function PlatformManager:draw()
     for plat in all(self.list) do
         if plat.ground then
@@ -222,7 +260,10 @@ function PlatformManager:draw()
     end
 end
 
--- Prüft, ob der Spieler auf einer Plattform landet
+---Prüft, ob der Spieler auf einer Plattform landet
+---@param player table Spieler-Objekt mit pos_x, pos_y, width, height, vy
+---@param previous_pos_y number
+---@return table|nil die Plattform, auf der der Spieler gelandet ist
 function PlatformManager:check_landing(player, previous_pos_y)
     if player.vy <= 0 then return false end
 
