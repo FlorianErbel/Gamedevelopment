@@ -93,6 +93,8 @@ function PlatformManager:max_per_level(is_easy_mode)
     return 1
 end
 
+-- Verhindert unspielbare Layouts durch überlappende Plattformen
+-- prüft sowohl vertikale als auch horizontale Schnitte
 function PlatformManager:platform_overlaps_existing(pos_x, pos_y, width, height)
     local min_vertical_gap = height or 6
 
@@ -109,6 +111,8 @@ function PlatformManager:platform_overlaps_existing(pos_x, pos_y, width, height)
     return false
 end
 
+-- Entscheidet basierend auf aktueller Höhe, Schwierigkeit und Zufall
+-- welche Plattform-Art gespawnt wird (default/ breakable/ catapult)
 function PlatformManager:spawn_platform(at_pos_y, is_easy_mode)
     local height = max(0, 120 - at_pos_y)
 
@@ -153,6 +157,8 @@ function PlatformManager:spawn_platform(at_pos_y, is_easy_mode)
     self:add_platform(kind, pos_x, at_pos_y, width, false)
 end
 
+-- Entfernt Plattformen, die entweder zerstört wurden
+-- oder unterhalb des sichtbaren Bildschirms liegen
 function PlatformManager:update(camera_pos_y)
     -- stelle sicher, dass oberhalb des sichtbaren bereichs genug plattformen existieren
     -- sichtbarer top ist camera_y, wir wollen bis camera_y - 128 (eine screenhöhe darüber) auffüllen
@@ -213,6 +219,8 @@ function PlatformManager:draw()
     end
 end
 
+-- Setzt Player-Position, velocity und triggert Plattform-Logik
+-- gibt die gelandete Plattform zurück oder nil
 function PlatformManager:check_landing(player, previous_pos_y)
     if player.vy <= 0 then return false end
 
