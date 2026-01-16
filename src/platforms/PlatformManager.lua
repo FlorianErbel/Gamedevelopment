@@ -1,7 +1,7 @@
 ---@class PlatformManager
 ---@field list table
 ---@field topmost_platform_y number
----@field last_pos_x number
+---@field last_platform_anchor_x number
 ---@field difficulty number
 ---@field jump_vertical number
 ---@field gravity number
@@ -15,7 +15,7 @@ function PlatformManager:init(difficulty)
 
     self.list = {}
     self.topmost_platform_y = 112
-    self.last_pos_x = nil
+    self.last_platform_anchor_x = nil
     self.camera_pos_y = 0
 
     self.minimum_height_catapult_platform = 2000
@@ -117,14 +117,14 @@ function PlatformManager:spawn_platform(at_pos_y, is_easy_mode)
 
     local width = is_easy_mode and 34 or clamp(28 - flr(height / 90) * 4, 12, 28)
 
-    local ax = self.last_pos_x or 64
+    local anchor_x = self.last_platform_anchor_x or 64
     local horizontal_reach = self:get_horizontal_reach_reach(at_pos_y, is_easy_mode)
 
     local max_tries = 8
     local pos_x = nil
 
     for i = 1, max_tries do
-        local new_pos_x = flr(rnd(horizontal_reach * 2 + 1) + (ax - horizontal_reach))
+        local new_pos_x = flr(rnd(horizontal_reach * 2 + 1) + (anchor_x - horizontal_reach))
         new_pos_x = (new_pos_x % 128 + 128) % 128
         new_pos_x = clamp(new_pos_x, 0, 128 - width)
 
@@ -139,7 +139,7 @@ function PlatformManager:spawn_platform(at_pos_y, is_easy_mode)
         return
     end
 
-    self.last_pos_x = pos_x + width / 2
+    self.last_platform_anchor_x = pos_x + width / 2
 
     local kind = "default"
     if not is_easy_mode then
@@ -182,25 +182,25 @@ function PlatformManager:update(camera_pos_y)
         end
 
         -- mehrere plattformen auf gleicher höhe, aber mit leicht unterschiedlichen anchors
-        local saved_anchor = self.last_pos_x
+        local saved_anchor = self.last_platform_anchor_x
         for i = 1, number_of_max_per_level do
             if saved_anchor then
-                self.last_pos_x = saved_anchor + (i - ((number_of_max_per_level + 1) / 2)) * 18
+                self.last_platform_anchor_x = saved_anchor + (i - ((number_of_max_per_level + 1) / 2)) * 18
             end
             self:spawn_platform(next_pos_y, false)
         end
-        self.last_pos_x = saved_anchor
+        self.last_platform_anchor_x = saved_anchor
 
         self.topmost_platform_y = next_pos_y
     end
 
-    local screen_bottom = camera_pos_y + 128
+    local visible_bottom_y = camera_pos_y + 128
 
     for i = #self.list, 1, -1 do
         local plat = self.list[i]
 
         if plat.is_dead
-            or plat.pos_y > screen_bottom + 16 then
+            or plat.pos_y > visible_bottom_y + 16 then
             del(self.list, plat)
         end
     end
