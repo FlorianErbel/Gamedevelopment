@@ -17,7 +17,7 @@ CatapultPlatform.__index = CatapultPlatform
 ---@return CatapultPlatform
 function CatapultPlatform.new(pos_x, pos_y, width)
     local self = Platform.new(pos_x, pos_y, width)
-    self.fill_color = 12
+    self.fill_color = 13
     self.border_color = 12
     self.boost_factor = 1.3
     return setmetatable(self, CatapultPlatform)
