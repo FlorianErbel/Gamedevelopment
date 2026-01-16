@@ -159,10 +159,12 @@ function PlatformManager:spawn_platform(at_pos_y, easy)
 
     local kind = "default"
     if not easy then
-        local r = rnd()
-        if r < 0.2 then
+        local height_from_ground = max(0, 120 - at_pos_y)
+        local random_number = rnd()
+
+        if height_from_ground >= 2000 and random_number < 0.20 then
             kind = "catapult"
-        elseif r < 0.35 then
+        elseif height_from_ground >= 1000 and random_number < 0.35 then
             kind = "breakable"
         end
     end
