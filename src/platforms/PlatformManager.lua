@@ -24,6 +24,8 @@ function PlatformManager:init(difficulty)
     self.random_generation_limit_catapult_platform = 0.20
     self.random_generation_limit_breakable_platform = 0.35
 
+self.ground_pos_y = 120
+
     self:add_platform("ground", 0, 120, 128, true)
 end
 
@@ -31,6 +33,10 @@ function PlatformManager.new(difficulty)
     local self = setmetatable({}, PlatformManager)
     self:init(difficulty)
     return self
+end
+
+function PlatformManager:get_height_from_ground(pos_y)
+    return max(0, self.ground_pos_y - pos_y)
 end
 
 function PlatformManager:add_platform(kind, pos_x, pos_y, width, is_ground)
@@ -44,8 +50,8 @@ function PlatformManager:add_platform(kind, pos_x, pos_y, width, is_ground)
     end
 end
 
-function PlatformManager:difficulty_at(y)
-    local height = max(0, 120 - y)
+function PlatformManager:difficulty_at(pos_y)
+    local height = self:get_height_from_ground(pos_y)
     local gap = 12 + flr(height / 60)
     return clamp(gap, 12, 26)
 end
@@ -63,7 +69,7 @@ end
 function PlatformManager:get_reach_factor(at_pos_y, is_easy_mode)
     if is_easy_mode then return 0.55 end
 
-    local height = max(0, 120 - at_pos_y)
+    local height = self:get_height_from_ground(at_pos_y)
 
     -- alle ~80px höhe ein +5% step
     local step = flr(height / 80)     -- 0,1,2,...
@@ -80,7 +86,7 @@ end
 
 function PlatformManager:get_horizontal_reach_reach(at_pos_y, is_easy_mode)
     -- am anfang großzügig, später etwas strenger
-    local height = max(0, 120 - at_pos_y)
+    local height = self:get_height_from_ground(at_pos_y)
     local base = is_easy_mode and 44 or 38
     local shrink = flr(height / 140) * 4
     return clamp(base - shrink, 22, 44)
@@ -114,7 +120,7 @@ end
 -- Entscheidet basierend auf aktueller Höhe, Schwierigkeit und Zufall
 -- welche Plattform-Art gespawnt wird (default/ breakable/ catapult)
 function PlatformManager:spawn_platform(at_pos_y, is_easy_mode)
-    local height = max(0, 120 - at_pos_y)
+    local height = self:get_height_from_ground(at_pos_y)
 
     local width = is_easy_mode and 34 or clamp(28 - flr(height / 90) * 4, 12, 28)
 
@@ -144,7 +150,7 @@ function PlatformManager:spawn_platform(at_pos_y, is_easy_mode)
 
     local kind = "default"
     if not is_easy_mode then
-        local height_from_ground = max(0, 120 - at_pos_y)
+        local height_from_ground = self:get_height_from_ground(at_pos_y)
         local random_number = rnd()
 
         if height_from_ground >= self.minimum_height_catapult_platform and random_number < self.random_generation_limit_catapult_platform then
