@@ -251,12 +251,7 @@ end
 ---Zeichnet alle Plattformen auf den Bildschirm
 function PlatformManager:draw()
     for plat in all(self.list) do
-        if plat.ground then
-            rectfill(plat.pos_x, plat.pos_y, plat.pos_x + plat.width - 1, plat.pos_y + plat.height - 1, 5)
-        else
-            rectfill(plat.pos_x, plat.pos_y, plat.pos_x + plat.width - 1, plat.pos_y + plat.height - 1, plat.fill_color)
-            rect(plat.pos_x, plat.pos_y, plat.pos_x + plat.width - 1, plat.pos_y + plat.height - 1, plat.border_color)
-        end
+        plat:draw()
     end
 end
 
