@@ -2,6 +2,7 @@
 --- BreakablePlatform class
 --- Created by florianerbel
 --- DateTime: 15.01.26 16:04
+--- Class to create platforms which break after a jump on it
 ---
 
 ---@class BreakablePlatform
