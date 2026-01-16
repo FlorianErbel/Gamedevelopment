@@ -10,7 +10,6 @@ PlatformManager.__index = PlatformManager
 
 function PlatformManager:init(diff)
     self.diff = diff or 1
-
     self.jump_vertical = 4.4
     self.g = 0.22
 
@@ -19,7 +18,11 @@ function PlatformManager:init(diff)
     self.last_pos_x = nil
     self.camera_pos_y = 0
 
+    self.minimum_height_catapult_platform = 2000
+    self.minimum_height_breakable_platform = 1000
 
+    self.random_generation_limit_catapult_platform = 0.20
+    self.random_generation_limit_breakable_platform = 0.35
 
     -- ground
     self:add_platform("ground", 0, 120, 128, true)
@@ -143,9 +146,9 @@ function PlatformManager:spawn_platform(at_pos_y, easy)
         local height_from_ground = max(0, 120 - at_pos_y)
         local random_number = rnd()
 
-        if height_from_ground >= 2000 and random_number < 0.20 then
+        if height_from_ground >= self.minimum_height_catapult_platform and random_number < self.random_generation_limit_catapult_platform then
             kind = "catapult"
-        elseif height_from_ground >= 1000 and random_number < 0.35 then
+        elseif height_from_ground >= self.minimum_height_breakable_platform and random_number < self.random_generation_limit_breakable_platform then
             kind = "breakable"
         end
     end
