@@ -6,12 +6,13 @@
 ---
 
 ---@class Platform
----@field public name string
 local Platform = {}
 Platform.__index = Platform
 
 ---Constructor
----@param name string
+---@param pos_x number
+---@param pos_y number
+---@param width number
 ---@return Platform
 function Platform.new(pos_x, pos_y, width)
     local self = setmetatable({}, Platform)
@@ -25,10 +26,12 @@ function Platform.new(pos_x, pos_y, width)
     return self
 end
 
+---Empty default definition of function
 function Platform:on_land(player)
     -- Default: nichts
 end
 
+---Empty default definition of function
 function Platform:update()
     -- Default: nichts
 end
