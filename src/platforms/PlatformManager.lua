@@ -23,13 +23,6 @@ function PlatformManager:init(diff)
 
     -- ground
     self:add_platform("ground", 0, 120, 128, true)
-
-    -- startplattformen
-    local y = 104
-    for i = 1, 14 do
-        self:spawn_platform(y, true)
-        y = y - 10
-    end
 end
 
 function PlatformManager.new(diff)
@@ -45,11 +38,6 @@ function PlatformManager.new(diff)
 
     self:add_platform("ground", 0, 120, 128, true)
 
-    local y = 104
-    for i = 1, 14 do
-        self:spawn_platform(y, true)
-        y = y - 10
-    end
     return self
 end
 
