@@ -3,14 +3,14 @@
 ---@field topmost_platform_y number
 ---@field last_platform_anchor_x number
 ---@field difficulty number
----@field jump_vertical number
+---@field default_jump_velocity number
 ---@field gravity number
 local PlatformManager = {}
 PlatformManager.__index = PlatformManager
 
 function PlatformManager:init(difficulty)
     self.difficulty = difficulty or 1
-    self.jump_vertical = 4.4
+    self.default_jump_velocity = 4.4
     self.gravity = 0.22
 
     self.list = {}
@@ -24,9 +24,27 @@ function PlatformManager:init(difficulty)
     self.random_generation_limit_catapult_platform = 0.20
     self.random_generation_limit_breakable_platform = 0.35
 
-self.ground_pos_y = 120
+    self.screen_height = 128
+    self.screen_width = 128
+    self.spawn_buffer_y = 12
+    self.platform_default_height = 6
+    self.cleanup_margin = 16
+    self.default_ground_y = 120
 
-    self:add_platform("ground", 0, 120, 128, true)
+    self.min_vertical_gap = 10
+    self.max_vertical_gap = 28
+    self.anchor_spread = 18
+    self.max_spawn_attempts = 8
+
+    self.max_platforms_easy = 3
+    self.max_platforms_medium = 2
+    self.max_platforms_hard = 1
+
+    self.difficulty_easy = 1
+    self.difficulty_medium = 2
+    self.difficulty_hard = 3
+
+    self:add_platform("ground", 0, self.default_ground_y, self.screen_width, true)
 end
 
 function PlatformManager.new(difficulty)
@@ -36,7 +54,7 @@ function PlatformManager.new(difficulty)
 end
 
 function PlatformManager:get_height_from_ground(pos_y)
-    return max(0, self.ground_pos_y - pos_y)
+    return max(0, self.default_ground_y - pos_y)
 end
 
 function PlatformManager:add_platform(kind, pos_x, pos_y, width, is_ground)
@@ -52,16 +70,16 @@ end
 
 function PlatformManager:difficulty_at(pos_y)
     local height = self:get_height_from_ground(pos_y)
-    local gap = 12 + flr(height / 60)
-    return clamp(gap, 12, 26)
+    local gap = self.spawn_buffer_y + flr(height / 60)
+    return clamp(gap, self.spawn_buffer_y, 26)
 end
 
 -- max jump height aus physik: h = v^2/(2g)
 -- wir nehmen default-werte passend zu Player.lua (jump_v=-3.6, g=0.22)
 function PlatformManager:get_max_jump_height()
-    local vertical = self.jump_vertical or 3.6
-    local g = self.gravity or 0.22
-    return (vertical * vertical) / (2 * g)
+    local vertical = self.default_jump_velocity or 3.6
+    local gravity = self.gravity or 0.22
+    return (vertical * vertical) / (2 * gravity)
 end
 
 -- difficulty in 5%-schritten bis max 90% der reach
@@ -71,7 +89,6 @@ function PlatformManager:get_reach_factor(at_pos_y, is_easy_mode)
 
     local height = self:get_height_from_ground(at_pos_y)
 
-    -- alle ~80px höhe ein +5% step
     local step = flr(height / 80)     -- 0,1,2,...
     local factor = 0.60 + step * 0.05 -- 0.60, 0.65, 0.70, ...
     return clamp(factor, 0.60, 0.90)
@@ -102,7 +119,7 @@ end
 -- Verhindert unspielbare Layouts durch überlappende Plattformen
 -- prüft sowohl vertikale als auch horizontale Schnitte
 function PlatformManager:platform_overlaps_existing(pos_x, pos_y, width, height)
-    local min_vertical_gap = height or 6
+    local min_vertical_gap = height or self.platform_default_height
 
     for plat in all(self.list) do
         if pos_y < plat.pos_y + plat.height
@@ -127,10 +144,9 @@ function PlatformManager:spawn_platform(at_pos_y, is_easy_mode)
     local anchor_x = self.last_platform_anchor_x or 64
     local horizontal_reach = self:get_horizontal_reach_reach(at_pos_y, is_easy_mode)
 
-    local max_tries = 8
     local pos_x = nil
 
-    for i = 1, max_tries do
+    for i = 1, self.max_spawn_attempts do
         local new_pos_x = flr(rnd(horizontal_reach * 2 + 1) + (anchor_x - horizontal_reach))
         new_pos_x = (new_pos_x % 128 + 128) % 128
         new_pos_x = clamp(new_pos_x, 0, 128 - width)
@@ -168,7 +184,7 @@ end
 function PlatformManager:update(camera_pos_y)
     -- stelle sicher, dass oberhalb des sichtbaren bereichs genug plattformen existieren
     -- sichtbarer top ist camera_y, wir wollen bis camera_y - 128 (eine screenhöhe darüber) auffüllen
-    local top_needed = camera_pos_y - 140
+    local top_needed = camera_pos_y - (self.screen_height + self.spawn_buffer_y)
 
     while self.topmost_platform_y > top_needed do
         local vertical_spawn_gap = self:get_vertical_spawn_gap_reach(self.topmost_platform_y, false)
@@ -180,13 +196,16 @@ function PlatformManager:update(camera_pos_y)
         local number_of_max_per_level = self:max_per_level(false)
         -- etwas randomness, aber begrenzt:
         -- is_easy_mode: oft 2-3, medium: 1-2, hard: 1
-        if self.difficulty == 1 then
-            number_of_max_per_level = 1 + flr(rnd(number_of_max_per_level)) -- 1..3
-            if rnd() < 0.55 then number_of_max_per_level = min(3, number_of_max_per_level + 1) end
-        elseif self.difficulty == 2 then
-            number_of_max_per_level = 1 + flr(rnd(number_of_max_per_level)) -- 1..2
+        if self.difficulty == self.difficulty_easy then
+            number_of_max_per_level = self.max_platforms_hard + flr(rnd(number_of_max_per_level)) -- 1..3
+            if rnd() < 0.55 then
+                number_of_max_per_level = min(self.max_platforms_easy,
+                    number_of_max_per_level + self.max_platforms_hard)
+            end
+        elseif self.difficulty == self.difficulty_medium then
+            number_of_max_per_level = self.max_platforms_hard + flr(rnd(number_of_max_per_level)) -- 1..2
         else
-            number_of_max_per_level = 1
+            number_of_max_per_level = self.max_platforms_hard
         end
 
         -- mehrere plattformen auf gleicher höhe, aber mit leicht unterschiedlichen anchors
@@ -202,13 +221,13 @@ function PlatformManager:update(camera_pos_y)
         self.topmost_platform_y = next_pos_y
     end
 
-    local visible_bottom_y = camera_pos_y + 128
+    local visible_bottom_y = camera_pos_y + self.screen_height
 
     for i = #self.list, 1, -1 do
         local plat = self.list[i]
 
         if plat.is_dead
-            or plat.pos_y > visible_bottom_y + 16 then
+            or plat.pos_y > visible_bottom_y + self.cleanup_margin then
             del(self.list, plat)
         end
     end
