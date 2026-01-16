@@ -15,6 +15,8 @@ GroundPlatform.__index = GroundPlatform
 ---@return GroundPlatform
 function GroundPlatform.new(pos_x, pos_y, width)
     local self = Platform.new(pos_x, pos_y, width)
+    self.fill_color = 4
+    self.border_color = 3
     self.height = 8
     return setmetatable(self, GroundPlatform)
 end
