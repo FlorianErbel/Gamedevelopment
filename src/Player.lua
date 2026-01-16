@@ -35,12 +35,6 @@ function player:jump()
     self.on_plat = false
 end
 
-function player:boost_once(boost_factor)
-    local jump_boost = self.jump_vertical * boost_factor
-    self.vy = jump_boost
-    self.on_plat = false
-end
-
 function player:shoot(dx, dy)
     local shot_speed = self.shot_speed
     add(self.shots, {
