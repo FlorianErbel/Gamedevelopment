@@ -132,11 +132,6 @@ function PlatformManager:spawn_platform(at_pos_y, easy)
     local height = max(0, 120 - at_pos_y)
 
     local width = easy and 34 or clamp(28 - flr(height / 90) * 4, 12, 28)
-    --[[if easy then
-        width = 34
-    else
-        width = clamp(28 - flr(height / 90) * 4, 12, 28)
-    end]]
 
     local ax = self.last_pos_x or 64
     local dx = self:get_dx_reach(at_pos_y, easy)
