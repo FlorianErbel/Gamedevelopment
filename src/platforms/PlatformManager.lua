@@ -17,6 +17,7 @@ function PlatformManager:init(diff)
     self.list = {}
     self.highest_pos_y = 112
     self.last_pos_x = nil
+    self.camera_pos_y = 0
 
     -- ground
     --self:add_platform(-64, 120, 256, true)
@@ -39,6 +40,7 @@ function PlatformManager.new(diff)
     self.list = {}
     self.highest_pos_y = 112
     self.last_pos_x = nil
+    self.camera_pos_y = 0
 
     self:add_platform("ground", 0, 120, 128, true)
 
@@ -210,10 +212,15 @@ function PlatformManager:update(camera_pos_y)
         self.highest_pos_y = next_pos_y
     end
 
-    -- alte plattformen weit unter dem bildschirm entfernen
+    local screen_bottom = camera_pos_y + 128
+
     for i = #self.list, 1, -1 do
         local plat = self.list[i]
-        if plat.is_dead then del(self.list, plat) end
+
+        if plat.is_dead
+            or plat.pos_y > screen_bottom + 16 then
+            del(self.list, plat)
+        end
     end
 end
 
