@@ -24,7 +24,6 @@ function PlatformManager:init(difficulty)
     self.random_generation_limit_catapult_platform = 0.20
     self.random_generation_limit_breakable_platform = 0.35
 
-    -- ground
     self:add_platform("ground", 0, 120, 128, true)
 end
 
@@ -45,7 +44,6 @@ function PlatformManager:add_platform(kind, pos_x, pos_y, width, is_ground)
     end
 end
 
--- difficulty: je höher, desto weniger / weiter auseinander
 function PlatformManager:difficulty_at(y)
     local height = max(0, 120 - y)
     local gap = 12 + flr(height / 60)
@@ -81,7 +79,6 @@ function PlatformManager:get_vertical_spawn_gap_reach(at_pos_y, is_easy_mode)
 end
 
 function PlatformManager:get_horizontal_reach_reach(at_pos_y, is_easy_mode)
-    -- simple "radius" um den anchor x
     -- am anfang großzügig, später etwas strenger
     local height = max(0, 120 - at_pos_y)
     local base = is_easy_mode and 44 or 38
@@ -164,7 +161,6 @@ function PlatformManager:update(camera_pos_y)
     while self.topmost_platform_y > top_needed do
         local vertical_spawn_gap = self:get_vertical_spawn_gap_reach(self.topmost_platform_y, false)
 
-        -- vertical_spawn_gap soll nie zu klein werden (sonst zu viele plattformen)
         vertical_spawn_gap = clamp(vertical_spawn_gap, 10, 28)
 
         local next_pos_y = self.topmost_platform_y - flr(vertical_spawn_gap)
@@ -212,13 +208,11 @@ function PlatformManager:draw()
             rectfill(plat.pos_x, plat.pos_y, plat.pos_x + plat.width - 1, plat.pos_y + plat.height - 1, 5)
         else
             rectfill(plat.pos_x, plat.pos_y, plat.pos_x + plat.width - 1, plat.pos_y + plat.height - 1, plat.fill_color)
-            -- kleine kanten
             rect(plat.pos_x, plat.pos_y, plat.pos_x + plat.width - 1, plat.pos_y + plat.height - 1, plat.border_color)
         end
     end
 end
 
--- one-way collision: nur wenn player von oben kommt (fallend) und über der plattform war
 function PlatformManager:check_landing(player, previous_pos_y)
     if player.vy <= 0 then return false end
 
