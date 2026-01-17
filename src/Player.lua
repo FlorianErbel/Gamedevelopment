@@ -87,7 +87,6 @@ function player:update(plats_ref, cam_pos_y)
     if not self.is_alive then return end
 
     local previous_y = self.pos_y
-    local landed_plat = plats_ref:check_landing(self, previous_y)
 
     -- input
     local ax = 0
