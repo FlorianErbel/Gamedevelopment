@@ -6,12 +6,12 @@ function player:init()
     self.width = 6
     self.height = 8
 
-    self.vx = 0
-    self.vy = 0
+    self.velocity_x = 0
+    self.velocity_y = 0
 
-    self.g = 0.22
-    self.move_acc = 0.35
-    self.max_vx = 1.8
+    self.gravity = 0.22
+    self.move_acceleration = 0.35
+    self.max_velocity_x = 1.8
 
     self.jump_vertical = -4.4 -- -3.6
     self.jump_vertical_small = -2.4
@@ -37,11 +37,11 @@ function player:jump()
     if self.is_jump_boost_used == true then
         local final_jump_height = base_jump * self.jump_boost_factor
 
-        self.vy = final_jump_height
+        self.velocity_y = final_jump_height
         self.jump_boost_factor = 1.0
         self.is_jump_boost_used = false
     else
-        self.vy = base_jump
+        self.velocity_y = base_jump
     end
     self.on_plat = false
 end
@@ -91,11 +91,11 @@ function player:update(plats_ref, cam_pos_y)
 
     -- input
     local ax = 0
-    if btn(0) then ax = ax - self.move_acc end -- left
-    if btn(1) then ax = ax + self.move_acc end -- right
+    if btn(0) then ax = ax - self.move_acceleration end -- left
+    if btn(1) then ax = ax + self.move_acceleration end -- right
 
-    self.vx = self.vx + ax
-    self.vx = clamp(self.vx, -self.max_vx, self.max_vx)
+    self.velocity_x = self.velocity_x + ax
+    self.velocity_x = clamp(self.velocity_x, -self.max_velocity_x, self.max_velocity_x)
 
     -- shoot only while holding UP
     if btn(2) then
@@ -107,14 +107,14 @@ function player:update(plats_ref, cam_pos_y)
 
 
     -- luftwiderstand
-    self.vx = self.vx * 0.90
+    self.velocity_x = self.velocity_x * 0.90
 
     -- gravity
-    self.vy = self.vy + self.g
+    self.velocity_y = self.velocity_y + self.gravity
 
     -- move
-    self.pos_x = self.pos_x + self.vx
-    self.pos_y = self.pos_y + self.vy
+    self.pos_x = self.pos_x + self.velocity_x
+    self.pos_y = self.pos_y + self.velocity_y
 
     -- wrap-around
     if self.pos_x < -self.width then self.pos_x = 128 end
