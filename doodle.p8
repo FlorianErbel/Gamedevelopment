@@ -12,6 +12,8 @@ __lua__
 #include src/platforms/PlatformManager.lua
 #include src/Player.lua
 #include src/Main.lua
+#include src/Enemies.lua
+
 
 __gfx__
 __label__

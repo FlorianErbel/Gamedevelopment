@@ -9,6 +9,7 @@ function _init()
     poke(0x5f2d, 1) -- keyboard input enable
     cartdata("doodlejump_hs")
     cam:init()
+    enemies:init()
     plats = PlatformManager.new(game.diff)
     player:init()
 
@@ -19,6 +20,7 @@ end
 
 function reset_game()
     cam:init()
+    enemies:init()
     plats = PlatformManager.new(game.diff)
     player:init()
 
@@ -27,7 +29,7 @@ function reset_game()
     game.best_height = 0
 end
 
-function _update60()
+ function _update60()
     if game.state == "menu" then
         local k = stat(31)
 
@@ -55,7 +57,19 @@ function _update60()
     end
 
 
-    player:update(plats, cam.pos_y)
+  player:update(plats, cam.pos_y)
+  enemies:update()
+  enemies:shots_hit(player)
+
+  -- collision: player touches hedgehog => game over
+  if enemies:player_hit(player) then
+    game.state="over"
+    player.alive=false
+    local hs = load_hs(game.diff)
+    if game.height > hs then save_hs(game.diff, game.height) end
+    return
+  end
+
 
     -- kamera folgt (nur nach oben)
     cam:update(player)
@@ -115,11 +129,12 @@ function _draw()
         return
     end
 
-    -- ab hier: spiel zeichnen
-    cam:apply()
-    plats:draw()
-    player:draw()
-    cam:reset()
+  -- ab hier: spiel zeichnen
+  cam:apply()
+  plats:draw()
+  enemies:draw()
+  player:draw()
+  cam:reset()
 
     camera()
     print("height: " .. game.height, 2, 2, 7)
