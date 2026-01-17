@@ -62,7 +62,7 @@ function enemies:update()
         e.y = p.y - e.h
 
         -- hin und her laufen auf der plattform
-        e.x += e.dir * e.speed
+        e.x = e.x +  e.dir * e.speed
         local left = p.x
         local right = p.x + p.w - e.w
         if e.x < left then e.x = left; e.dir = 1 end
@@ -115,7 +115,7 @@ function enemies:shots_hit(player)
           e.alive = false
           del(self.list, e)
           hit = true
-          kills += 1
+          kills = kills + 1
           break
         end
       end
