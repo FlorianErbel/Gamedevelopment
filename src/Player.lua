@@ -1,6 +1,6 @@
-Player = {}
+player = {}
 
-function Player:init()
+function player:init()
     self.pos_x = 64
     self.pos_y = 100
     self.width = 6
@@ -19,7 +19,7 @@ function Player:init()
     self.jump_boost_factor = 1.0
     self.is_jump_boost_used = false
 
-  --  self.on_plat = false
+    self.on_plat = false
     self.is_alive = true
 
     self.last_landed_pos_y = 120
@@ -29,7 +29,7 @@ function Player:init()
     self.shot_speed = 18
 end
 
-function Player:jump()
+function player:jump()
     local base_jump = self.jump_vertical
     if btn(3) then -- down
         base_jump = self.jump_vertical_small
@@ -43,10 +43,10 @@ function Player:jump()
     else
         self.velocity_y = base_jump
     end
-   -- self.on_plat = false
+    self.on_plat = false
 end
 
-function Player:shoot(dx, dy)
+function player:shoot(dx, dy)
     local shot_speed = self.shot_speed
     add(self.shots, {
         pos_x = self.pos_x + self.width / 2,
@@ -57,7 +57,7 @@ function Player:shoot(dx, dy)
     })
 end
 
-function Player:update_shots(cam_pos_y)
+function player:update_shots(cam_pos_y)
     for i = #self.shots, 1, -1 do
         local shots = self.shots[i]
         shots.pos_x = shots.pos_x + shots.vx
@@ -76,14 +76,14 @@ function Player:update_shots(cam_pos_y)
     end
 end
 
-function Player:draw_shots()
+function player:draw_shots()
     for shot in all(self.shots) do
         circfill(shot.pos_x, shot.pos_y, 2, 10) -- feuerball
         pset(shot.pos_x + 1, shot.pos_y, 7)     -- glanzpunkt
     end
 end
 
-function Player:update(plats_ref, cam_pos_y)
+function player:update(plats_ref, cam_pos_y)
     if not self.is_alive then return end
 
     local previous_y = self.pos_y
@@ -121,7 +121,7 @@ function Player:update(plats_ref, cam_pos_y)
     if self.pos_x > 128 then self.pos_x = -self.width end
 
     -- one-way landings (einmal prüfen, mit gültigem previous_y)
-    -- selon_platt = false
+     self.on_plat = false
     local landed_plat = plats_ref:check_landing(self, previous_y)
 
     if landed_plat then
@@ -135,7 +135,7 @@ function Player:update(plats_ref, cam_pos_y)
     self:update_shots(cam_pos_y)
 end
 
-function Player:draw()
+function player:draw()
     self:draw_shots()
     -- einfache figur: body + augen
     rectfill(self.pos_x, self.pos_y, self.pos_x + self.width - 1, self.pos_y + self.height - 1, 7)
