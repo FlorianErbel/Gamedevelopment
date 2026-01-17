@@ -1,6 +1,6 @@
-player = {}
+Player = {}
 
-function player:init()
+function Player:init()
     self.pos_x = 64
     self.pos_y = 100
     self.width = 6
@@ -29,7 +29,7 @@ function player:init()
     self.shot_speed = 18
 end
 
-function player:jump()
+function Player:jump()
     local base_jump = self.jump_vertical
     if btn(3) then -- down
         base_jump = self.jump_vertical_small
@@ -46,7 +46,7 @@ function player:jump()
     self.on_plat = false
 end
 
-function player:shoot(dx, dy)
+function Player:shoot(dx, dy)
     local shot_speed = self.shot_speed
     add(self.shots, {
         pos_x = self.pos_x + self.width / 2,
@@ -57,7 +57,7 @@ function player:shoot(dx, dy)
     })
 end
 
-function player:update_shots(cam_pos_y)
+function Player:update_shots(cam_pos_y)
     for i = #self.shots, 1, -1 do
         local shots = self.shots[i]
         shots.pos_x = shots.pos_x + shots.vx
@@ -76,14 +76,14 @@ function player:update_shots(cam_pos_y)
     end
 end
 
-function player:draw_shots()
+function Player:draw_shots()
     for shot in all(self.shots) do
         circfill(shot.pos_x, shot.pos_y, 2, 10) -- feuerball
         pset(shot.pos_x + 1, shot.pos_y, 7)     -- glanzpunkt
     end
 end
 
-function player:update(plats_ref, cam_pos_y)
+function Player:update(plats_ref, cam_pos_y)
     if not self.is_alive then return end
 
     local previous_y = self.pos_y
@@ -135,7 +135,7 @@ function player:update(plats_ref, cam_pos_y)
     self:update_shots(cam_pos_y)
 end
 
-function player:draw()
+function Player:draw()
     self:draw_shots()
     -- einfache figur: body + augen
     rectfill(self.pos_x, self.pos_y, self.pos_x + self.width - 1, self.pos_y + self.height - 1, 7)
