@@ -19,7 +19,7 @@ function Player:init()
     self.jump_boost_factor = 1.0
     self.is_jump_boost_used = false
 
-    self.on_plat = false
+  --  self.on_plat = false
     self.is_alive = true
 
     self.last_landed_pos_y = 120
@@ -43,7 +43,7 @@ function Player:jump()
     else
         self.velocity_y = base_jump
     end
-    self.on_plat = false
+   -- self.on_plat = false
 end
 
 function Player:shoot(dx, dy)
@@ -121,7 +121,7 @@ function Player:update(plats_ref, cam_pos_y)
     if self.pos_x > 128 then self.pos_x = -self.width end
 
     -- one-way landings (einmal prüfen, mit gültigem previous_y)
-    selon_platt = false
+    -- selon_platt = false
     local landed_plat = plats_ref:check_landing(self, previous_y)
 
     if landed_plat then
