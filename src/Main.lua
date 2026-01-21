@@ -2,7 +2,8 @@ game = {
     state = "menu", -- menu/play/over
     difficulty = 1,
     height = 0,
-    best_height = 0
+    best_height = 0,
+    STARTING_HEIGHT = 0
 }
 
 --[[function _init()
@@ -18,15 +19,29 @@ game = {
     game.best_height = 0
 end]]
 
-function reset_game()
+function game_setup()
     cam:init()
     enemies:init()
     plats = PlatformManager.new(game.difficulty)
     player:init()
 
+    game.height = game.STARTING_HEIGHT
+    game.best_height = game.STARTING_HEIGHT
+end
+
+function _init()
+    poke(0x5f2d, 1) -- keyboard input enable
+    cartdata("doodlejump_hs")
+
+    game_setup()
+
+    game.state = "menu"
+end
+
+function reset_game()
+    game_setup()
+
     game.state = "play"
-    game.height = 0
-    game.best_height = 0
 end
 
 function game_over()
