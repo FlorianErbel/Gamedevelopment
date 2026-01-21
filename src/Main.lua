@@ -1,15 +1,17 @@
 game = {
-    state = "menu", -- menu/play/over
-    difficulty = 1,
-    height = 0,
-    best_height = 0,
+
     STARTING_HEIGHT = 0,
     STATE_MENU = "menu",
     STATE_PLAY = "play",
     STATE_OVER = "over",
     DIFFICULTY_EASY = 1,
     DIFFICULTY_MEDIUM = 2,
-    DIFFICULTY_HARD = 3
+    DIFFICULTY_HARD = 3,
+
+    state = STATE_MENU,
+    difficulty = 1,
+    height = 0,
+    best_height = 0
 }
 
 --[[function _init()
