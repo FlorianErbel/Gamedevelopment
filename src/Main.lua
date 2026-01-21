@@ -88,8 +88,8 @@ end
     if player.pos_y > cam.pos_y + 140 then
         game.state = "over"
         player.is_alive = false
-        local hs = load_hs(game.difficulty)
-        if game.height > hs then
+        local highscore = load_hs(game.difficulty)
+        if game.height > highscore then
             save_hs(game.difficulty, game.height)
         end
     end
