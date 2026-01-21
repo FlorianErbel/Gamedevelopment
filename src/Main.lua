@@ -92,12 +92,7 @@ function _update60()
     -- gameover: fällt unter unteren screenrand
     -- unterer sichtbarer rand in welt: cam.y + 128
     if player.pos_y > cam.pos_y + 140 then
-        game.state = "over"
-        player.is_alive = false
-        local highscore = load_highscore(game.difficulty)
-        if game.height > highscore then
-            save_highscore(game.difficulty, game.height)
-        end
+        game_over()
     end
 end
 
