@@ -29,6 +29,15 @@ function reset_game()
     game.best_height = 0
 end
 
+function game_over()
+    game.state = "over"
+    player.alive = false
+    local highscore = load_highscore(game.difficulty)
+    if game.best_height > highscore then
+        save_highscore(game.difficulty, game.best_height)
+    end
+end
+
  function _update60()
     if game.state == "menu" then
         local k = stat(31)
