@@ -1,6 +1,6 @@
 game = {
     state = "menu", -- menu/play/over
-    diff = 1,
+    difficulty = 1,
     height = 0,
     best_height = 0
 }
@@ -10,7 +10,7 @@ function _init()
     cartdata("doodlejump_hs")
     cam:init()
     enemies:init()
-    plats = PlatformManager.new(game.diff)
+    plats = PlatformManager.new(game.difficulty)
     player:init()
 
     game.state = "menu"
@@ -21,7 +21,7 @@ end
 function reset_game()
     cam:init()
     enemies:init()
-    plats = PlatformManager.new(game.diff)
+    plats = PlatformManager.new(game.difficulty)
     player:init()
 
     game.state = "play"
@@ -34,13 +34,13 @@ end
         local k = stat(31)
 
         if k == "1" then
-            game.diff = 1
+            game.difficulty = 1
             reset_game()
         elseif k == "2" then
-            game.diff = 2
+            game.difficulty = 2
             reset_game()
         elseif k == "3" then
-            game.diff = 3
+            game.difficulty = 3
             reset_game()
         end
 
@@ -65,8 +65,8 @@ end
   if enemies:player_hit(player) then
     game.state="over"
     player.alive=false
-    local hs = load_hs(game.diff)
-    if game.height > hs then save_hs(game.diff, game.height) end
+    local hs = load_hs(game.difficulty)
+    if game.height > hs then save_hs(game.difficulty, game.height) end
     return
   end
 
@@ -89,9 +89,9 @@ end
     if player.pos_y > cam.pos_y + 140 then
         game.state = "over"
         player.is_alive = false
-        local hs = load_hs(game.diff)
+        local hs = load_hs(game.difficulty)
         if game.height > hs then
-            save_hs(game.diff, game.height)
+            save_hs(game.difficulty, game.height)
         end
     end
 end
