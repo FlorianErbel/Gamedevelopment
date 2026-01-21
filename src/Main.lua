@@ -64,8 +64,8 @@ end
   if enemies:player_hit(player) then
     game.state="over"
     player.alive=false
-    local highscore = load_hs(game.difficulty)
-    if game.height > highscore then save_hs(game.difficulty, game.height) end
+    local highscore = load_highscore(game.difficulty)
+    if game.height > highscore then save_highscore(game.difficulty, game.height) end
     return
   end
 
@@ -88,23 +88,23 @@ end
     if player.pos_y > cam.pos_y + 140 then
         game.state = "over"
         player.is_alive = false
-        local highscore = load_hs(game.difficulty)
+        local highscore = load_highscore(game.difficulty)
         if game.height > highscore then
-            save_hs(game.difficulty, game.height)
+            save_highscore(game.difficulty, game.height)
         end
     end
 end
 
-function hs_slot(diff)
-    return diff - 1 -- slots 0,1,2
+function highscore_slot(difficulty)
+    return difficulty - 1 -- slots 0,1,2
 end
 
-function load_hs(diff)
-    return dget(hs_slot(diff)) or 0
+function load_highscore(difficulty)
+    return dget(highscore_slot(difficulty)) or 0
 end
 
-function save_hs(diff, val)
-    dset(hs_slot(diff), val)
+function save_highscore(difficulty, new_highscore)
+    dset(highscore_slot(difficulty), new_highscore)
 end
 
 function _draw()
@@ -114,16 +114,16 @@ function _draw()
     camera()
 
     if game.state == "menu" then
-        local hs1 = load_hs(1)
-        local hs2 = load_hs(2)
-        local hs3 = load_hs(3)
+        local highscore_difficulty_easy = load_highscore(1)
+        local highscore_difficulty_medium = load_highscore(2)
+        local highscore_difficulty_hard = load_highscore(3)
 
         print("doodletump", 44, 18, 7)
         print("select mode:", 40, 34, 6)
 
-        print("1 easy   hs: " .. hs1, 34, 50, 7)
-        print("2 medium hs: " .. hs2, 34, 60, 7)
-        print("3 hard   hs: " .. hs3, 34, 70, 7)
+        print("1 easy   hs: " .. highscore_difficulty_easy, 34, 50, 7)
+        print("2 medium hs: " .. highscore_difficulty_medium, 34, 60, 7)
+        print("3 hard   hs: " .. highscore_difficulty_hard, 34, 70, 7)
 
         return
     end
