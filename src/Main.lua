@@ -29,7 +29,7 @@ function reset_game()
     game.best_height = 0
 end
 
-function game:game_over()
+function game_over()
     game.state = "over"
     player.alive = false
     local highscore = load_highscore(game.difficulty)
@@ -71,7 +71,7 @@ function _update60()
 
     -- collision: player touches hedgehog => game over
     if enemies:player_hit(player) then
-        game:game_over()
+        game_over()
         return
     end
 
