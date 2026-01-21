@@ -48,7 +48,6 @@ end
     end
 
     if game.state == "over" then
-        -- zurück ins menü mit z/x
         if btnp(4) or btnp(5) then
             game.state = "menu"
             return
