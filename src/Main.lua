@@ -38,7 +38,7 @@ function game_over()
     end
 end
 
- function _update60()
+function _update60()
     if game.state == "menu" then
         local k = stat(31)
 
@@ -65,18 +65,18 @@ end
     end
 
 
-  player:update(plats, cam.pos_y)
-  enemies:update()
-  enemies:shots_hit(player)
+    player:update(plats, cam.pos_y)
+    enemies:update()
+    enemies:shots_hit(player)
 
-  -- collision: player touches hedgehog => game over
-  if enemies:player_hit(player) then
-    game.state="over"
-    player.alive=false
-    local highscore = load_highscore(game.difficulty)
-    if game.height > highscore then save_highscore(game.difficulty, game.height) end
-    return
-  end
+    -- collision: player touches hedgehog => game over
+    if enemies:player_hit(player) then
+        game.state = "over"
+        player.alive = false
+        local highscore = load_highscore(game.difficulty)
+        if game.height > highscore then save_highscore(game.difficulty, game.height) end
+        return
+    end
 
 
     -- kamera folgt (nur nach oben)
@@ -137,12 +137,12 @@ function _draw()
         return
     end
 
-  -- ab hier: spiel zeichnen
-  cam:apply()
-  plats:draw()
-  enemies:draw()
-  player:draw()
-  cam:reset()
+    -- ab hier: spiel zeichnen
+    cam:apply()
+    plats:draw()
+    enemies:draw()
+    player:draw()
+    cam:reset()
 
     camera()
     print("height: " .. game.height, 2, 2, 7)
