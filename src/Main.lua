@@ -64,8 +64,8 @@ end
   if enemies:player_hit(player) then
     game.state="over"
     player.alive=false
-    local hs = load_hs(game.difficulty)
-    if game.height > hs then save_hs(game.difficulty, game.height) end
+    local highscore = load_hs(game.difficulty)
+    if game.height > highscore then save_hs(game.difficulty, game.height) end
     return
   end
 
