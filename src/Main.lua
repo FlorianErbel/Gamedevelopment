@@ -5,7 +5,7 @@ game = {
     best_height = 0
 }
 
-function _init()
+--[[function _init()
     poke(0x5f2d, 1) -- keyboard input enable
     cartdata("doodlejump_hs")
     cam:init()
@@ -16,7 +16,7 @@ function _init()
     game.state = "menu"
     game.height = 0
     game.best_height = 0
-end
+end]]
 
 function reset_game()
     cam:init()
