@@ -5,9 +5,8 @@ function enemies:init()
 end
 
 -- AABB collision
--- TODO: Umbenennen der Variablen in verständliche Variablen --> Lars fragen, was was sein soll
-local function aabb(ax, ay, aw, ah, bx, by, bw, bh)
-    return ax < bx + bw and ax + aw > bx and ay < by + bh and ay + ah > by
+local function aabb(player_pos_x, player_pos_y, player_width, player_height, enemie_pos_x, enemie_pos_y, enemie_width, enemie_height)
+    return player_pos_x < enemie_pos_x + enemie_width and player_pos_x + player_width > enemie_pos_x and player_pos_y < enemie_pos_y + enemie_height and player_pos_y + player_height > enemie_pos_y
 end
 
 function enemies:max_alive(difficulty)
