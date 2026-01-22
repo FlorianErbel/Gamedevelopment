@@ -94,8 +94,8 @@ function enemies:draw()
 end
 
 function enemies:player_hit(player)
-    for e in all(self.list) do
-        if aabb(player.x, player.y, player.w, player.h, e.x, e.y, e.w, e.h) then
+    for enemie in all(self.list) do
+        if aabb(player.pos_x, player.pos_y, player.width, player.height, enemie.pos_x, enemie.pos_y, enemie.width, enemie.height) then
             return true
         end
     end
