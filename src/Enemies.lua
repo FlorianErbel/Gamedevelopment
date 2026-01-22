@@ -38,7 +38,7 @@ function enemies:try_spawn_on_platform(platform, difficulty, height)
     -- TODO: Wenn wir die Kontrolle umdrehen und den folgenden Code-Block hier einbauen, kommen wir dann nicht zum selben Erbenis, nur ohne den Funktionsabbruch (return)
     if rnd() > p then return end
 
-    local e = {
+    local new_enemie = {
         kind = "hedgehog",
         plat = platform, -- referenz
         w = 8,
@@ -49,7 +49,7 @@ function enemies:try_spawn_on_platform(platform, difficulty, height)
         y = platform.y - 6,
         alive = true
     }
-    add(self.list, e)
+    add(self.list, new_enemie)
 end
 
 function enemies:update()
@@ -60,8 +60,6 @@ function enemies:update()
         else
             local plat = enemies.plat
             -- falls plattform gelöscht wurde: entfernen
-            if not p then
-                del(self.list, e)
             if not plat then
                 del(self.list, enemies)
             else
