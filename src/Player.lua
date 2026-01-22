@@ -64,7 +64,7 @@ function player:shoot(direction_x, direction_y)
 end
 
 function player:update_shots(cam_pos_y)
-    for i = #self.shots, 1, -1 do
+    --[[for i = #self.shots, 1, -1 do
         local shots = self.shots[i]
         shots.pos_x = shots.pos_x + shots.velocity_x
         shots.pos_y = shots.pos_y + shots.velocity_y
@@ -79,7 +79,7 @@ function player:update_shots(cam_pos_y)
         if shots.pos_x < left_bound - 4 or shots.pos_x > right_bound + 4 or shots.pos_y < top_bound - 4 or shots.pos_y > bottom_bound + 4 or shots.life <= 0 then
             del(self.shots, shots)
         end
-    end
+    end]]
 end
 
 function player:draw_shots()
