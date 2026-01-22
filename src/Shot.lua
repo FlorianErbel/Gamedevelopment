@@ -7,12 +7,12 @@
 local Shot = {}
 Shot.__index = Shot
 
-function Shot.new(x, y, vx, vy)
+function Shot.new(pos_x, pos_y, velocity_x, velocity_y)
     local self = setmetatable({}, Shot)
-    self.pos_x = x
-    self.pos_y = y
-    self.velocity_x = vx
-    self.velocity_y = vy
+    self.pos_x = pos_x
+    self.pos_y = pos_y
+    self.velocity_x = velocity_x
+    self.velocity_y = velocity_y
     self.life = 60
     return self
 end
