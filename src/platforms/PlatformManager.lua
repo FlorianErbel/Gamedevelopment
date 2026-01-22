@@ -256,21 +256,21 @@ function PlatformManager:draw()
 end
 
 ---Prüft, ob der Spieler auf einer Plattform landet
----@param Player table Spieler-Objekt mit pos_x, pos_y, width, height, vy
+---@param player table Spieler-Objekt mit pos_x, pos_y, width, height, velocity_y
 ---@param previous_pos_y number
 ---@return table|nil die Plattform, auf der der Spieler gelandet ist
-function PlatformManager:check_landing(Player, previous_pos_y)
-    if Player.velocity_y <= 0 then return false end
+function PlatformManager:check_landing(player, previous_pos_y)
+    if player.velocity_y <= 0 then return false end
 
-    local foot_previous = previous_pos_y + Player.height
-    local foot_now = Player.pos_y + Player.height
+    local foot_previous = previous_pos_y + player.height
+    local foot_now = player.pos_y + player.height
 
     for plat in all(self.list) do
-        if Player.pos_x + Player.width > plat.pos_x and Player.pos_x < plat.pos_x + plat.width then
+        if player.pos_x + player.width > plat.pos_x and player.pos_x < plat.pos_x + plat.width then
             if foot_previous <= plat.pos_y and foot_now >= plat.pos_y then
-                Player.pos_y = plat.pos_y - Player.height
-                Player.velocity_y = 0
-                plat:on_land(Player)
+                player.pos_y = plat.pos_y - player.height
+                player.velocity_y = 0
+                plat:on_land(player)
                 return plat
             end
         end
