@@ -80,6 +80,13 @@ function player:update_shots(cam_pos_y)
             del(self.shots, shots)
         end
     end]]
+    for i = #self.shots, 1, -1 do
+        local shot = self.shots[i]
+        shot:update()
+        if shot:is_dead(cam_pos_y) then
+            del(self.shots, shot)
+        end
+    end
 end
 
 function player:draw_shots()
