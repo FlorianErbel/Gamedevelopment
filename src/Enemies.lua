@@ -17,6 +17,7 @@ function enemies:max_alive(difficulty)
 end
 
 -- spawnchance pro "platform level"
+-- TODO: Was bedeuten die Verknüpfungen bei der difficulty?
 function enemies:spawn_prob(difficulty, height)
     local base = (difficulty == 1 and 0.05) or (difficulty == 2 and 0.08) or 0.12
     -- height wächst mit fortschritt; langsam ansteigen lassen
