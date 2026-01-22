@@ -54,27 +54,29 @@ end
 
 function enemies:update()
     for i = #self.list, 1, -1 do
-        local e = self.list[i]
-        if not e.alive then
-            del(self.list, e)
+        local enemies = self.list[i]
+        if not enemies.alive then
+            del(self.list, enemies)
         else
-            local p = e.plat
+            local plat = enemies.plat
             -- falls plattform gelöscht wurde: entfernen
             if not p then
                 del(self.list, e)
+            if not plat then
+                del(self.list, enemies)
             else
                 -- y an plattform binden
-                e.y = p.y - e.h
+                enemies.y = plat.y - enemies.h
 
                 -- hin und her laufen auf der plattform
-                e.x = e.x + e.dir * e.speed
-                local left = p.x
-                local right = p.x + p.w - e.w
-                if e.x < left then
-                    e.x = left; e.dir = 1
+                enemies.x = enemies.x + enemies.dir * enemies.speed
+                local left = plat.x
+                local right = plat.x + plat.w - enemies.w
+                if enemies.x < left then
+                    enemies.x = left; enemies.dir = 1
                 end
-                if e.x > right then
-                    e.x = right; e.dir = -1
+                if enemies.x > right then
+                    enemies.x = right; enemies.dir = -1
                 end
             end
         end
