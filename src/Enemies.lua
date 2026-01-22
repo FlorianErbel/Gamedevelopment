@@ -108,7 +108,7 @@ function enemies:shots_hit(player)
 
     local kills = 0
 
--- TODO: Was bedeuten die Variablen?
+-- TODO: Was bedeuten die Variablen? s= shot oder shots? was ist si = #shots? Kann das umgebaut werden?
     for si = #shots, 1, -1 do
         local s = shots[si]
         -- treat shot as small box
