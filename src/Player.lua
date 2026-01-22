@@ -60,8 +60,8 @@ end
 function player:update_shots(cam_pos_y)
     for i = #self.shots, 1, -1 do
         local shots = self.shots[i]
-        shots.pos_x = shots.pos_x + shots.vx
-        shots.pos_y = shots.pos_y + shots.vy
+        shots.pos_x = shots.pos_x + shots.velocity_x
+        shots.pos_y = shots.pos_y + shots.velocity_y
         shots.life = shots.life - 1
 
         -- screen bounds in world coords
