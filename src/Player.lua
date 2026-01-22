@@ -64,22 +64,6 @@ function player:shoot(direction_x, direction_y)
 end
 
 function player:update_shots(cam_pos_y)
-    --[[for i = #self.shots, 1, -1 do
-        local shots = self.shots[i]
-        shots.pos_x = shots.pos_x + shots.velocity_x
-        shots.pos_y = shots.pos_y + shots.velocity_y
-        shots.life = shots.life - 1
-
-        -- screen bounds in world coords
-        local left_bound = 0
-        local right_bound = 128
-        local top_bound = cam_pos_y
-        local bottom_bound = cam_pos_y + 128
-
-        if shots.pos_x < left_bound - 4 or shots.pos_x > right_bound + 4 or shots.pos_y < top_bound - 4 or shots.pos_y > bottom_bound + 4 or shots.life <= 0 then
-            del(self.shots, shots)
-        end
-    end]]
     for i = #self.shots, 1, -1 do
         local shot = self.shots[i]
         shot:update()
@@ -91,8 +75,6 @@ end
 
 function player:draw_shots()
     for shot in all(self.shots) do
-        --[[circfill(shot.pos_x, shot.pos_y, 2, 10) -- feuerball
-        pset(shot.pos_x + 1, shot.pos_y, 7)     -- glanzpunkt]]
         shot:draw()
     end
 end
