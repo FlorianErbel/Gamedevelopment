@@ -42,13 +42,13 @@ function enemies:try_spawn_on_platform(platform, difficulty, height)
     local new_enemie = {
         kind = "hedgehog",
         plat = platform, -- referenz
-        w = 8,
-        h = 6,
+        width = 8,
+        height = 6,
         dir = (rnd() < 0.5) and -1 or 1,
         speed = (difficulty == 1 and 0.45) or (difficulty == 2 and 0.6) or 0.8,
-        x = platform.x + 4,
-        y = platform.y - 6,
-        alive = true
+        pos_x = platform.pos_x + 4,
+        pos_y = platform.pos_y - 6,
+        is_alive = true
     }
     add(self.list, new_enemie)
 end
@@ -85,11 +85,11 @@ end
 function enemies:draw()
     for enemie in all(self.list) do
         -- einfacher "igel": kleiner block + stacheln
-        rectfill(enemie.x, enemie.y, enemie.x + enemie.w - 1, enemie.y + enemie.h - 1, 4)
+        rectfill(enemie.pos_x, enemie.pos_y, enemie.pos_x + enemie.width - 1, enemie.pos_y + enemie.height - 1, 4)
         -- stacheln oben
-        pset(enemie.x + 1, enemie.y - 1, 0)
-        pset(enemie.x + 3, enemie.y - 2, 0)
-        pset(enemie.x + 5, enemie.y - 1, 0)
+        pset(enemie.pos_x + 1, enemie.pos_y - 1, 0)
+        pset(enemie.pos_x + 3, enemie.pos_y - 2, 0)
+        pset(enemie.pos_x + 5, enemie.pos_y - 1, 0)
     end
 end
 
