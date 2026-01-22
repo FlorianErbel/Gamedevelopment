@@ -26,7 +26,7 @@ function player:init()
     self.best_landed_pos_y = 120 -- kleinste y (höchste plattform)
 
     self.shots = {}
-    self.shot_speed = 18
+    self.shot_speed = 5
 end
 
 function player:jump()
