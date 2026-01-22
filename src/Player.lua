@@ -91,8 +91,9 @@ end
 
 function player:draw_shots()
     for shot in all(self.shots) do
-        circfill(shot.pos_x, shot.pos_y, 2, 10) -- feuerball
-        pset(shot.pos_x + 1, shot.pos_y, 7)     -- glanzpunkt
+        --[[circfill(shot.pos_x, shot.pos_y, 2, 10) -- feuerball
+        pset(shot.pos_x + 1, shot.pos_y, 7)     -- glanzpunkt]]
+        shot:draw()
     end
 end
 
