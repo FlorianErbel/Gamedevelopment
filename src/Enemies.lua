@@ -9,15 +9,15 @@ local function aabb(ax,ay,aw,ah,bx,by,bw,bh)
   return ax < bx+bw and ax+aw > bx and ay < by+bh and ay+ah > by
 end
 
-function enemies:max_alive(diff)
-  if diff==1 then return 1 end
-  if diff==2 then return 2 end
+function enemies:max_alive(difficulty)
+  if difficulty==1 then return 1 end
+  if difficulty==2 then return 2 end
   return 3
 end
 
 -- spawnchance pro "platform level"
-function enemies:spawn_prob(diff, height)
-  local base = (diff==1 and 0.05) or (diff==2 and 0.08) or 0.12
+function enemies:spawn_prob(difficulty, height)
+  local base = (difficulty==1 and 0.05) or (difficulty==2 and 0.08) or 0.12
   -- height wächst mit fortschritt; langsam ansteigen lassen
   local hf = clamp(height / 800, 0, 1) * 0.18  -- +0..0.18
   local p = base + hf
@@ -25,13 +25,13 @@ function enemies:spawn_prob(diff, height)
 end
 
 -- platform: table {x,y,w,h}
-function enemies:try_spawn_on_platform(platform, diff, height)
+function enemies:try_spawn_on_platform(platform, difficulty, height)
   if not self.list then self.list = {} end
-  if #self.list >= self:max_alive(diff) then return end
+  if #self.list >= self:max_alive(difficulty) then return end
   if platform.ground then return end
   if platform.w < 18 then return end -- zu klein für igel-laufen
 
-  local p = self:spawn_prob(diff, height)
+  local p = self:spawn_prob(difficulty, height)
   if rnd() > p then return end
 
   local e = {
@@ -39,7 +39,7 @@ function enemies:try_spawn_on_platform(platform, diff, height)
     plat=platform,          -- referenz
     w=8, h=6,
     dir = (rnd() < 0.5) and -1 or 1,
-    speed = (diff==1 and 0.45) or (diff==2 and 0.6) or 0.8,
+    speed = (difficulty==1 and 0.45) or (difficulty==2 and 0.6) or 0.8,
     x = platform.x + 4,
     y = platform.y - 6,
     alive=true
