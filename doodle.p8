@@ -10,9 +10,10 @@ __lua__
 #include src/platforms/CatapultPlatform.lua
 #include src/platforms/PlatformFactory.lua
 #include src/platforms/PlatformManager.lua
+#include src/Shot.lua
+#include src/Enemies.lua
 #include src/Player.lua
 #include src/Main.lua
-#include src/Enemies.lua
 
 
 __gfx__
