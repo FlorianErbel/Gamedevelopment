@@ -1,5 +1,5 @@
 enemies = {}
-
+-- TODO: Macht es Sinn für Enemies ebenfalls das Factory-Pattern mit Manager zu erstellen?
 function enemies:init()
     self.list = {}
 end
