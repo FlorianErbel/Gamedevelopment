@@ -105,13 +105,13 @@ function player:update(plats_ref, cam_pos_y)
     end
 
 
-    -- luftwiderstand
+    -- Luftwiderstand
     self.velocity_x = self.velocity_x * 0.90
 
-    -- gravity
+    -- Gravitation
     self.velocity_y = self.velocity_y + self.gravity
 
-    -- move
+    -- Bewegung
     self.pos_x = self.pos_x + self.velocity_x
     self.pos_y = self.pos_y + self.velocity_y
 
