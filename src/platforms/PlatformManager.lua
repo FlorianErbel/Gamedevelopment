@@ -3,27 +3,27 @@
 ---@field topmost_platform_y number  -- y-Koordinate der höchstgelegenen Plattform
 ---@field last_platform_anchor_x number -- Letzte x-Koordinate als Anker für neue Plattformen
 ---@field difficulty number           -- Schwierigkeitsgrad
----@field default_jump_velocity number -- Standard-Sprunggeschwindigkeit des Spielers
----@field gravity number             -- Schwerkraft
+---@field DEFAULT_JUMP_VELOCITY number -- Standard-Sprunggeschwindigkeit des Spielers
+---@field GRAVITY number             -- Schwerkraft
 ---@field camera_pos_y number        -- Aktuelle Kameraposition Y
----@field minimum_height_catapult_platform number -- Mindesthöhe für Katapult-Plattformen
----@field minimum_height_breakable_platform number -- Mindesthöhe für zerstörbare Plattformen
----@field random_generation_limit_catapult_platform number -- Spawnwahrscheinlichkeit Katapult-Plattform
----@field random_generation_limit_breakable_platform number -- Spawnwahrscheinlichkeit Breakable-Plattform
----@field screen_height number       -- Höhe des sichtbaren Bildschirms
----@field screen_width number        -- Breite des sichtbaren Bildschirms
----@field spawn_buffer_y number      -- Mindestabstand für Spawn-Lücken
----@field platform_default_height number -- Standardhöhe einer Plattform
----@field cleanup_margin number      -- Extra-Margin für das Entfernen unterer Plattformen
----@field default_ground_y number    -- y-Koordinate der Bodenplattform
----@field anchor_spread number       -- Abstand zwischen mehreren Plattformen auf gleicher Höhe
----@field max_spawn_attempts number  -- Maximale Versuche zur Platzierung einer Plattform
----@field max_platforms_easy number  -- Max Plattformen pro Level (leicht)
----@field max_platforms_medium number -- Max Plattformen pro Level (mittel)
----@field max_platforms_hard number -- Max Plattformen pro Level (schwer)
----@field difficulty_easy number     -- Index für leicht
----@field difficulty_medium number   -- Index für mittel
----@field difficulty_hard number     -- Index für schwer
+---@field MINIMUM_HEIGHT_CATAPULT_PLATFORM number -- Mindesthöhe für Katapult-Plattformen
+---@field MINIMUM_HEIGHT_BREAKABLE_PLATFORM number -- Mindesthöhe für zerstörbare Plattformen
+---@field RANDOM_GENERATION_LIMIT_CATAPULT_PLATFORM number -- Spawnwahrscheinlichkeit Katapult-Plattform
+---@field RANDOM_GENERATION_LIMIT_BREAKABLE_PLATFORM number -- Spawnwahrscheinlichkeit Breakable-Plattform
+---@field SCREEN_HEIGHT number       -- Höhe des sichtbaren Bildschirms
+---@field SCREEN_WIDTH number        -- Breite des sichtbaren Bildschirms
+---@field SPAWN_BUFFER_Y number      -- Mindestabstand für Spawn-Lücken
+---@field PLATFORM_DEFAULT_HEIGHT number -- Standardhöhe einer Plattform
+---@field CLEANUP_MARGIN number      -- Extra-Margin für das Entfernen unterer Plattformen
+---@field DEFAULT_GROUND_Y number    -- y-Koordinate der Bodenplattform
+---@field ANCHOR_SPREAD number       -- Abstand zwischen mehreren Plattformen auf gleicher Höhe
+---@field MAX_SPAWN_ATTEMPTS number  -- Maximale Versuche zur Platzierung einer Plattform
+---@field MAX_PLATFORMS_EASY number  -- Max Plattformen pro Level (leicht)
+---@field MAX_PLATFORMS_MEDIUM number -- Max Plattformen pro Level (mittel)
+---@field MAX_PLATFORMS_HARD number -- Max Plattformen pro Level (schwer)
+---@field DIFFICULTY_EASY number     -- Index für leicht
+---@field DIFFICULTY_MEDIUM number   -- Index für mittel
+---@field DIFFICULTY_HARD number     -- Index für schwer
 local PlatformManager = {}
 
 PlatformManager.__index = PlatformManager
@@ -33,8 +33,8 @@ PlatformManager.__index = PlatformManager
 function PlatformManager:init(difficulty)
     -- Allgemeine Spiel-Parameter
     self.difficulty = difficulty or 1
-    self.default_jump_velocity = 4.4
-    self.gravity = 0.22
+    self.DEFAULT_JUMP_VELOCITY = 4.4
+    self.GRAVITY = 0.22
 
     -- Platform-Tracking
     self.list = {}
@@ -42,31 +42,31 @@ function PlatformManager:init(difficulty)
     self.last_platform_anchor_x = nil
 
     -- Plattform-Generierungsparameter
-    self.minimum_height_catapult_platform = 2000
-    self.minimum_height_breakable_platform = 1000
-    self.random_generation_limit_catapult_platform = 0.20
-    self.random_generation_limit_breakable_platform = 0.35
-    self.platform_default_height = 6
-    self.spawn_buffer_y = 12
-    self.anchor_spread = 18
-    self.max_spawn_attempts = 8
-    self.cleanup_margin = 16
+    self.MINIMUM_HEIGHT_CATAPULT_PLATFORM = 2000
+    self.MINIMUM_HEIGHT_BREAKABLE_PLATFORM = 1000
+    self.RANDOM_GENERATION_LIMIT_CATAPULT_PLATFORM = 0.20
+    self.RANDOM_GENERATION_LIMIT_BREAKABLE_PLATFORM = 0.35
+    self.PLATFORM_DEFAULT_HEIGHT = 6
+    self.SPAWN_BUFFER_Y = 12
+    self.ANCHOR_SPREAD = 18
+    self.MAX_SPAWN_ATTEMPTS = 8
+    self.CLEANUP_MARGIN = 16
 
     -- Bildschirm- und Layout-Parameter
-    self.screen_height = 128
-    self.screen_width = 128
-    self.default_ground_y = 120
+    self.SCREEN_HEIGHT = 128
+    self.SCREEN_WIDTH = 128
+    self.DEFAULT_GROUND_Y = 120
 
     -- Anzahl Plattformen pro Schwierigkeitsgrad
-    self.max_platforms_easy = 3
-    self.max_platforms_medium = 2
-    self.max_platforms_hard = 1
-    self.difficulty_easy = 1
-    self.difficulty_medium = 2
-    self.difficulty_hard = 3
+    self.MAX_PLATFORMS_EASY = 3
+    self.MAX_PLATFORMS_MEDIUM = 2
+    self.MAX_PLATFORMS_HARD = 1
+    self.DIFFICULTY_EASY = 1
+    self.DIFFICULTY_MEDIUM = 2
+    self.DIFFICULTY_HARD = 3
 
     -- Startplattform
-    self:add_platform("ground", 0, self.default_ground_y, self.screen_width, true)
+    self:add_platform("ground", 0, self.DEFAULT_GROUND_Y, self.SCREEN_WIDTH, true)
 end
 
 ---Erzeugt eine neue Instanz des PlatformManagers
@@ -82,7 +82,7 @@ end
 ---@param pos_y number
 ---@return number
 function PlatformManager:get_height_from_ground(pos_y)
-    return max(0, self.default_ground_y - pos_y)
+    return max(0, self.DEFAULT_GROUND_Y - pos_y)
 end
 
 ---Fügt eine Plattform hinzu
@@ -106,14 +106,14 @@ end
 ---@return number
 function PlatformManager:difficulty_at(pos_y)
     local height = self:get_height_from_ground(pos_y)
-    local gap = self.spawn_buffer_y + flr(height / 60)
-    return clamp(gap, self.spawn_buffer_y, 26)
+    local gap = self.SPAWN_BUFFER_Y + flr(height / 60)
+    return clamp(gap, self.SPAWN_BUFFER_Y, 26)
 end
 
 ---Berechnet die maximale Sprunghöhe basierend auf Gravitation und Standard-Jump
 ---@return number
 function PlatformManager:get_max_jump_height()
-    return (self.default_jump_velocity ^ 2) / (2 * self.gravity)
+    return (self.DEFAULT_JUMP_VELOCITY ^ 2) / (2 * self.GRAVITY)
 end
 
 ---Bestimmt einen Faktor für die vertikale Reichweite abhängig von Höhe und Schwierigkeit
@@ -151,10 +151,10 @@ end
 ---@param is_easy_mode boolean
 ---@return number
 function PlatformManager:max_per_level(is_easy_mode)
-    if is_easy_mode then return self.max_platforms_easy end
-    if self.difficulty == self.difficulty_easy then return self.max_platforms_easy end
-    if self.difficulty == self.difficulty_medium then return self.max_platforms_medium end
-    return self.max_platforms_hard
+    if is_easy_mode then return self.MAX_PLATFORMS_EASY end
+    if self.difficulty == self.DIFFICULTY_EASY then return self.MAX_PLATFORMS_EASY end
+    if self.difficulty == self.DIFFICULTY_MEDIUM then return self.MAX_PLATFORMS_MEDIUM end
+    return self.MAX_PLATFORMS_HARD
 end
 
 ---Prüft, ob eine neue Plattform mit existierenden kollidiert
@@ -164,7 +164,7 @@ end
 ---@param height number
 ---@return boolean
 function PlatformManager:platform_overlaps_existing(pos_x, pos_y, width, height)
-    height = height or self.platform_default_height
+    height = height or self.PLATFORM_DEFAULT_HEIGHT
     for plat in all(self.list) do
         if pos_y < plat.pos_y + plat.height and pos_y + height > plat.pos_y then
             if pos_x < plat.pos_x + plat.width and pos_x + width > plat.pos_x then
@@ -186,12 +186,12 @@ function PlatformManager:spawn_platform(at_pos_y, is_easy_mode)
     local horizontal_reach = self:get_horizontal_reach(at_pos_y, is_easy_mode)
 
     local pos_x = nil
-    for i = 1, self.max_spawn_attempts do
+    for i = 1, self.MAX_SPAWN_ATTEMPTS do
         local new_pos_x = flr(rnd(horizontal_reach * 2 + 1) + (anchor_x - horizontal_reach))
-        new_pos_x = (new_pos_x % self.screen_width + self.screen_width) % self.screen_width
-        new_pos_x = clamp(new_pos_x, 0, self.screen_width - width)
+        new_pos_x = (new_pos_x % self.SCREEN_WIDTH + self.SCREEN_WIDTH) % self.SCREEN_WIDTH
+        new_pos_x = clamp(new_pos_x, 0, self.SCREEN_WIDTH - width)
 
-        if not self:platform_overlaps_existing(new_pos_x, at_pos_y, width, self.platform_default_height) then
+        if not self:platform_overlaps_existing(new_pos_x, at_pos_y, width, self.PLATFORM_DEFAULT_HEIGHT) then
             pos_x = new_pos_x
             break
         end
@@ -207,9 +207,9 @@ function PlatformManager:spawn_platform(at_pos_y, is_easy_mode)
     local kind = "default"
     if not is_easy_mode then
         local random_number = rnd()
-        if height_from_ground >= self.minimum_height_catapult_platform and random_number < self.random_generation_limit_catapult_platform then
+        if height_from_ground >= self.MINIMUM_HEIGHT_CATAPULT_PLATFORM and random_number < self.RANDOM_GENERATION_LIMIT_CATAPULT_PLATFORM then
             kind = "catapult"
-        elseif height_from_ground >= self.minimum_height_breakable_platform and random_number < self.random_generation_limit_breakable_platform then
+        elseif height_from_ground >= self.MINIMUM_HEIGHT_BREAKABLE_PLATFORM and random_number < self.RANDOM_GENERATION_LIMIT_BREAKABLE_PLATFORM then
             kind = "breakable"
         end
     end
@@ -220,7 +220,7 @@ end
 ---Aktualisiert Plattformen: erzeugt neue und entfernt alte
 ---@param camera_pos_y number
 function PlatformManager:update(camera_pos_y)
-    local top_needed = camera_pos_y - (self.screen_height + self.spawn_buffer_y)
+    local top_needed = camera_pos_y - (self.SCREEN_HEIGHT + self.SPAWN_BUFFER_Y)
 
     while self.topmost_platform_y > top_needed do
         local vertical_gap = clamp(self:get_vertical_spawn_gap_reach(self.topmost_platform_y, false), 10, 28)
@@ -231,7 +231,7 @@ function PlatformManager:update(camera_pos_y)
         for i = 1, number_of_max_per_level do
             if saved_anchor then
                 self.last_platform_anchor_x = saved_anchor +
-                    (i - ((number_of_max_per_level + 1) / 2)) * self.anchor_spread
+                    (i - ((number_of_max_per_level + 1) / 2)) * self.ANCHOR_SPREAD
             end
             self:spawn_platform(next_pos_y, false)
         end
@@ -239,10 +239,10 @@ function PlatformManager:update(camera_pos_y)
         self.topmost_platform_y = next_pos_y
     end
 
-    local visible_bottom_y = camera_pos_y + self.screen_height
+    local visible_bottom_y = camera_pos_y + self.SCREEN_HEIGHT
     for i = #self.list, 1, -1 do
         local plat = self.list[i]
-        if plat.is_dead or plat.pos_y > visible_bottom_y + self.cleanup_margin then
+        if plat.is_dead or plat.pos_y > visible_bottom_y + self.CLEANUP_MARGIN then
             del(self.list, plat)
         end
     end
