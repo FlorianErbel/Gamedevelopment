@@ -47,14 +47,20 @@ function player:jump()
 end
 
 function player:shoot(direction_x, direction_y)
-    local shot_speed = self.shot_speed
+    --[[local shot_speed = self.shot_speed
     add(self.shots, {
         pos_x = self.pos_x + self.width / 2,
         pos_y = self.pos_y + self.height / 2,
         velocity_x = direction_x * shot_speed,
         velocity_y = direction_y * shot_speed,
         life = 60
-    })
+    })]]
+    add(self.shots, Shot.new(
+        self.pos_x + self.width / 2,
+        self.pos_y + self.height / 2,
+        direction_x * self.shot_speed,
+        direction_y * self.shot_speed
+    ))
 end
 
 function player:update_shots(cam_pos_y)
@@ -120,7 +126,7 @@ function player:update(plats_ref, cam_pos_y)
     if self.pos_x > 128 then self.pos_x = -self.width end
 
     -- one-way landings (einmal prüfen, mit gültigem previous_y)
-     self.on_plat = false
+    self.on_plat = false
     local landed_plat = plats_ref:check_landing(self, previous_y)
 
     if landed_plat then
