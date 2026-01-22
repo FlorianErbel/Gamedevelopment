@@ -47,14 +47,6 @@ function player:jump()
 end
 
 function player:shoot(direction_x, direction_y)
-    --[[local shot_speed = self.shot_speed
-    add(self.shots, {
-        pos_x = self.pos_x + self.width / 2,
-        pos_y = self.pos_y + self.height / 2,
-        velocity_x = direction_x * shot_speed,
-        velocity_y = direction_y * shot_speed,
-        life = 60
-    })]]
     add(self.shots, Shot.new(
         self.pos_x + self.width / 2,
         self.pos_y + self.height / 2,
