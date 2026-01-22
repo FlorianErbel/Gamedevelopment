@@ -8,7 +8,7 @@ end
 -- wir wollen, dass die höchste erreichte stelle auf ~20% des screens ist
 -- 20% von 128 ≈ 26
 function cam:update(player)
-    local target_screen_pos_y = 90
+    local target_screen_pos_y = 120
     local desired = player.best_landed_pos_y - target_screen_pos_y
 
     if desired < self.target_pos_y then
