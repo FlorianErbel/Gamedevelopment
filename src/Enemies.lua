@@ -83,13 +83,13 @@ function enemies:update()
 end
 
 function enemies:draw()
-    for e in all(self.list) do
+    for enemie in all(self.list) do
         -- einfacher "igel": kleiner block + stacheln
-        rectfill(e.x, e.y, e.x + e.w - 1, e.y + e.h - 1, 4)
+        rectfill(enemie.x, enemie.y, enemie.x + enemie.w - 1, enemie.y + enemie.h - 1, 4)
         -- stacheln oben
-        pset(e.x + 1, e.y - 1, 0)
-        pset(e.x + 3, e.y - 2, 0)
-        pset(e.x + 5, e.y - 1, 0)
+        pset(enemie.x + 1, enemie.y - 1, 0)
+        pset(enemie.x + 3, enemie.y - 2, 0)
+        pset(enemie.x + 5, enemie.y - 1, 0)
     end
 end
 
