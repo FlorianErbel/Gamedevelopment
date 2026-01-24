@@ -1,13 +1,11 @@
 ---
 --- Difficulty enum
---- Created by florianerbel
---- DateTime: 24.01.26 15:39
+--- Enum zur Definition der Spielschwierigkeit
 ---
 
 ---@enum Difficulty
 local Difficulty = {
-    -- Define enum values
-    EASY = 1,
-    MEDIUM = 2,
-    HARD = 3
+    EASY = 1,    -- Einfach: geringe Plattformanzahl, niedrige Spawn-Herausforderungen
+    MEDIUM = 2,  -- Mittel: mittlere Plattformanzahl und mittlere Spawn-Herausforderungen
+    HARD = 3     -- Schwer: wenige Plattformen, hohe Spawn-Herausforderungen
 }
