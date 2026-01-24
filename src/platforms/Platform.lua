@@ -34,7 +34,7 @@ end
 
 ---
 --- Wird aufgerufen, wenn der Spieler auf der Plattform landet.
---- Kann von Unterklassen überschrieben werden, um Spezialverhalten zu implementieren.
+--- Standardmäßig leer, kann von Unterklassen überschrieben werden, um Spezialverhalten zu implementieren.
 ---
 ---@param player table
 function Platform:on_land(player)
