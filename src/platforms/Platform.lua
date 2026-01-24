@@ -37,6 +37,18 @@ function Platform:update()
 end
 
 function Platform:draw()
-    rectfill(self.pos_x, self.pos_y, self.pos_x + self.width - 1, self.pos_y + self.height - 1, self.fill_color)
-    rect(self.pos_x, self.pos_y, self.pos_x + self.width - 1, self.pos_y + self.height - 1, self.border_color)
+    rectfill(
+        self.pos_x,
+        self.pos_y,
+        self.pos_x + self.width - 1,
+        self.pos_y + self.height - 1,
+        self.fill_color
+    )
+    rect(
+        self.pos_x,
+        self.pos_y,
+        self.pos_x + self.width - 1,
+        self.pos_y + self.height - 1,
+        self.border_color
+    )
 end
