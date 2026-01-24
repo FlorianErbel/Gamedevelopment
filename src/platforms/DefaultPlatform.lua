@@ -1,17 +1,19 @@
 ---
---- DefaultPlatform class
---- Created by florianerbel
---- DateTime: 15.01.26 15:56
+--- Standardplattform ohne Spezialverhalten.
+--- Dient als häufigster Plattformtyp im Spiel.
 ---
-
----@class DefaultPlatform
----@field public name string
+---@class DefaultPlatform : Platform
 local DefaultPlatform = {}
-DefaultPlatform = setmetatable({}, Platform)
 DefaultPlatform.__index = DefaultPlatform
+setmetatable(DefaultPlatform, Platform)
 
----Constructor
----@param name string
+---
+--- Erstellt eine neue Standardplattform.
+--- Übernimmt vollständig das Verhalten und die Darstellung der Basisklasse Platform.
+---
+---@param pos_x number -- Linke X-Position der Plattform
+---@param pos_y number -- Y-Position der Plattform (Weltkoordinaten)
+---@param width number -- Breite der Plattform
 ---@return DefaultPlatform
 function DefaultPlatform.new(pos_x, pos_y, width)
     local self = Platform.new(pos_x, pos_y, width)
