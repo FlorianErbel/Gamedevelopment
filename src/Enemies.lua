@@ -41,7 +41,7 @@ function enemies:try_spawn_on_platform(platform, difficulty, height)
             plat = platform, -- referenz
             width = 8,
             height = 6,
-            dir = (rnd() < 0.5) and -1 or 1,
+            direction = (rnd() < 0.5) and -1 or 1,
             speed = (difficulty == 1 and 0.45) or (difficulty == 2 and 0.6) or 0.8,
             pos_x = platform.pos_x + 4,
             pos_y = platform.pos_y - 6,
@@ -66,14 +66,14 @@ function enemies:update()
                 enemie.pos_y = plat.pos_y - enemie.height
 
                 -- hin und her laufen auf der plattform
-                enemie.pos_x = enemie.pos_x + enemie.dir * enemie.speed
+                enemie.pos_x = enemie.pos_x + enemie.direction * enemie.speed
                 local left = plat.pos_x
                 local right = plat.pos_x + plat.width - enemie.width
                 if enemie.pos_x < left then
-                    enemie.pos_x = left; enemie.dir = 1
+                    enemie.pos_x = left; enemie.direction = 1
                 end
                 if enemie.pos_x > right then
-                    enemie.pos_x = right; enemie.dir = -1
+                    enemie.pos_x = right; enemie.direction = -1
                 end
             end
         end
