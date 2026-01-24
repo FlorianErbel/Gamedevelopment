@@ -1,7 +1,6 @@
 enemies = {}
--- TODO: Macht es Sinn für Enemies ebenfalls das Factory-Pattern mit Manager zu erstellen?
 function enemies:init()
-    self.list = {}
+    self.enemies_list = {}
 end
 
 -- AABB collision
@@ -29,8 +28,8 @@ end
 
 -- platform: table {x,y,w,h}
 function enemies:try_spawn_on_platform(platform, difficulty, height)
-    if not self.list then self.list = {} end
-    if #self.list >= self:max_alive(difficulty) then return end
+    if not self.enemies_list then self.enemies_list = {} end
+    if #self.enemies_list >= self:max_alive(difficulty) then return end
     if platform.ground then return end
     if platform.w < 18 then return end -- zu klein für igel-laufen
 
@@ -51,19 +50,19 @@ function enemies:try_spawn_on_platform(platform, difficulty, height)
         pos_y = platform.pos_y - 6,
         is_alive = true
     }
-    add(self.list, new_enemie)
+    add(self.enemies_list, new_enemie)
 end
 
 function enemies:update()
-    for i = #self.list, 1, -1 do
-        local enemies = self.list[i]
+    for i = #self.enemies_list, 1, -1 do
+        local enemies = self.enemies_list[i]
         if not enemies.alive then
-            del(self.list, enemies)
+            del(self.enemies_list, enemies)
         else
             local plat = enemies.plat
             -- falls plattform gelöscht wurde: entfernen
             if not plat then
-                del(self.list, enemies)
+                del(self.enemies_list, enemies)
             else
                 -- y an plattform binden
                 enemies.pos_y = plat.pos_y - enemies.height
@@ -84,7 +83,7 @@ function enemies:update()
 end
 
 function enemies:draw()
-    for enemie in all(self.list) do
+    for enemie in all(self.enemies_list) do
         -- einfacher "igel": kleiner block + stacheln
         rectfill(enemie.pos_x, enemie.pos_y, enemie.pos_x + enemie.width - 1, enemie.pos_y + enemie.height - 1, 4)
         -- stacheln oben
@@ -95,7 +94,7 @@ function enemies:draw()
 end
 
 function enemies:player_hit(player)
-    for enemie in all(self.list) do
+    for enemie in all(self.enemies_list) do
         if aabb(player.pos_x, player.pos_y, player.width, player.height, enemie.pos_x, enemie.pos_y, enemie.width, enemie.height) then
             return true
         end
@@ -121,8 +120,8 @@ function enemies:shots_hit(player)
 
         local hit = false
 
-        for ei = #self.list, 1, -1 do
-            local enemie = self.list[ei]
+        for ei = #self.enemies_list, 1, -1 do
+            local enemie = self.enemies_list[ei]
 
             if enemie.is_alive then
                 if sx < enemie.pos_x + enemie.width
@@ -131,7 +130,7 @@ function enemies:shots_hit(player)
                     and sy + sh > enemie.pos_y then
                     -- Enemy stirbt
                     enemie.is_alive = false
-                    del(self.list, enemie)
+                    del(self.enemies_list, enemie)
 
                     hit = true
                     kills = kills + 1
