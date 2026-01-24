@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b7c68a63-b096-45be-8680-996d1d193727" name="Changes" comment="Anzeigename geändert" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="LuaClass" />
+        <option value="LuaEnum" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="Shots_Klasse" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;FlorianErbel&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/FlorianErbel/Gamedevelopment.git&quot;,
+    &quot;accountId&quot;: &quot;89014433-0e7b-4c8b-8fc7-62204e8d1bdd&quot;
+  }
+}</component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="38I2aaluxjLzyAovAm9jZ05xDuu" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/florianerbel/Documents/GitHub/Untitled/Gamedevelopment&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/platforms" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="Gamedevelopment" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="Gamedevelopment" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.29346.138" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b7c68a63-b096-45be-8680-996d1d193727" name="Changes" comment="" />
+      <created>1768472829239</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1768472829239</updated>
+      <workItem from="1768472830933" duration="74000" />
+      <workItem from="1768472931565" duration="11119000" />
+      <workItem from="1769021913670" duration="316000" />
+      <workItem from="1769022235793" duration="15845000" />
+      <workItem from="1769254728480" duration="9583000" />
+    </task>
+    <task id="LOCAL-00088" summary="Renaming">
+      <option name="closed" value="true" />
+      <created>1769067731600</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1769067731600</updated>
+    </task>
+    <task id="LOCAL-00089" summary="Player shoot zum testen so umgebaut, dass neues Objekt erstellt wird">
+      <option name="closed" value="true" />
+      <created>1769067995517</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1769067995517</updated>
+    </task>
+    <task id="LOCAL-00090" summary="Code zum Testen auskommentiert">
+      <option name="closed" value="true" />
+      <created>1769074206867</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1769074206867</updated>
+    </task>
+    <task id="LOCAL-00091" summary="Testweise update Shot so umgebaut, dass sie auf das Objektd er Klasse zugreift">
+      <option name="closed" value="true" />
+      <created>1769074328038</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1769074328038</updated>
+    </task>
+    <task id="LOCAL-00092" summary="Testweise draw_shots so umgebaut, dass sie auf das Objektd er Klasse zugreift">
+      <option name="closed" value="true" />
+      <created>1769074387986</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1769074387986</updated>
+    </task>
+    <task id="LOCAL-00093" summary="Enemies Shot hit angepasst, damit es mit Shot-Klasse kompatibel ist">
+      <option name="closed" value="true" />
+      <created>1769075306909</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1769075306909</updated>
+    </task>
+    <task id="LOCAL-00094" summary="Kamera weiter nach unten gesetzt, um mehr Plattformen nach oben zu sehen und den Puffer nach unten zu verringern">
+      <option name="closed" value="true" />
+      <created>1769075763358</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1769075763358</updated>
+    </task>
+    <task id="LOCAL-00095" summary="Kommentare mit Alt-code entfernt">
+      <option name="closed" value="true" />
+      <created>1769075806653</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1769075806653</updated>
+    </task>
+    <task id="LOCAL-00096" summary="Kommentare mit Alt-code entfernt">
+      <option name="closed" value="true" />
+      <created>1769075870418</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1769075870418</updated>
+    </task>
+    <task id="LOCAL-00097" summary="Shot speed angepasst">
+      <option name="closed" value="true" />
+      <created>1769076706857</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1769076706857</updated>
+    </task>
+    <task id="LOCAL-00098" summary="Konstanten groß geschrieben">
+      <option name="closed" value="true" />
+      <created>1769080826128</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1769080826128</updated>
+    </task>
+    <task id="LOCAL-00099" summary="rechange Player --&gt; player">
+      <option name="closed" value="true" />
+      <created>1769084828243</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1769084828243</updated>
+    </task>
+    <task id="LOCAL-00100" summary="rename list --&gt; platform_list für besseres Verständnis">
+      <option name="closed" value="true" />
+      <created>1769255277459</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1769255277459</updated>
+    </task>
+    <task id="LOCAL-00101" summary="Konstanten im Programm zur Konsistenz groß geschrieben">
+      <option name="closed" value="true" />
+      <created>1769255495347</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1769255495347</updated>
+    </task>
+    <task id="LOCAL-00102" summary="ax --&gt; anchor_x">
+      <option name="closed" value="true" />
+      <created>1769255531828</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1769255531828</updated>
+    </task>
+    <task id="LOCAL-00103" summary="Kommentar entfernt">
+      <option name="closed" value="true" />
+      <created>1769255596361</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1769255596361</updated>
+    </task>
+    <task id="LOCAL-00104" summary="Auskommentierte, umgeschriebene Funktion entfernt">
+      <option name="closed" value="true" />
+      <created>1769255698505</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1769255698505</updated>
+    </task>
+    <task id="LOCAL-00105" summary="Konstanten von Player angepasst">
+      <option name="closed" value="true" />
+      <created>1769261784885</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1769261784885</updated>
+    </task>
+    <task id="LOCAL-00106" summary="renamed list --&gt; enemies_list">
+      <option name="closed" value="true" />
+      <created>1769262084217</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1769262084217</updated>
+    </task>
+    <task id="LOCAL-00107" summary="player.alive --&gt; player.is_alive">
+      <option name="closed" value="true" />
+      <created>1769262103600</created>
+      <option name="number" value="00107" />
+      <option name="presentableId" value="LOCAL-00107" />
+      <option name="project" value="LOCAL" />
+      <updated>1769262103601</updated>
+    </task>
+    <task id="LOCAL-00108" summary="rename p --&gt; probability">
+      <option name="closed" value="true" />
+      <created>1769262190764</created>
+      <option name="number" value="00108" />
+      <option name="presentableId" value="LOCAL-00108" />
+      <option name="project" value="LOCAL" />
+      <updated>1769262190764</updated>
+    </task>
+    <task id="LOCAL-00109" summary="Bedingug gedreht, um Abbruch zu vermeiden.&#10;Wenn Bedingung erfüllt wird, wird ein Enemie erstellt, ansonsten endet die Funktion regulär">
+      <option name="closed" value="true" />
+      <created>1769262290734</created>
+      <option name="number" value="00109" />
+      <option name="presentableId" value="LOCAL-00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1769262290734</updated>
+    </task>
+    <task id="LOCAL-00110" summary="enemies --&gt; enemie">
+      <option name="closed" value="true" />
+      <created>1769262431497</created>
+      <option name="number" value="00110" />
+      <option name="presentableId" value="LOCAL-00110" />
+      <option name="project" value="LOCAL" />
+      <updated>1769262431497</updated>
+    </task>
+    <task id="LOCAL-00111" summary="alive --&gt; is_alive">
+      <option name="closed" value="true" />
+      <created>1769262455760</created>
+      <option name="number" value="00111" />
+      <option name="presentableId" value="LOCAL-00111" />
+      <option name="project" value="LOCAL" />
+      <updated>1769262455760</updated>
+    </task>
+    <task id="LOCAL-00112" summary="dir --&gt; direction">
+      <option name="closed" value="true" />
+      <created>1769262539490</created>
+      <option name="number" value="00112" />
+      <option name="presentableId" value="LOCAL-00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1769262539490</updated>
+    </task>
+    <task id="LOCAL-00113" summary="si --&gt; i&#10;sx --&gt; shot_pos_x&#10;sy --&gt; shot_pos_y&#10;sw --&gt; shot_width&#10;sh --&gt; shot_height&#10;ei --&gt; j">
+      <option name="closed" value="true" />
+      <created>1769262721971</created>
+      <option name="number" value="00113" />
+      <option name="presentableId" value="LOCAL-00113" />
+      <option name="project" value="LOCAL" />
+      <updated>1769262721971</updated>
+    </task>
+    <task id="LOCAL-00114" summary="Fill-Funktion auseinandergezogen">
+      <option name="closed" value="true" />
+      <created>1769263580086</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1769263580086</updated>
+    </task>
+    <task id="LOCAL-00115" summary="Dokumentation inklusive Typannotationen hinzugefügt">
+      <option name="closed" value="true" />
+      <created>1769263595927</created>
+      <option name="number" value="00115" />
+      <option name="presentableId" value="LOCAL-00115" />
+      <option name="project" value="LOCAL" />
+      <updated>1769263595927</updated>
+    </task>
+    <task id="LOCAL-00116" summary="Dokumentation inklusive Typannotationen hinzugefügt">
+      <option name="closed" value="true" />
+      <created>1769263679926</created>
+      <option name="number" value="00116" />
+      <option name="presentableId" value="LOCAL-00116" />
+      <option name="project" value="LOCAL" />
+      <updated>1769263679926</updated>
+    </task>
+    <task id="LOCAL-00117" summary="return Platform entfernt">
+      <option name="closed" value="true" />
+      <created>1769263731464</created>
+      <option name="number" value="00117" />
+      <option name="presentableId" value="LOCAL-00117" />
+      <option name="project" value="LOCAL" />
+      <updated>1769263731465</updated>
+    </task>
+    <task id="LOCAL-00118" summary="Dokumentation inklusive Typannotationen erstellt">
+      <option name="closed" value="true" />
+      <created>1769263857351</created>
+      <option name="number" value="00118" />
+      <option name="presentableId" value="LOCAL-00118" />
+      <option name="project" value="LOCAL" />
+      <updated>1769263857351</updated>
+    </task>
+    <task id="LOCAL-00119" summary="Dokumentation inklusive Typannotationen erstellt">
+      <option name="closed" value="true" />
+      <created>1769263976077</created>
+      <option name="number" value="00119" />
+      <option name="presentableId" value="LOCAL-00119" />
+      <option name="project" value="LOCAL" />
+      <updated>1769263976077</updated>
+    </task>
+    <task id="LOCAL-00120" summary="Dokumentation inklusive Typannotationen erstellt">
+      <option name="closed" value="true" />
+      <created>1769264106369</created>
+      <option name="number" value="00120" />
+      <option name="presentableId" value="LOCAL-00120" />
+      <option name="project" value="LOCAL" />
+      <updated>1769264106369</updated>
+    </task>
+    <task id="LOCAL-00121" summary="Dokumentation inklusive Typannotationen erstellt">
+      <option name="closed" value="true" />
+      <created>1769264241197</created>
+      <option name="number" value="00121" />
+      <option name="presentableId" value="LOCAL-00121" />
+      <option name="project" value="LOCAL" />
+      <updated>1769264241197</updated>
+    </task>
+    <task id="LOCAL-00122" summary="ENUM PlatformType hinzugefügt, um hier die gesamten, unterschiedlichen Arten der Platform-Typen speichern zu können und um Rechtschreibfehler in unterschiedlichen Codes zu vermeiden">
+      <option name="closed" value="true" />
+      <created>1769264640064</created>
+      <option name="number" value="00122" />
+      <option name="presentableId" value="LOCAL-00122" />
+      <option name="project" value="LOCAL" />
+      <updated>1769264640064</updated>
+    </task>
+    <task id="LOCAL-00123" summary="Dokumentation inklusive Typannotation hinzugefügt">
+      <option name="closed" value="true" />
+      <created>1769264905840</created>
+      <option name="number" value="00123" />
+      <option name="presentableId" value="LOCAL-00123" />
+      <option name="project" value="LOCAL" />
+      <updated>1769264905840</updated>
+    </task>
+    <task id="LOCAL-00124" summary="PlatformType-ENUM eingebaut">
+      <option name="closed" value="true" />
+      <created>1769265104571</created>
+      <option name="number" value="00124" />
+      <option name="presentableId" value="LOCAL-00124" />
+      <option name="project" value="LOCAL" />
+      <updated>1769265104571</updated>
+    </task>
+    <task id="LOCAL-00125" summary="ENUM-Difficulty integriert">
+      <option name="closed" value="true" />
+      <created>1769265871300</created>
+      <option name="number" value="00125" />
+      <option name="presentableId" value="LOCAL-00125" />
+      <option name="project" value="LOCAL" />
+      <updated>1769265871300</updated>
+    </task>
+    <task id="LOCAL-00126" summary="Dokumentation inklusive Typannotationen erstellt">
+      <option name="closed" value="true" />
+      <created>1769267027587</created>
+      <option name="number" value="00126" />
+      <option name="presentableId" value="LOCAL-00126" />
+      <option name="project" value="LOCAL" />
+      <updated>1769267027587</updated>
+    </task>
+    <task id="LOCAL-00127" summary="ENUM-Difficulty integriert">
+      <option name="closed" value="true" />
+      <created>1769267041667</created>
+      <option name="number" value="00127" />
+      <option name="presentableId" value="LOCAL-00127" />
+      <option name="project" value="LOCAL" />
+      <updated>1769267041667</updated>
+    </task>
+    <task id="LOCAL-00128" summary="Dokumentation">
+      <option name="closed" value="true" />
+      <created>1769267148036</created>
+      <option name="number" value="00128" />
+      <option name="presentableId" value="LOCAL-00128" />
+      <option name="project" value="LOCAL" />
+      <updated>1769267148036</updated>
+    </task>
+    <task id="LOCAL-00129" summary="Dokumentation + Typannotationen">
+      <option name="closed" value="true" />
+      <created>1769267651833</created>
+      <option name="number" value="00129" />
+      <option name="presentableId" value="LOCAL-00129" />
+      <option name="project" value="LOCAL" />
+      <updated>1769267651833</updated>
+    </task>
+    <task id="LOCAL-00130" summary="Dokumentation + Typannotationen">
+      <option name="closed" value="true" />
+      <created>1769268129052</created>
+      <option name="number" value="00130" />
+      <option name="presentableId" value="LOCAL-00130" />
+      <option name="project" value="LOCAL" />
+      <updated>1769268129052</updated>
+    </task>
+    <task id="LOCAL-00131" summary="Code-Vereinfachung">
+      <option name="closed" value="true" />
+      <created>1769268140534</created>
+      <option name="number" value="00131" />
+      <option name="presentableId" value="LOCAL-00131" />
+      <option name="project" value="LOCAL" />
+      <updated>1769268140534</updated>
+    </task>
+    <task id="LOCAL-00132" summary="ENUM-GameState integriert">
+      <option name="closed" value="true" />
+      <created>1769268455514</created>
+      <option name="number" value="00132" />
+      <option name="presentableId" value="LOCAL-00132" />
+      <option name="project" value="LOCAL" />
+      <updated>1769268455514</updated>
+    </task>
+    <task id="LOCAL-00133" summary="ENUM-GameState integriert">
+      <option name="closed" value="true" />
+      <created>1769268521539</created>
+      <option name="number" value="00133" />
+      <option name="presentableId" value="LOCAL-00133" />
+      <option name="project" value="LOCAL" />
+      <updated>1769268521539</updated>
+    </task>
+    <task id="LOCAL-00134" summary="Dokumentation">
+      <option name="closed" value="true" />
+      <created>1769268571671</created>
+      <option name="number" value="00134" />
+      <option name="presentableId" value="LOCAL-00134" />
+      <option name="project" value="LOCAL" />
+      <updated>1769268571671</updated>
+    </task>
+    <task id="LOCAL-00135" summary="Dokumentation + Typannotation">
+      <option name="closed" value="true" />
+      <created>1769268773758</created>
+      <option name="number" value="00135" />
+      <option name="presentableId" value="LOCAL-00135" />
+      <option name="project" value="LOCAL" />
+      <updated>1769268773758</updated>
+    </task>
+    <task id="LOCAL-00136" summary="Anzeigename geändert">
+      <option name="closed" value="true" />
+      <created>1769269333182</created>
+      <option name="number" value="00136" />
+      <option name="presentableId" value="LOCAL-00136" />
+      <option name="project" value="LOCAL" />
+      <updated>1769269333182</updated>
+    </task>
+    <option name="localTasksCounter" value="137" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="Shots_Klasse" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Kommentar entfernt" />
+    <MESSAGE value="Auskommentierte, umgeschriebene Funktion entfernt" />
+    <MESSAGE value="Konstanten von Player angepasst" />
+    <MESSAGE value="renamed list --&gt; enemies_list" />
+    <MESSAGE value="player.alive --&gt; player.is_alive" />
+    <MESSAGE value="rename p --&gt; probability" />
+    <MESSAGE value="Bedingug gedreht, um Abbruch zu vermeiden.&#10;Wenn Bedingung erfüllt wird, wird ein Enemie erstellt, ansonsten endet die Funktion regulär" />
+    <MESSAGE value="enemies --&gt; enemie" />
+    <MESSAGE value="alive --&gt; is_alive" />
+    <MESSAGE value="dir --&gt; direction" />
+    <MESSAGE value="si --&gt; i&#10;sx --&gt; shot_pos_x&#10;sy --&gt; shot_pos_y&#10;sw --&gt; shot_width&#10;sh --&gt; shot_height&#10;ei --&gt; j" />
+    <MESSAGE value="Fill-Funktion auseinandergezogen" />
+    <MESSAGE value="Dokumentation inklusive Typannotationen hinzugefügt" />
+    <MESSAGE value="return Platform entfernt" />
+    <MESSAGE value="ENUM PlatformType hinzugefügt, um hier die gesamten, unterschiedlichen Arten der Platform-Typen speichern zu können und um Rechtschreibfehler in unterschiedlichen Codes zu vermeiden" />
+    <MESSAGE value="Dokumentation inklusive Typannotation hinzugefügt" />
+    <MESSAGE value="PlatformType-ENUM eingebaut" />
+    <MESSAGE value="Dokumentation inklusive Typannotationen erstellt" />
+    <MESSAGE value="ENUM-Difficulty integriert" />
+    <MESSAGE value="Dokumentation + Typannotationen" />
+    <MESSAGE value="Code-Vereinfachung" />
+    <MESSAGE value="ENUM-GameState integriert" />
+    <MESSAGE value="Dokumentation" />
+    <MESSAGE value="Dokumentation + Typannotation" />
+    <MESSAGE value="Anzeigename geändert" />
+    <option name="LAST_COMMIT_MESSAGE" value="Anzeigename geändert" />
+  </component>
+</project>
