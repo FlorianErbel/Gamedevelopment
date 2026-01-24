@@ -1,23 +1,27 @@
 ---
 --- PlatformFactory class
---- Created by florianerbel
---- DateTime: 15.01.26 16:16
+--- Erstellt Plattformen verschiedener Typen anhand des angegebenen Kinds
 ---
 
 ---@class PlatformFactory
----@field public name string
+---@field public name string Name der Factory
 local PlatformFactory = {}
 PlatformFactory.__index = PlatformFactory
 
----Constructor
----@param name string
+---Konstruktor der Factory
+---@param name string optionaler Name der Factory
 ---@return PlatformFactory
 function PlatformFactory.new(name)
     local self = setmetatable({}, PlatformFactory)
     self.name = name or "PlatformFactory"
-    return self
 end
 
+---Erstellt eine Plattform des angegebenen Typs an der Position (pos_x, pos_y) mit gegebener Breite
+---@param kind string Plattformtyp (siehe PlatformType ENUM)
+---@param pos_x number X-Position der Plattform
+---@param pos_y number Y-Position der Plattform
+---@param width number Breite der Plattform
+---@return Platform
 function PlatformFactory.create(kind, pos_x, pos_y, width)
     if kind == PlatformType.DEFAULT then
         return DefaultPlatform.new(pos_x, pos_y, width)
