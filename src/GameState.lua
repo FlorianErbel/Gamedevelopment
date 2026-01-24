@@ -1,13 +1,11 @@
 ---
 --- GameState enum
---- Created by florianerbel
---- DateTime: 24.01.26 16:23
+--- Enum für den aktuellen Zustand des Spiels
 ---
 
 ---@enum GameState
 local GameState = {
-    -- Define enum values
-    MENU = "menu",
-    PLAY = "play",
-    OVER = "over"
+    MENU = "menu",  -- Spiel befindet sich im Menü
+    PLAY = "play",  -- Spiel läuft aktiv
+    OVER = "over"   -- Spiel vorbei / Game Over
 }
