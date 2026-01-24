@@ -64,5 +64,3 @@ function Platform:draw()
         self.border_color
     )
 end
-
-return Platform
