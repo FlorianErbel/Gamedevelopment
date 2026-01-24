@@ -19,13 +19,13 @@ function PlatformFactory.new(name)
 end
 
 function PlatformFactory.create(kind, pos_x, pos_y, width)
-    if kind == "default" then
+    if kind == PlatformType.DEFAULT then
         return DefaultPlatform.new(pos_x, pos_y, width)
-    elseif kind == "catapult" then
+    elseif kind == PlatformType.CATAPULT then
         return CatapultPlatform.new(pos_x, pos_y, width)
-    elseif kind == "breakable" then
+    elseif kind == PlatformType.BREAKABLE then
         return BreakablePlatform.new(pos_x, pos_y, width)
-    elseif kind == "ground" then
+    elseif kind == PlatformType.GROUND then
         return GroundPlatform.new(pos_x, pos_y, width)
     end
 end

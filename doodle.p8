@@ -3,6 +3,7 @@ version 42
 __lua__
 #include src/Util.lua
 #include src/Camera.lua
+#include src/platforms/PlatformType.lua
 #include src/platforms/Platform.lua
 #include src/platforms/GroundPlatform.lua
 #include src/platforms/DefaultPlatform.lua
