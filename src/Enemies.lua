@@ -85,7 +85,7 @@ end
 
 function enemies:player_hit(player)
   for e in all(self.list) do
-    if aabb(player.x, player.y, player.w, player.h, e.x, e.y, e.w, e.h) then
+    if aabb(player.pos_x, player.pos_y, player.width, player.height, e.x, e.y, e.w, e.h) then
       return true
     end
   end
@@ -102,7 +102,7 @@ function enemies:shots_hit(player)
   for si=#shots,1,-1 do
     local s = shots[si]
     -- treat shot as small box
-    local sx, sy = s.x-2, s.y-2
+    local sx, sy = s.pos_x-2, s.pos_y-2
     local sw, sh = 4, 4
 
     local hit = false
