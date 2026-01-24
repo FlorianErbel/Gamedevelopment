@@ -1,39 +1,42 @@
----@class PlatformManager
----@field platform_list table                 -- Liste aller Plattformen
----@field topmost_platform_y number  -- y-Koordinate der höchstgelegenen Plattform
----@field last_platform_anchor_x number -- Letzte x-Koordinate als Anker für neue Plattformen
----@field difficulty number           -- Schwierigkeitsgrad
----@field DEFAULT_JUMP_VELOCITY number -- Standard-Sprunggeschwindigkeit des Spielers
----@field GRAVITY number             -- Schwerkraft
----@field camera_pos_y number        -- Aktuelle Kameraposition Y
----@field MINIMUM_HEIGHT_CATAPULT_PLATFORM number -- Mindesthöhe für Katapult-Plattformen
----@field MINIMUM_HEIGHT_BREAKABLE_PLATFORM number -- Mindesthöhe für zerstörbare Plattformen
----@field RANDOM_GENERATION_LIMIT_CATAPULT_PLATFORM number -- Spawnwahrscheinlichkeit Katapult-Plattform
----@field RANDOM_GENERATION_LIMIT_BREAKABLE_PLATFORM number -- Spawnwahrscheinlichkeit Breakable-Plattform
----@field SCREEN_HEIGHT number       -- Höhe des sichtbaren Bildschirms
----@field SCREEN_WIDTH number        -- Breite des sichtbaren Bildschirms
----@field SPAWN_BUFFER_Y number      -- Mindestabstand für Spawn-Lücken
----@field PLATFORM_DEFAULT_HEIGHT number -- Standardhöhe einer Plattform
----@field CLEANUP_MARGIN number      -- Extra-Margin für das Entfernen unterer Plattformen
----@field DEFAULT_GROUND_Y number    -- y-Koordinate der Bodenplattform
----@field ANCHOR_SPREAD number       -- Abstand zwischen mehreren Plattformen auf gleicher Höhe
----@field MAX_SPAWN_ATTEMPTS number  -- Maximale Versuche zur Platzierung einer Plattform
----@field MAX_PLATFORMS_EASY number  -- Max Plattformen pro Level (leicht)
----@field MAX_PLATFORMS_MEDIUM number -- Max Plattformen pro Level (mittel)
----@field MAX_PLATFORMS_HARD number -- Max Plattformen pro Level (schwer)
-local PlatformManager = {}
+---
+--- PlatformManager class
+--- Verwaltet alle Plattformen, ihre Generierung, Positionierung und Kollisionslogik mit dem Spieler
+---
 
+---@class PlatformManager
+---@field platform_list table Liste aller Plattformen
+---@field topmost_platform_y number Y-Koordinate der höchstgelegenen Plattform
+---@field last_platform_anchor_x number Letzte x-Koordinate als Anker für neue Plattformen
+---@field difficulty number Schwierigkeitsgrad
+---@field DEFAULT_JUMP_VELOCITY number Standard-Sprunggeschwindigkeit des Spielers
+---@field GRAVITY number Gravitation
+---@field camera_pos_y number Aktuelle Kameraposition Y
+---@field MINIMUM_HEIGHT_CATAPULT_PLATFORM number Mindesthöhe für Katapult-Plattformen
+---@field MINIMUM_HEIGHT_BREAKABLE_PLATFORM number Mindesthöhe für zerstörbare Plattformen
+---@field RANDOM_GENERATION_LIMIT_CATAPULT_PLATFORM number Spawnwahrscheinlichkeit Katapult-Plattform
+---@field RANDOM_GENERATION_LIMIT_BREAKABLE_PLATFORM number Spawnwahrscheinlichkeit Breakable-Plattform
+---@field SCREEN_HEIGHT number Höhe des sichtbaren Bildschirms
+---@field SCREEN_WIDTH number Breite des sichtbaren Bildschirms
+---@field SPAWN_BUFFER_Y number Mindestabstand für Spawn-Lücken
+---@field PLATFORM_DEFAULT_HEIGHT number Standardhöhe einer Plattform
+---@field CLEANUP_MARGIN number Extra-Margin für das Entfernen unterer Plattformen
+---@field DEFAULT_GROUND_Y number Y-Koordinate der Bodenplattform
+---@field ANCHOR_SPREAD number Abstand zwischen mehreren Plattformen auf gleicher Höhe
+---@field MAX_SPAWN_ATTEMPTS number Maximale Versuche zur Platzierung einer Plattform
+---@field MAX_PLATFORMS_EASY number Max Plattformen pro Level (leicht)
+---@field MAX_PLATFORMS_MEDIUM number Max Plattformen pro Level (mittel)
+---@field MAX_PLATFORMS_HARD number Max Plattformen pro Level (schwer)
+local PlatformManager = {}
 PlatformManager.__index = PlatformManager
 
----Initialisiert den PlatformManager
+---Initialisiert den PlatformManager mit Standardwerten und Startplattform
 ---@param difficulty number? optionaler Schwierigkeitsgrad
 function PlatformManager:init(difficulty)
-    -- Allgemeine Spiel-Parameter
     self.difficulty = difficulty or 1
     self.DEFAULT_JUMP_VELOCITY = 4.4
     self.GRAVITY = 0.22
 
-    -- Platform-Tracking
+    -- Plattformverwaltung
     self.platform_list = {}
     self.topmost_platform_y = 112
     self.last_platform_anchor_x = nil
@@ -49,17 +52,17 @@ function PlatformManager:init(difficulty)
     self.MAX_SPAWN_ATTEMPTS = 8
     self.CLEANUP_MARGIN = 16
 
-    -- Bildschirm- und Layout-Parameter
+    -- Bildschirm-Parameter
     self.SCREEN_HEIGHT = 128
     self.SCREEN_WIDTH = 128
     self.DEFAULT_GROUND_Y = 120
 
-    -- Anzahl Plattformen pro Schwierigkeitsgrad
+    -- Maximale Plattformen pro Schwierigkeitsgrad
     self.MAX_PLATFORMS_EASY = 3
     self.MAX_PLATFORMS_MEDIUM = 2
     self.MAX_PLATFORMS_HARD = 1
 
-    -- Startplattform
+    -- Erzeuge Startplattform (Boden)
     self:add_platform(PlatformType.GROUND, 0, self.DEFAULT_GROUND_Y, self.SCREEN_WIDTH, true)
 end
 
@@ -72,19 +75,19 @@ function PlatformManager.new(difficulty)
     return self
 end
 
----Berechnet die Höhe eines Punkts relativ zum Boden
+---Berechnet Höhe eines Punktes relativ zum Boden
 ---@param pos_y number
 ---@return number
 function PlatformManager:get_height_from_ground(pos_y)
     return max(0, self.DEFAULT_GROUND_Y - pos_y)
 end
 
----Fügt eine Plattform hinzu
----@param kind string Plattformtyp ("default", "breakable", "catapult")
----@param pos_x number x-Koordinate
----@param pos_y number y-Koordinate
+---Fügt eine Plattform hinzu und aktualisiert Top-Marker
+---@param kind string Plattformtyp
+---@param pos_x number X-Koordinate
+---@param pos_y number Y-Koordinate
 ---@param width number Plattformbreite
----@param is_ground boolean? ob es sich um den Boden handelt
+---@param is_ground boolean? optionaler Boden-Marker
 function PlatformManager:add_platform(kind, pos_x, pos_y, width, is_ground)
     local plat = PlatformFactory.create(kind or PlatformType.DEFAULT, pos_x, pos_y, width)
     plat.is_ground = is_ground or false
@@ -95,7 +98,7 @@ function PlatformManager:add_platform(kind, pos_x, pos_y, width, is_ground)
     end
 end
 
----Gibt den minimalen vertikalen Abstand zwischen Plattformen in Abhängigkeit von Höhe zurück
+---Berechnet minimalen vertikalen Abstand zwischen Plattformen abhängig von Höhe
 ---@param pos_y number
 ---@return number
 function PlatformManager:difficulty_at(pos_y)
@@ -104,13 +107,13 @@ function PlatformManager:difficulty_at(pos_y)
     return clamp(gap, self.SPAWN_BUFFER_Y, 26)
 end
 
----Berechnet die maximale Sprunghöhe basierend auf Gravitation und Standard-Jump
+---Berechnet maximale Sprunghöhe des Spielers basierend auf Gravitation
 ---@return number
 function PlatformManager:get_max_jump_height()
     return (self.DEFAULT_JUMP_VELOCITY ^ 2) / (2 * self.GRAVITY)
 end
 
----Bestimmt einen Faktor für die vertikale Reichweite abhängig von Höhe und Schwierigkeit
+---Bestimmt Faktor für vertikale Reichweite abhängig von Höhe und Schwierigkeitsgrad
 ---@param at_pos_y number
 ---@param is_easy_mode boolean
 ---@return number
@@ -122,7 +125,7 @@ function PlatformManager:get_reach_factor(at_pos_y, is_easy_mode)
     return clamp(factor, 0.60, 0.90)
 end
 
----Berechnet vertikale Spawn-Lücke für Plattformen
+---Berechnet vertikale Spawn-Lücke für neue Plattformen
 ---@param at_pos_y number
 ---@param is_easy_mode boolean
 ---@return number
@@ -141,7 +144,7 @@ function PlatformManager:get_horizontal_reach(at_pos_y, is_easy_mode)
     return clamp(base - shrink, 22, 44)
 end
 
----Maximale Plattformen pro Level je nach Schwierigkeitsgrad
+---Maximale Plattformen pro Level abhängig vom Schwierigkeitsgrad
 ---@param is_easy_mode boolean
 ---@return number
 function PlatformManager:max_per_level(is_easy_mode)
@@ -151,7 +154,7 @@ function PlatformManager:max_per_level(is_easy_mode)
     return self.MAX_PLATFORMS_HARD
 end
 
----Prüft, ob eine neue Plattform mit existierenden kollidiert
+---Prüft, ob eine Plattform mit bestehenden kollidiert
 ---@param pos_x number
 ---@param pos_y number
 ---@param width number
@@ -169,7 +172,7 @@ function PlatformManager:platform_overlaps_existing(pos_x, pos_y, width, height)
     return false
 end
 
----Erzeugt eine neue Plattform basierend auf Höhe, Schwierigkeitsgrad und Zufall
+---Erzeugt neue Plattformen basierend auf Höhe, Schwierigkeit und Zufall
 ---@param at_pos_y number
 ---@param is_easy_mode boolean
 function PlatformManager:spawn_platform(at_pos_y, is_easy_mode)
@@ -211,7 +214,7 @@ function PlatformManager:spawn_platform(at_pos_y, is_easy_mode)
     self:add_platform(kind, pos_x, at_pos_y, width, false)
 end
 
----Aktualisiert Plattformen: erzeugt neue und entfernt alte
+---Aktualisiert alle Plattformen: generiert neue und entfernt alte
 ---@param camera_pos_y number
 function PlatformManager:update(camera_pos_y)
     local top_needed = camera_pos_y - (self.SCREEN_HEIGHT + self.SPAWN_BUFFER_Y)
@@ -249,10 +252,10 @@ function PlatformManager:draw()
     end
 end
 
----Prüft, ob der Spieler auf einer Plattform landet
----@param player table Spieler-Objekt mit pos_x, pos_y, width, height, velocity_y
+---Prüft, ob der Spieler auf einer Plattform landet und stoppt den Fall
+---@param player table Spieler-Objekt mit pos_x, pos_y, WIDTH, HEIGHT, velocity_y
 ---@param previous_pos_y number
----@return table|nil die Plattform, auf der der Spieler gelandet ist
+---@return table|nil Plattform, auf der gelandet wurde
 function PlatformManager:check_landing(player, previous_pos_y)
     if player.velocity_y <= 0 then return false end
 
