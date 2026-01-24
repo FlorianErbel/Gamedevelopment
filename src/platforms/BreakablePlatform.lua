@@ -1,19 +1,19 @@
 ---
---- BreakablePlatform class
---- Created by florianerbel
---- DateTime: 15.01.26 16:04
---- Class to create platforms which break after a jump on it
+--- Zerbrechliche Plattform.
+--- Wird nach dem ersten Betreten durch den Spieler entfernt.
 ---
 
----@class BreakablePlatform
+---@class BreakablePlatform : Platform
 local BreakablePlatform = {}
-BreakablePlatform = setmetatable({}, Platform)
 BreakablePlatform.__index = BreakablePlatform
+setmetatable(BreakablePlatform, Platform)
 
----Constructor
----@param pos_x number
----@param pos_y number
----@param width number
+---
+--- Erstellt eine neue zerbrechliche Plattform.
+---
+---@param pos_x number -- Linke X-Position der Plattform
+---@param pos_y number -- Y-Position der Plattform (Weltkoordinaten)
+---@param width number -- Breite der Plattform
 ---@return BreakablePlatform
 function BreakablePlatform.new(pos_x, pos_y, width)
     local self = Platform.new(pos_x, pos_y, width)
@@ -22,6 +22,11 @@ function BreakablePlatform.new(pos_x, pos_y, width)
     return setmetatable(self, BreakablePlatform)
 end
 
+---
+--- Wird aufgerufen, wenn der Spieler auf der Plattform landet.
+--- Markiert die Plattform als zerstört, sodass sie im nächsten Update entfernt wird.
+---
+---@param player Player -- Referenz auf den Spieler
 function BreakablePlatform:on_land(player)
     self.is_dead = true
 end
