@@ -1,5 +1,5 @@
 ---@class PlatformManager
----@field list table                 -- Liste aller Plattformen
+---@field platform_list table                 -- Liste aller Plattformen
 ---@field topmost_platform_y number  -- y-Koordinate der höchstgelegenen Plattform
 ---@field last_platform_anchor_x number -- Letzte x-Koordinate als Anker für neue Plattformen
 ---@field difficulty number           -- Schwierigkeitsgrad
@@ -37,7 +37,7 @@ function PlatformManager:init(difficulty)
     self.GRAVITY = 0.22
 
     -- Platform-Tracking
-    self.list = {}
+    self.platform_list = {}
     self.topmost_platform_y = 112
     self.last_platform_anchor_x = nil
 
@@ -94,7 +94,7 @@ end
 function PlatformManager:add_platform(kind, pos_x, pos_y, width, is_ground)
     local plat = PlatformFactory.create(kind or "default", pos_x, pos_y, width)
     plat.is_ground = is_ground or false
-    add(self.list, plat)
+    add(self.platform_list, plat)
 
     if pos_y < self.topmost_platform_y then
         self.topmost_platform_y = pos_y
@@ -165,7 +165,7 @@ end
 ---@return boolean
 function PlatformManager:platform_overlaps_existing(pos_x, pos_y, width, height)
     height = height or self.PLATFORM_DEFAULT_HEIGHT
-    for plat in all(self.list) do
+    for plat in all(self.platform_list) do
         if pos_y < plat.pos_y + plat.height and pos_y + height > plat.pos_y then
             if pos_x < plat.pos_x + plat.width and pos_x + width > plat.pos_x then
                 return true
@@ -240,17 +240,17 @@ function PlatformManager:update(camera_pos_y)
     end
 
     local visible_bottom_y = camera_pos_y + self.SCREEN_HEIGHT
-    for i = #self.list, 1, -1 do
-        local plat = self.list[i]
+    for i = #self.platform_list, 1, -1 do
+        local plat = self.platform_list[i]
         if plat.is_dead or plat.pos_y > visible_bottom_y + self.CLEANUP_MARGIN then
-            del(self.list, plat)
+            del(self.platform_list, plat)
         end
     end
 end
 
 ---Zeichnet alle Plattformen auf den Bildschirm
 function PlatformManager:draw()
-    for plat in all(self.list) do
+    for plat in all(self.platform_list) do
         plat:draw()
     end
 end
@@ -265,7 +265,7 @@ function PlatformManager:check_landing(player, previous_pos_y)
     local foot_previous = previous_pos_y + player.height
     local foot_now = player.pos_y + player.height
 
-    for plat in all(self.list) do
+    for plat in all(self.platform_list) do
         if player.pos_x + player.width > plat.pos_x and player.pos_x < plat.pos_x + plat.width then
             if foot_previous <= plat.pos_y and foot_now >= plat.pos_y then
                 player.pos_y = plat.pos_y - player.height
