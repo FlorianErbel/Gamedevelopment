@@ -1,15 +1,21 @@
 ---
---- Platform class
---- Created by florianerbel
---- DateTime: 15.01.26 15:39
---- Template class to enable using the template pattern
+--- Basisklasse für alle Plattformtypen.
+--- Stellt gemeinsame Positions-, Größen-, Rendering- und Lebenszykluslogik bereit.
 ---
-
 ---@class Platform
+---@field pos_x number        -- Weltkoordinate X (linke Kante)
+---@field pos_y number        -- Weltkoordinate Y (obere Kante)
+---@field width number        -- Breite der Plattform
+---@field height number       -- Höhe der Plattform
+---@field is_dead boolean     -- Markiert die Plattform zur Entfernung
+---@field fill_color number   -- Füllfarbe für das Rendering
+---@field border_color number -- Rahmenfarbe für das Rendering
 local Platform = {}
 Platform.__index = Platform
 
----Constructor
+---
+--- Erstellt eine neue Plattforminstanz.
+---
 ---@param pos_x number
 ---@param pos_y number
 ---@param width number
@@ -26,16 +32,22 @@ function Platform.new(pos_x, pos_y, width)
     return self
 end
 
----Empty default definition of function
+---
+--- Wird aufgerufen, wenn der Spieler auf der Plattform landet.
+--- Kann von Unterklassen überschrieben werden, um Spezialverhalten zu implementieren.
+---
+---@param player table
 function Platform:on_land(player)
-    -- Default: nichts
 end
 
----Empty default definition of function
+---
+--- Aktualisiert plattformspezifische Logik.
+--- Standardmäßig leer und für Überschreibungen vorgesehen.
 function Platform:update()
-    -- Default: nichts
 end
 
+---
+--- Zeichnet die Plattform anhand ihrer Positions- und Farbattribute.
 function Platform:draw()
     rectfill(
         self.pos_x,
@@ -52,3 +64,5 @@ function Platform:draw()
         self.border_color
     )
 end
+
+return Platform
