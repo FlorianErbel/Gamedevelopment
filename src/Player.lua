@@ -61,10 +61,9 @@ function player:jump()
     if btn(3) then -- Down-Button kleine Sprunghöhe
         base_jump = self.JUMP_VERTICAL_SMALL
     end
-    if self.is_jump_boost_used == true then
-        local final_jump_height = base_jump * self.jump_boost_factor
 
-        self.velocity_y = final_jump_height
+    if self.is_jump_boost_used then
+        self.velocity_y = base_jump * self.jump_boost_factor
         self.jump_boost_factor = 1.0
         self.is_jump_boost_used = false
     else
