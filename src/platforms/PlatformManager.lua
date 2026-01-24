@@ -66,7 +66,7 @@ function PlatformManager:init(difficulty)
     self.DIFFICULTY_HARD = 3
 
     -- Startplattform
-    self:add_platform("ground", 0, self.DEFAULT_GROUND_Y, self.SCREEN_WIDTH, true)
+    self:add_platform(PlatformType.GROUND, 0, self.DEFAULT_GROUND_Y, self.SCREEN_WIDTH, true)
 end
 
 ---Erzeugt eine neue Instanz des PlatformManagers
@@ -92,7 +92,7 @@ end
 ---@param width number Plattformbreite
 ---@param is_ground boolean? ob es sich um den Boden handelt
 function PlatformManager:add_platform(kind, pos_x, pos_y, width, is_ground)
-    local plat = PlatformFactory.create(kind or "default", pos_x, pos_y, width)
+    local plat = PlatformFactory.create(kind or PlatformType.DEFAULT, pos_x, pos_y, width)
     plat.is_ground = is_ground or false
     add(self.platform_list, plat)
 
@@ -204,13 +204,13 @@ function PlatformManager:spawn_platform(at_pos_y, is_easy_mode)
 
     self.last_platform_anchor_x = pos_x + width / 2
 
-    local kind = "default"
+    local kind = PlatformType.DEFAULT
     if not is_easy_mode then
         local random_number = rnd()
         if height_from_ground >= self.MINIMUM_HEIGHT_CATAPULT_PLATFORM and random_number < self.RANDOM_GENERATION_LIMIT_CATAPULT_PLATFORM then
-            kind = "catapult"
+            kind = PlatformType.CATAPULT
         elseif height_from_ground >= self.MINIMUM_HEIGHT_BREAKABLE_PLATFORM and random_number < self.RANDOM_GENERATION_LIMIT_BREAKABLE_PLATFORM then
-            kind = "breakable"
+            kind = PlatformType.BREAKABLE
         end
     end
 
