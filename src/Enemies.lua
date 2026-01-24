@@ -33,11 +33,10 @@ function enemies:try_spawn_on_platform(platform, difficulty, height)
     if platform.ground then return end
     if platform.w < 18 then return end -- zu klein für igel-laufen
 
-    -- TODO: p = player, propability oder plat?
-    local p = self:spawn_prob(difficulty, height)
+    local probability = self:spawn_prob(difficulty, height)
 
     -- TODO: Wenn wir die Kontrolle umdrehen und den folgenden Code-Block hier einbauen, kommen wir dann nicht zum selben Erbenis, nur ohne den Funktionsabbruch (return)
-    if rnd() > p then return end
+    if rnd() > probability then return end
 
     local new_enemie = {
         kind = "hedgehog",
