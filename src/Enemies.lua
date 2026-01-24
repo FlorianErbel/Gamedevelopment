@@ -7,7 +7,7 @@ end
 local function aabb(player_pos_x, player_pos_y, player_width, player_height, enemie_pos_x, enemie_pos_y, enemie_width,
                     enemie_height)
     return player_pos_x < enemie_pos_x + enemie_width and player_pos_x + player_width > enemie_pos_x and
-    player_pos_y < enemie_pos_y + enemie_height and player_pos_y + player_height > enemie_pos_y
+        player_pos_y < enemie_pos_y + enemie_height and player_pos_y + player_height > enemie_pos_y
 end
 
 function enemies:max_alive(difficulty)
@@ -35,21 +35,20 @@ function enemies:try_spawn_on_platform(platform, difficulty, height)
 
     local probability = self:spawn_prob(difficulty, height)
 
-    -- TODO: Wenn wir die Kontrolle umdrehen und den folgenden Code-Block hier einbauen, kommen wir dann nicht zum selben Erbenis, nur ohne den Funktionsabbruch (return)
-    if rnd() > probability then return end
-
-    local new_enemie = {
-        kind = "hedgehog",
-        plat = platform, -- referenz
-        width = 8,
-        height = 6,
-        dir = (rnd() < 0.5) and -1 or 1,
-        speed = (difficulty == 1 and 0.45) or (difficulty == 2 and 0.6) or 0.8,
-        pos_x = platform.pos_x + 4,
-        pos_y = platform.pos_y - 6,
-        is_alive = true
-    }
-    add(self.enemies_list, new_enemie)
+    if rnd() < probability then
+        local new_enemie = {
+            kind = "hedgehog",
+            plat = platform, -- referenz
+            width = 8,
+            height = 6,
+            dir = (rnd() < 0.5) and -1 or 1,
+            speed = (difficulty == 1 and 0.45) or (difficulty == 2 and 0.6) or 0.8,
+            pos_x = platform.pos_x + 4,
+            pos_y = platform.pos_y - 6,
+            is_alive = true
+        }
+        add(self.enemies_list, new_enemie)
+    end
 end
 
 function enemies:update()
