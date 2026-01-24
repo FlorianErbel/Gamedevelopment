@@ -1,12 +1,9 @@
 game = {
 
     STARTING_HEIGHT = 0,
-    STATE_MENU = "menu",
-    STATE_PLAY = "play",
-    STATE_OVER = "over",
 
-    state = STATE_MENU,
-    difficulty = 1,
+    state = GameState.MENU,
+    difficulty = Difficulty.EASY,
     height = 0,
     best_height = 0
 }
@@ -27,17 +24,17 @@ function _init()
 
     game_setup()
 
-    game.state = game.STATE_MENU
+    game.state = GameState.MENU
 end
 
 function reset_game()
     game_setup()
 
-    game.state = game.STATE_PLAY
+    game.state = GameState.PLAY
 end
 
 function game_over()
-    game.state = game.STATE_OVER
+    game.state = GameState.OVER
     player.is_alive = false
     local highscore = load_highscore(game.difficulty)
     if game.best_height > highscore then
@@ -46,7 +43,7 @@ function game_over()
 end
 
 function _update60()
-    if game.state == game.STATE_MENU then
+    if game.state == GameState.MENU then
         local k = stat(31)
 
         if k == "1" then
@@ -63,9 +60,9 @@ function _update60()
         return
     end
 
-    if game.state == game.STATE_OVER then
+    if game.state == GameState.OVER then
         if btnp(4) or btnp(5) then
-            game.state = game.STATE_MENU
+            game.state = GameState.MENU
             return
         end
         return
@@ -121,7 +118,7 @@ function _draw()
     -- ui ohne kamera
     camera()
 
-    if game.state == game.STATE_MENU then
+    if game.state == GameState.MENU then
         local highscore_difficulty_easy = load_highscore(Difficulty.EASY)
         local highscore_difficulty_medium = load_highscore(Difficulty.MEDIUM)
         local highscore_difficulty_hard = load_highscore(Difficulty.HARD)
@@ -147,7 +144,7 @@ function _draw()
     print("height: " .. game.height, 2, 2, 7)
     print("best: " .. game.best_height, 2, 10, 6)
 
-    if game.state == game.STATE_OVER then
+    if game.state == GameState.OVER then
         rectfill(18, 48, 110, 80, 0)
         rect(18, 48, 110, 80, 7)
         print("game over", 44, 56, 8)
