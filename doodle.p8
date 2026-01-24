@@ -3,11 +3,21 @@ version 42
 __lua__
 #include src/Util.lua
 #include src/Camera.lua
+#include src/platforms/PlatformType.lua
+#include src/Difficulty.lua
+#include src/GameState.lua
 #include src/platforms/Platform.lua
+#include src/platforms/GroundPlatform.lua
+#include src/platforms/DefaultPlatform.lua
 #include src/platforms/BreakablePlatform.lua
 #include src/platforms/CatapultPlatform.lua
+#include src/platforms/PlatformFactory.lua
+#include src/platforms/PlatformManager.lua
+#include src/Shot.lua
+#include src/Enemies.lua
 #include src/Player.lua
 #include src/Main.lua
+
 
 __gfx__
 __label__
