@@ -124,7 +124,6 @@ end
 
 function player:draw()
     self:draw_shots()
-    -- einfache figur: body + augen
     rectfill(self.pos_x, self.pos_y, self.pos_x + self.WIDTH - 1, self.pos_y + self.HEIGHT - 1, 7)
     pset(self.pos_x + 1, self.pos_y + 2, 0)
     pset(self.pos_x + 4, self.pos_y + 2, 0)
