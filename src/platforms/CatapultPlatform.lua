@@ -1,19 +1,21 @@
 ---
---- CatapultPlatform class
---- Created by florianerbel
---- DateTime: 15.01.26 16:00
----Class to create platforms which enable a jump-boost to the player
+--- Katapultplattform.
+--- Verleiht dem Spieler beim Landen einen einmaligen Sprung-Boost.
 ---
 
----@class CatapultPlatform
+---@class CatapultPlatform : Platform
+---@field boost_factor number -- Multiplikator für die Sprunghöhe
 local CatapultPlatform = {}
-CatapultPlatform = setmetatable({}, Platform)
 CatapultPlatform.__index = CatapultPlatform
+setmetatable(CatapultPlatform, Platform)
 
----Constructor
----@param pos_x number
----@param pos_y number
----@param width number
+---
+--- Erstellt eine neue Katapultplattform.
+--- Die Plattform setzt beim Landen einen temporären Sprung-Boost am Spieler.
+---
+---@param pos_x number -- Linke X-Position der Plattform
+---@param pos_y number -- Y-Position der Plattform (Weltkoordinaten)
+---@param width number -- Breite der Plattform
 ---@return CatapultPlatform
 function CatapultPlatform.new(pos_x, pos_y, width)
     local self = Platform.new(pos_x, pos_y, width)
@@ -23,6 +25,11 @@ function CatapultPlatform.new(pos_x, pos_y, width)
     return setmetatable(self, CatapultPlatform)
 end
 
+---
+--- Wird aufgerufen, wenn der Spieler auf der Plattform landet.
+--- Aktiviert einen einmaligen Sprung-Boost beim nächsten Sprung.
+---
+---@param player Player -- Referenz auf den Spieler
 function CatapultPlatform:on_land(player)
     player.jump_boost_factor = self.boost_factor
     player.is_jump_boost_used = true
