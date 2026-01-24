@@ -5,6 +5,7 @@ __lua__
 #include src/Camera.lua
 #include src/platforms/PlatformType.lua
 #include src/Difficulty.lua
+#include src/GameState.lua
 #include src/platforms/Platform.lua
 #include src/platforms/GroundPlatform.lua
 #include src/platforms/DefaultPlatform.lua

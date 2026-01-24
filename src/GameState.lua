@@ -11,5 +11,3 @@ local GameState = {
     PLAY = "play",
     OVER = "over"
 }
-
-return GameState
