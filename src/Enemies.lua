@@ -54,7 +54,7 @@ end
 function enemies:update()
     for i = #self.enemies_list, 1, -1 do
         local enemie = self.enemies_list[i]
-        if not enemie.alive then
+        if not enemie.is_alive then
             del(self.enemies_list, enemie)
         else
             local plat = enemie.plat
