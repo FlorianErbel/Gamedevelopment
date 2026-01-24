@@ -107,25 +107,25 @@ function enemies:shots_hit(player)
     local kills = 0
 
     -- rückwärts, weil wir löschen
-    for si = #shots, 1, -1 do
-        local shot = shots[si]
+    for i = #shots, 1, -1 do
+        local shot = shots[i]
 
         -- Shot als kleines AABB behandeln
-        local sx = shot.pos_x - 2
-        local sy = shot.pos_y - 2
-        local sw = 4
-        local sh = 4
+        local shot_pos_x = shot.pos_x - 2
+        local shot_pos_y = shot.pos_y - 2
+        local shot_width = 4
+        local shot_height = 4
 
         local hit = false
 
-        for ei = #self.enemies_list, 1, -1 do
-            local enemie = self.enemies_list[ei]
+        for j = #self.enemies_list, 1, -1 do
+            local enemie = self.enemies_list[j]
 
             if enemie.is_alive then
-                if sx < enemie.pos_x + enemie.width
-                    and sx + sw > enemie.pos_x
-                    and sy < enemie.pos_y + enemie.height
-                    and sy + sh > enemie.pos_y then
+                if shot_pos_x < enemie.pos_x + enemie.width
+                    and shot_pos_x + shot_width > enemie.pos_x
+                    and shot_pos_y < enemie.pos_y + enemie.height
+                    and shot_pos_y + shot_height > enemie.pos_y then
                     -- Enemy stirbt
                     enemie.is_alive = false
                     del(self.enemies_list, enemie)
