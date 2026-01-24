@@ -3,18 +3,18 @@ player = {}
 function player:init()
     self.pos_x = 64
     self.pos_y = 100
-    self.width = 6
-    self.height = 8
+    self.WIDTH = 6
+    self.HEIGHT = 8
 
     self.velocity_x = 0
     self.velocity_y = 0
 
-    self.gravity = 0.22
-    self.move_acceleration = 0.35
-    self.max_velocity_x = 1.8
+    self.GRAVITY = 0.22
+    self.MOVE_ACCELERATION = 0.35
+    self.MAX_VELOCITY_X = 1.8
 
-    self.jump_vertical = -4.4 -- -3.6
-    self.jump_vertical_small = -2.4
+    self.JUMP_VERTICAL = -4.4 -- -3.6
+    self.JUMP_VERTICAL_SMALL = -2.4
 
     self.jump_boost_factor = 1.0
     self.is_jump_boost_used = false
@@ -26,13 +26,13 @@ function player:init()
     self.best_landed_pos_y = 120 -- kleinste y (höchste plattform)
 
     self.shots = {}
-    self.shot_speed = 5
+    self.SHOT_SPEED = 5
 end
 
 function player:jump()
-    local base_jump = self.jump_vertical
+    local base_jump = self.JUMP_VERTICAL
     if btn(3) then -- down
-        base_jump = self.jump_vertical_small
+        base_jump = self.JUMP_VERTICAL_SMALL
     end
     if self.is_jump_boost_used == true then
         local final_jump_height = base_jump * self.jump_boost_factor
@@ -48,10 +48,10 @@ end
 
 function player:shoot(direction_x, direction_y)
     add(self.shots, Shot.new(
-        self.pos_x + self.width / 2,
-        self.pos_y + self.height / 2,
-        direction_x * self.shot_speed,
-        direction_y * self.shot_speed
+        self.pos_x + self.WIDTH / 2,
+        self.pos_y + self.HEIGHT / 2,
+        direction_x * self.SHOT_SPEED,
+        direction_y * self.SHOT_SPEED
     ))
 end
 
@@ -78,11 +78,11 @@ function player:update(plats_ref, cam_pos_y)
 
     -- input
     local ax = 0
-    if btn(0) then ax = ax - self.move_acceleration end -- left
-    if btn(1) then ax = ax + self.move_acceleration end -- right
+    if btn(0) then ax = ax - self.MOVE_ACCELERATION end -- left
+    if btn(1) then ax = ax + self.MOVE_ACCELERATION end -- right
 
     self.velocity_x = self.velocity_x + ax
-    self.velocity_x = clamp(self.velocity_x, -self.max_velocity_x, self.max_velocity_x)
+    self.velocity_x = clamp(self.velocity_x, -self.MAX_VELOCITY_X, self.MAX_VELOCITY_X)
 
     -- shoot only while holding UP
     if btn(2) then
@@ -97,15 +97,15 @@ function player:update(plats_ref, cam_pos_y)
     self.velocity_x = self.velocity_x * 0.90
 
     -- Gravitation
-    self.velocity_y = self.velocity_y + self.gravity
+    self.velocity_y = self.velocity_y + self.GRAVITY
 
     -- Bewegung
     self.pos_x = self.pos_x + self.velocity_x
     self.pos_y = self.pos_y + self.velocity_y
 
     -- wrap-around
-    if self.pos_x < -self.width then self.pos_x = 128 end
-    if self.pos_x > 128 then self.pos_x = -self.width end
+    if self.pos_x < -self.WIDTH then self.pos_x = 128 end
+    if self.pos_x > 128 then self.pos_x = -self.WIDTH end
 
     -- one-way landings (einmal prüfen, mit gültigem previous_y)
     self.on_plat = false
@@ -125,7 +125,7 @@ end
 function player:draw()
     self:draw_shots()
     -- einfache figur: body + augen
-    rectfill(self.pos_x, self.pos_y, self.pos_x + self.width - 1, self.pos_y + self.height - 1, 7)
+    rectfill(self.pos_x, self.pos_y, self.pos_x + self.WIDTH - 1, self.pos_y + self.HEIGHT - 1, 7)
     pset(self.pos_x + 1, self.pos_y + 2, 0)
     pset(self.pos_x + 4, self.pos_y + 2, 0)
 end
