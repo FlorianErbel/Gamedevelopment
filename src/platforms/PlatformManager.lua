@@ -262,13 +262,13 @@ end
 function PlatformManager:check_landing(player, previous_pos_y)
     if player.velocity_y <= 0 then return false end
 
-    local foot_previous = previous_pos_y + player.height
-    local foot_now = player.pos_y + player.height
+    local foot_previous = previous_pos_y + player.HEIGHT
+    local foot_now = player.pos_y + player.HEIGHT
 
     for plat in all(self.platform_list) do
-        if player.pos_x + player.width > plat.pos_x and player.pos_x < plat.pos_x + plat.width then
+        if player.pos_x + player.WIDTH > plat.pos_x and player.pos_x < plat.pos_x + plat.width then
             if foot_previous <= plat.pos_y and foot_now >= plat.pos_y then
-                player.pos_y = plat.pos_y - player.height
+                player.pos_y = plat.pos_y - player.HEIGHT
                 player.velocity_y = 0
                 plat:on_land(player)
                 return plat
