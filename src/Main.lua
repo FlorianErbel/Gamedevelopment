@@ -41,7 +41,7 @@ end
 
 function game_over()
     game.state = game.STATE_OVER
-    player.alive = false
+    player.is_alive = false
     local highscore = load_highscore(game.difficulty)
     if game.best_height > highscore then
         save_highscore(game.difficulty, game.best_height)
