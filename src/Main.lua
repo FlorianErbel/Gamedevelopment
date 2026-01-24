@@ -4,9 +4,6 @@ game = {
     STATE_MENU = "menu",
     STATE_PLAY = "play",
     STATE_OVER = "over",
-    DIFFICULTY_EASY = 1,
-    DIFFICULTY_MEDIUM = 2,
-    DIFFICULTY_HARD = 3,
 
     state = STATE_MENU,
     difficulty = 1,
@@ -53,13 +50,13 @@ function _update60()
         local k = stat(31)
 
         if k == "1" then
-            game.difficulty = game.DIFFICULTY_EASY
+            game.difficulty = Difficulty.EASY
             reset_game()
         elseif k == "2" then
-            game.difficulty = game.DIFFICULTY_MEDIUM
+            game.difficulty = Difficulty.MEDIUM
             reset_game()
         elseif k == "3" then
-            game.difficulty = game.DIFFICULTY_HARD
+            game.difficulty = Difficulty.HARD
             reset_game()
         end
 
@@ -125,9 +122,9 @@ function _draw()
     camera()
 
     if game.state == game.STATE_MENU then
-        local highscore_difficulty_easy = load_highscore(game.DIFFICULTY_EASY)
-        local highscore_difficulty_medium = load_highscore(game.DIFFICULTY_MEDIUM)
-        local highscore_difficulty_hard = load_highscore(game.DIFFICULTY_HARD)
+        local highscore_difficulty_easy = load_highscore(Difficulty.EASY)
+        local highscore_difficulty_medium = load_highscore(Difficulty.MEDIUM)
+        local highscore_difficulty_hard = load_highscore(Difficulty.HARD)
 
         print("doodletump", 44, 18, 7)
         print("select mode:", 40, 34, 6)
