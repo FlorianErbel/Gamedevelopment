@@ -145,7 +145,7 @@ function _draw()
         local hs_hard = load_highscore(Difficulty.HARD)
 
         -- Menü anzeigen
-        print("highjump", 44, 18, 7)
+        print("highjump", 50, 18, 7)
         print("select mode:", 40, 34, 6)
         print("1 easy   hs: " .. hs_easy, 34, 50, 7)
         print("2 medium hs: " .. hs_medium, 34, 60, 7)
