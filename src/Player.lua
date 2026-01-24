@@ -77,11 +77,11 @@ function player:update(plats_ref, cam_pos_y)
     local previous_y = self.pos_y
 
     -- input
-    local ax = 0
-    if btn(0) then ax = ax - self.MOVE_ACCELERATION end -- left
-    if btn(1) then ax = ax + self.MOVE_ACCELERATION end -- right
+    local anchor_x = 0
+    if btn(0) then anchor_x = anchor_x - self.MOVE_ACCELERATION end -- left
+    if btn(1) then anchor_x = anchor_x + self.MOVE_ACCELERATION end -- right
 
-    self.velocity_x = self.velocity_x + ax
+    self.velocity_x = self.velocity_x + anchor_x
     self.velocity_x = clamp(self.velocity_x, -self.MAX_VELOCITY_X, self.MAX_VELOCITY_X)
 
     -- shoot only while holding UP
