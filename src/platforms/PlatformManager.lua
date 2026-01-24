@@ -21,9 +21,6 @@
 ---@field MAX_PLATFORMS_EASY number  -- Max Plattformen pro Level (leicht)
 ---@field MAX_PLATFORMS_MEDIUM number -- Max Plattformen pro Level (mittel)
 ---@field MAX_PLATFORMS_HARD number -- Max Plattformen pro Level (schwer)
----@field DIFFICULTY_EASY number     -- Index für leicht
----@field DIFFICULTY_MEDIUM number   -- Index für mittel
----@field DIFFICULTY_HARD number     -- Index für schwer
 local PlatformManager = {}
 
 PlatformManager.__index = PlatformManager
@@ -61,9 +58,6 @@ function PlatformManager:init(difficulty)
     self.MAX_PLATFORMS_EASY = 3
     self.MAX_PLATFORMS_MEDIUM = 2
     self.MAX_PLATFORMS_HARD = 1
-    self.DIFFICULTY_EASY = 1
-    self.DIFFICULTY_MEDIUM = 2
-    self.DIFFICULTY_HARD = 3
 
     -- Startplattform
     self:add_platform(PlatformType.GROUND, 0, self.DEFAULT_GROUND_Y, self.SCREEN_WIDTH, true)
@@ -152,8 +146,8 @@ end
 ---@return number
 function PlatformManager:max_per_level(is_easy_mode)
     if is_easy_mode then return self.MAX_PLATFORMS_EASY end
-    if self.difficulty == self.DIFFICULTY_EASY then return self.MAX_PLATFORMS_EASY end
-    if self.difficulty == self.DIFFICULTY_MEDIUM then return self.MAX_PLATFORMS_MEDIUM end
+    if self.difficulty == Difficulty.EASY then return self.MAX_PLATFORMS_EASY end
+    if self.difficulty == Difficulty.MEDIUM then return self.MAX_PLATFORMS_MEDIUM end
     return self.MAX_PLATFORMS_HARD
 end
 
