@@ -493,7 +493,12 @@ function enemies:draw()
             pset(x - 1, y + 2, 0)
             pset(x - 2, y + 2 + flap, 0)
             pset(x - 3, y + 3 + flap, 0)
-            pset(x - 4, y + 2 + flap, 0)
+
+            if wing_spread > 2 then
+                pset(x - 4, y + 2 + flap, 0)
+            else
+                pset(x - 4, y + 4 + flap, 0)
+            end
 
             if wing_spread >= 3 then
                 pset(x - 5, y + 3 + flap, 0)
@@ -507,7 +512,12 @@ function enemies:draw()
             pset(x + w,     y + 2, 0)
             pset(x + w + 1, y + 2 + flap, 0)
             pset(x + w + 2, y + 3 + flap, 0)
-            pset(x + w + 3, y + 2 + flap, 0)
+
+            if wing_spread > 2 then
+                pset(x + w + 3, y + 2 + flap, 0)
+            else
+                pset(x + w + 3, y + 4 + flap, 0)
+            end
 
             if wing_spread >= 3 then
                 pset(x + w + 4, y + 3 + flap, 0)
