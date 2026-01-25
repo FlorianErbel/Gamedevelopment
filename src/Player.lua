@@ -46,6 +46,8 @@ function player:init()
     self.is_jump_boost_used = false
 
     self.on_plat = false
+    self.land_timer = 0
+    self.land_timer_max = 120
     self.is_alive = true
 
     self.last_landed_pos_y = 120
@@ -108,9 +110,17 @@ end
 ---@param plats_ref PlatformManager Referenz auf den PlatformManager
 ---@param cam_pos_y number aktuelle Kameraposition Y
 function player:update(plats_ref, cam_pos_y)
-    if not self.is_alive then return end
+    if not self.is_alive then
+        self:draw()
+        return
+    end
 
     local previous_y = self.pos_y
+
+    if self.land_timer and self.land_timer > 0 then
+        self.land_timer = self.land_timer - 1
+    end
+
 
     -- Input horizontal
     local anchor_x = 0
@@ -148,6 +158,8 @@ function player:update(plats_ref, cam_pos_y)
         if landed_plat.pos_y < self.best_landed_pos_y then
             self.best_landed_pos_y = landed_plat.pos_y
         end
+
+        self.land_timer = land_timer_max
         self:jump()
     end
 
@@ -157,7 +169,35 @@ end
 ---Zeichnet den Spieler und seine Projektile
 function player:draw()
     self:draw_shots()
-    rectfill(self.pos_x, self.pos_y, self.pos_x + self.WIDTH - 1, self.pos_y + self.HEIGHT - 1, 7)
-    pset(self.pos_x + 1, self.pos_y + 2, 0)
-    pset(self.pos_x + 4, self.pos_y + 2, 0)
+
+    local x = self.pos_x
+    local y = self.pos_y
+    local w = self.WIDTH
+    local h = self.HEIGHT
+
+    local contacted = (self.land_timer and self.land_timer > 0)
+
+    -- body
+    rectfill(x, y, x + w - 1, y + h - 1, 7)
+
+    -- "Fuß/Standfläche" kurz nach Kontakt (Bild 1)
+    if contacted then
+        rectfill(x - 2, y + h - 1, x + w + 1, y + h - 1, 7)
+    end
+
+    -- eyes: für WIDTH=6 passen 1..4 gut
+    if self.is_alive then
+    pset(x + 1, y + 2, 0)
+    pset(x + 4, y + 2, 0)
+
+    else
+    pset(x + 1, y + 2, 0)
+    pset(x + 0, y + 2, 0)
+
+    pset(x + 4, y + 2, 0)
+    pset(x + 5, y + 2, 0)
+    end
+
+
 end
+
