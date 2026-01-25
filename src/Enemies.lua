@@ -412,31 +412,113 @@ end
 function enemies:draw()
     for enemie in all(self.enemies_list) do
         if enemie.kind == "hedgehog" then
-            rectfill(enemie.pos_x, enemie.pos_y,
-                     enemie.pos_x + enemie.width - 1,
-                     enemie.pos_y + enemie.height - 1, 4)
+            local x = enemie.pos_x
+            local y = enemie.pos_y
+            local w = enemie.width
+            local h = enemie.height
 
-            pset(enemie.pos_x + 1, enemie.pos_y - 1, 0)
-            pset(enemie.pos_x + 3, enemie.pos_y - 2, 0)
-            pset(enemie.pos_x + 5, enemie.pos_y - 1, 0)
+            local dir = enemie.direction or -1 -- -1 links, +1 rechts
+            local facing_right = dir > 0
+
+            -- body
+            rectfill(x, y, x + w - 1, y + h - 1, 4)
+
+            -- mehr stacheln oben (kleines "kamm"-muster)
+            -- (du kannst die farbe 0 oder 5 nehmen – 0 ist schwarz, 5 ist dunkelgrau)
+            for sx = 0, w - 1, 2 do
+                pset(x + sx, y - 1, 0)
+                if (sx % 4) == 0 then
+                    pset(x + sx, y - 2, 0)
+                end
+            end
+
+            -- schnauze + auge je nach blickrichtung
+            if facing_right then
+                -- schnauze rechts
+                pset(x + w, y + 3, 0)
+
+                -- auge rechts-vorne
+                pset(x + w - 3, y + 2, 7) -- weiß
+                pset(x + w - 3, y + 2, 0) -- pupille (überschreibt weiß -> wenn du pupille + weiß willst: 2 pixel)
+
+                -- bessere Augen-Variante (2px), statt oben:
+                -- pset(x + w - 3, y + 2, 7)
+                -- pset(x + w - 2, y + 2, 0)
+
+            else
+                -- schnauze links
+                pset(x - 1, y + 3, 0)
+
+                -- auge links-vorne
+                pset(x + 2, y + 2, 7)
+                pset(x + 2, y + 2, 0)
+
+                -- bessere Augen-Variante (2px):
+                -- pset(x + 2, y + 2, 7)
+                -- pset(x + 1, y + 2, 0)
+            end
 
         elseif enemie.kind == "bat" then
-            -- simple bat look: body + wings (minimalistisch)
-            rectfill(enemie.pos_x, enemie.pos_y,
-                     enemie.pos_x + enemie.width - 1,
-                     enemie.pos_y + enemie.height - 1, 2)
+            local x = enemie.pos_x
+            local y = enemie.pos_y
+            local w = enemie.width
+            local h = enemie.height
+
+            -- ----------------
+            -- body
+            -- ----------------
+            rectfill(x, y, x + w - 1, y + h - 1, 2)
 
             -- eyes
-            pset(enemie.pos_x + 2, enemie.pos_y + 2, 0)
-            pset(enemie.pos_x + 5, enemie.pos_y + 2, 0)
+            pset(x + 2, y + 2, 0)
+            pset(x + 5, y + 2, 0)
 
-            -- wings (small pixels)
-            pset(enemie.pos_x - 1, enemie.pos_y + 3, 2)
-            pset(enemie.pos_x + enemie.width, enemie.pos_y + 3, 2)
+            -- ----------------
+            -- wing animation
+            -- ----------------
+            local flap = sin(enemie.wave_t or 0) * 2
 
-            -- telegraph in pause: small marker above
+            -- state modifiers
+            local wing_spread = 4
             if enemie.state == "pause" then
-                pset(enemie.pos_x + 3, enemie.pos_y - 3, 8)
+                wing_spread = 2
+                flap = 0
+            elseif enemie.state == "charge" then
+                wing_spread = 1
+                flap = -1
+            end
+            -- ----------------
+            -- left wing
+            -- ----------------
+            pset(x - 1, y + 2, 0)
+            pset(x - 2, y + 2 + flap, 0)
+            pset(x - 3, y + 3 + flap, 0)
+            pset(x - 4, y + 2 + flap, 0)
+
+            if wing_spread >= 3 then
+                pset(x - 5, y + 3 + flap, 0)
+            end
+            if wing_spread >= 4 then
+                pset(x - 6, y + 4 + flap, 0)
+            end
+            -- ----------------
+            -- right wing (mirrors left)
+            -- ----------------
+            pset(x + w,     y + 2, 0)
+            pset(x + w + 1, y + 2 + flap, 0)
+            pset(x + w + 2, y + 3 + flap, 0)
+            pset(x + w + 3, y + 2 + flap, 0)
+
+            if wing_spread >= 3 then
+                pset(x + w + 4, y + 3 + flap, 0)
+            end
+            if wing_spread >= 4 then
+                pset(x + w + 5, y + 4 + flap, 0)
+            end
+
+            -- telegraph marker in pause
+            if enemie.state == "pause" then
+                pset(x + 3, y - 3, 8)
             end
         end
     end
