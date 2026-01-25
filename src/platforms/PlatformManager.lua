@@ -88,6 +88,7 @@ end
 ---@param pos_y number Y-Koordinate
 ---@param width number Plattformbreite
 ---@param is_ground boolean? optionaler Boden-Marker
+---@return table plat
 function PlatformManager:add_platform(kind, pos_x, pos_y, width, is_ground)
     local plat = PlatformFactory.create(kind or PlatformType.DEFAULT, pos_x, pos_y, width)
     plat.is_ground = is_ground or false
@@ -96,6 +97,8 @@ function PlatformManager:add_platform(kind, pos_x, pos_y, width, is_ground)
     if pos_y < self.topmost_platform_y then
         self.topmost_platform_y = pos_y
     end
+
+    return plat
 end
 
 ---Berechnet minimalen vertikalen Abstand zwischen Plattformen abhängig von Höhe
@@ -177,7 +180,18 @@ end
 ---@param is_easy_mode boolean
 function PlatformManager:spawn_platform(at_pos_y, is_easy_mode)
     local height_from_ground = self:get_height_from_ground(at_pos_y)
+
+    -- (1) Enemy-Director plant optional einen Spawn + Plattform-Anforderungen
+    local plan = enemies:plan_next_spawn(self.difficulty, height_from_ground)
+
+    -- Basisbreite
     local width = is_easy_mode and 34 or clamp(28 - flr(height_from_ground / 90) * 4, 12, 28)
+
+    -- (2) Plattform-Anforderung anwenden (z.B. Igel -> min width)
+    if plan and plan.platform_req and plan.platform_req.min_width then
+        width = max(width, plan.platform_req.min_width)
+        width = clamp(width, 12, 60) -- 60 als "harte" Obergrenze
+    end
 
     local anchor_x = self.last_platform_anchor_x or 64
     local horizontal_reach = self:get_horizontal_reach(at_pos_y, is_easy_mode)
@@ -211,7 +225,13 @@ function PlatformManager:spawn_platform(at_pos_y, is_easy_mode)
         end
     end
 
-    self:add_platform(kind, pos_x, at_pos_y, width, false)
+    -- (3) Plattform erzeugen
+    local plat = self:add_platform(kind, pos_x, at_pos_y, width, false)
+
+    -- (4) Wenn ein Plan existiert: Enemy auf dieser Plattform spawnen
+    if plan then
+        enemies:spawn_from_plan(plan, plat, self.difficulty, height_from_ground)
+    end
 end
 
 ---Aktualisiert alle Plattformen: generiert neue und entfernt alte

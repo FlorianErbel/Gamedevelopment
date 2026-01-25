@@ -21,6 +21,12 @@ local game = {
 function game_setup()
     cam:init()                       -- Kamera initialisieren
     enemies:init()                   -- Gegnerliste initialisieren
+    
+    enemies.debug.enabled = false        -- Debug-Modus an (true)/aus (false)
+    enemies.debug.spawn_first = false    -- erste Plattform bekommt garantiert nen Enemy bei true
+    enemies.debug.force_kind = nil  -- nil, "hedgehog", "bat"
+    enemies.debug.force_plan = false  -- wenn true: plan_next_spawn liefert immer einen Plan
+    
     plats = PlatformManager.new(game.difficulty) -- Plattform-Manager initialisieren
     player:init()                    -- Spieler initialisieren
 
@@ -74,7 +80,7 @@ function _update60()
 
     -- GameOver-Logik
     if game.state == GameState.OVER then
-        if btnp(4) or btnp(5) then
+        if btnp(5)  then
             game.state = GameState.MENU
             return
         end
@@ -83,7 +89,7 @@ function _update60()
 
     -- Spieler aktualisieren (Bewegung, Sprünge, Schüsse)
     player:update(plats, cam.pos_y)
-    enemies:update()
+    enemies:update(player)
     enemies:shots_hit(player)
 
     -- Spieler trifft Gegner => Game Over
@@ -170,6 +176,6 @@ function _draw()
         rectfill(18, 48, 110, 80, 0)
         rect(18, 48, 110, 80, 7)
         print("game over", 44, 56, 8)
-        print("z/x -> menu", 36, 66, 7)
+        print("x -> menu", 36, 66, 7)
     end
 end
