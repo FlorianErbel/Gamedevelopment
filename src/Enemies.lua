@@ -1,61 +1,62 @@
 -- Enemies.lua
--- Enemy-Verwaltung + Spawn-Planning + Kill wenn unter Screen
--- Enemies:
---  - hedgehog: läuft auf Plattform hin und her, darf nicht berührt werden, kann abgeschossen werden
---  - bat: fliegt zwischen 2 Punkten, wenn Spieler nahe: 1s Pause, dann Charge auf gespeicherte Spielerposition
+-- Zentrales Enemy-Subsystem:
+--  - Verwaltung aktiver Gegner
+--  - Director-basierte Spawn-Planung (höhe- & difficulty-abhängig)
+--  - Update-, Draw- und Interaktionslogik
+--
+-- Enemy-Typen:
+--  - Hedgehog: läuft auf Plattformen, tödlich bei Berührung, abschießbar
+--  - Bat: patrouilliert, pausiert bei Nähe, charged auf gespeicherte Spielerposition
 
 enemies = {}
 
 function enemies:init()
     self.enemies_list = {}
 
-    -- Director-Spawn-Logik (höhenbasiert / steuerbar)
+    -- Director: steuert Spawn-Abstände und Skalierung
     self.director = {
-    next_spawn_height = 60,
+        next_spawn_height = 60,
 
-    -- Spawn-Frequenz / Abstand:
-    amplitude = 40,        -- Range-Breite: max_gap - min_gap (für später leicht änderbar)
-    step_height = 1500,    -- alle X Höhe…
-    step_drop = 10,        -- …sinkt gap um Y
+        amplitude = 40,        -- Differenz zwischen min_gap und max_gap
+        step_height = 1500,    -- Höhenintervall für Skalierung
+        step_drop = 10,        -- Reduktion des max_gap pro Intervall
 
-    -- Basis-Max-Gaps je Difficulty (bei Höhe 0..1499)
-    -- WICHTIG: wenn du Medium am Anfang 140-180 willst, muss base_max=180 sein.
-    base_max_by_diff = {
-        [Difficulty.EASY] = 180,
-        [Difficulty.MEDIUM] = 150,
-        [Difficulty.HARD] = 130
-    },
+        -- Basiswerte pro Difficulty (bei geringer Höhe)
+        base_max_by_diff = {
+            [Difficulty.EASY] = 180,
+            [Difficulty.MEDIUM] = 150,
+            [Difficulty.HARD] = 130
+        },
 
-    -- Harte Untergrenzen für min_gap (damit es nicht zu extrem wird)
-    min_floor_by_diff = {
-        [Difficulty.EASY] = 60,
-        [Difficulty.MEDIUM] = 40,
-        [Difficulty.HARD] = 15
+        -- Untergrenzen für min_gap
+        min_floor_by_diff = {
+            [Difficulty.EASY] = 60,
+            [Difficulty.MEDIUM] = 40,
+            [Difficulty.HARD] = 15
+        }
     }
-}
 
-    -- Test/Debug-Schalter
+    -- Debug- und Testoptionen
     self.debug = {
         enabled = false,
 
-        -- Spawns erzwingen
-        spawn_first = false,      -- erste passende Plattform bekommt garantiert einen Enemy
+        spawn_first = false,      -- erster Spawn garantiert
         did_first = false,
-        force_plan = false,       -- wenn true: immer planen (unabhängig von next_spawn_height)
-        force_kind = nil,         -- nil, "hedgehog", "bat"
-        ignore_max_alive = false, -- wenn true: max_alive blockiert nicht (für Tests)
+        force_plan = false,       -- ignoriert Höhenlogik
+        force_kind = nil,         -- erzwingt Enemy-Typ
+        ignore_max_alive = false, -- deaktiviert max_alive Limit
     }
 end
 
--- -------------------------
--- Utils
--- -------------------------
+-- -------------------------------------------------
+-- Utility-Funktionen
+-- -------------------------------------------------
 
 local function aabb(ax, ay, aw, ah, bx, by, bw, bh)
     return ax < bx + bw and ax + aw > bx and ay < by + bh and ay + ah > by
 end
 
--- World->Screen ist (world_y - cam.pos_y). Wenn Screen_y deutlich > 128 ist => unterhalb.
+-- Prüft, ob ein Enemy deutlich unterhalb des sichtbaren Screens liegt
 local function is_below_screen(enemie, cam_y, screen_h)
     local sy = enemie.pos_y - cam_y
     return sy > screen_h + 16
@@ -69,25 +70,22 @@ local function enemy_center(enemie)
     return enemie.pos_x + enemie.width/2, enemie.pos_y + enemie.height/2
 end
 
+-- Setzt nach einem Charge ein neues Patrol-Fenster um die aktuelle Position
 local function reset_bat_patrol_around_current(enemie)
-    -- neue Patrol-Startposition = aktuelle Position (Charge-Ende)
     enemie.base_y = enemie.pos_y
 
-    -- Patrol-Fenster neu um current x
-    local patrol_half = 18 + rnd(10) -- oder festen Wert nehmen
+    local patrol_half = 18 + rnd(10)
     enemie.x1 = clamp(enemie.pos_x - patrol_half, 0, 128 - enemie.width)
     enemie.x2 = clamp(enemie.pos_x + patrol_half, 0, 128 - enemie.width)
+
     if enemie.x2 < enemie.x1 + 10 then
         enemie.x2 = min(128 - enemie.width, enemie.x1 + 10)
     end
-
-    -- flutter wave sauber weiterlaufen lassen
-    -- enemie.wave_t = rnd(1) -- optional: neu randomisieren
 end
 
--- -------------------------
--- Limits / Director
--- -------------------------
+-- -------------------------------------------------
+-- Director / Limits
+-- -------------------------------------------------
 
 function enemies:max_alive(difficulty)
     if difficulty == 1 then return 1 end
@@ -95,6 +93,7 @@ function enemies:max_alive(difficulty)
     if difficulty == 3 then return 4 end
 end
 
+-- Berechnet min/max Spawn-Abstände basierend auf Höhe & Difficulty
 function enemies:director_gap(height_from_ground, difficulty)
     local amp = self.director.amplitude or 40
     local step_h = self.director.step_height or 1500
@@ -107,13 +106,11 @@ function enemies:director_gap(height_from_ground, difficulty)
     local max_gap = base_max - steps * step_drop
     local min_gap = max_gap - amp
 
-    -- clamp: nicht unter floor
     if min_gap < floor_min then
         min_gap = floor_min
         max_gap = floor_min + amp
     end
 
-    -- safety: mindestens 1 Abstand
     if max_gap <= min_gap then
         max_gap = min_gap + 1
     end
@@ -121,8 +118,7 @@ function enemies:director_gap(height_from_ground, difficulty)
     return min_gap, max_gap
 end
 
--- choose next kind (simple)
--- Gegner erst ab bestimmter Höhe
+-- Wählt Enemy-Typ abhängig von Höhe (Unlock + Gewichtung)
 function enemies:choose_kind(height_from_ground)
     local unlock_hedgehog_height = 1000
     local unlock_bat_height = 4000
@@ -163,35 +159,33 @@ function enemies:choose_kind(height_from_ground)
     return nil
 end
 
--- (A) PLAN: entscheidet ob/was spawnen soll + welche Plattform-Anforderungen gelten
--- Rückgabe: nil oder plan-Table {kind=..., platform_req={min_width=...}}
+-- -------------------------------------------------
+-- Spawn-Planung
+-- -------------------------------------------------
+-- Entscheidet, ob ein Enemy geplant wird und welche Plattform-Anforderungen gelten
+-- Rückgabe: nil oder { kind=..., platform_req={ min_width=... } }
+
 function enemies:plan_next_spawn(difficulty, height_from_ground)
-    -- (0) Blocker: max alive
     if not (self.debug.enabled and self.debug.ignore_max_alive) then
         if #self.enemies_list >= self:max_alive(difficulty) then
             return nil
         end
     end
 
-    -- (1) Debug: erster Spawn garantiert
     if self.debug.enabled and self.debug.spawn_first and not self.debug.did_first then
         self.debug.did_first = true
         local k = self.debug.force_kind
 
-        if not k then
-            return nil
-        end
+        if not k then return nil end
 
         if k == "hedgehog" then
             return { kind = "hedgehog", platform_req = { min_width = 28 } }
         elseif k == "bat" then
             return { kind = "bat", platform_req = { min_width = 16 } }
         end
-
         return nil
     end
 
-    -- (2) Debug: immer planen
     if self.debug.enabled and self.debug.force_plan then
         local k = self.debug.force_kind or "hedgehog"
         if k == "hedgehog" then
@@ -199,11 +193,9 @@ function enemies:plan_next_spawn(difficulty, height_from_ground)
         elseif k == "bat" then
             return { kind = "bat", platform_req = { min_width = 16 } }
         end
-
         return nil
     end
 
-    -- (3) Normal: höhenbasiert
     if height_from_ground < self.director.next_spawn_height then
         return nil
     end
@@ -211,7 +203,6 @@ function enemies:plan_next_spawn(difficulty, height_from_ground)
     local min_gap, max_gap = self:director_gap(height_from_ground, difficulty)
     local gap = min_gap + rnd(max_gap - min_gap)
     self.director.next_spawn_height = height_from_ground + gap
-
 
     local k = self:choose_kind(height_from_ground)
     if self.debug.enabled and self.debug.force_kind then
@@ -221,15 +212,14 @@ function enemies:plan_next_spawn(difficulty, height_from_ground)
     if k == "hedgehog" then
         return { kind = "hedgehog", platform_req = { min_width = 28 } }
     elseif k == "bat" then
-        -- Bat braucht keine Riesenplattform, aber wir wollen eine "brauchbare" Breite als Spawn-Anker
         return { kind = "bat", platform_req = { min_width = 16 } }
     end
     return nil
 end
 
--- -------------------------
+-- -------------------------------------------------
 -- Spawn
--- -------------------------
+-- -------------------------------------------------
 
 function enemies:spawn_from_plan(plan, plat, difficulty, height_from_ground)
     if not plan or not plat then return end
@@ -256,15 +246,13 @@ function enemies:spawn_from_plan(plan, plat, difficulty, height_from_ground)
         add(self.enemies_list, e)
 
     elseif plan.kind == "bat" then
-        -- Fledermaus: spawn über der Plattform, patrouilliert zwischen zwei Punkten
         local cx = plat.pos_x + plat.width/2
-        local base_y = plat.pos_y - 26  -- höher als Plattform
+        local base_y = plat.pos_y - 26
 
-        local patrol_half = 18 + rnd(10) -- 18..28
+        local patrol_half = 18 + rnd(10)
         local x1 = cx - patrol_half
         local x2 = cx + patrol_half
 
-        -- clamp in screen range (wrap handling optional; wir bleiben erstmal im sichtbaren Bereich)
         x1 = clamp(x1, 0, 128-8)
         x2 = clamp(x2, 0, 128-8)
         if x2 < x1 + 10 then
@@ -273,7 +261,7 @@ function enemies:spawn_from_plan(plan, plat, difficulty, height_from_ground)
 
         local e = {
             kind = "bat",
-            plat = plat,        -- nur als "Anker" für Cleanup (optional)
+            plat = plat,
 
             width = 8,
             height = 6,
@@ -281,24 +269,20 @@ function enemies:spawn_from_plan(plan, plat, difficulty, height_from_ground)
             pos_x = cx,
             pos_y = base_y,
 
-            -- Patrol path
             x1 = x1,
             x2 = x2,
             base_y = base_y,
             dir = (rnd() < 0.5) and -1 or 1,
             speed = (difficulty == 1 and 0.55) or (difficulty == 2 and 0.75) or 0.95,
 
-            -- Kleine vertikale "Welle" fürs Flattern
             wave_t = rnd(1),
 
-            -- Charge State Machine
-            state = "patrol",   -- "patrol" | "pause" | "charge"
+            state = "patrol",
             timer = 0,
             target_x = cx,
             target_y = base_y,
             charge_speed = (difficulty == 1 and 2.2) or (difficulty == 2 and 2.6) or 3.0,
 
-            -- Trigger distances
             trigger_dx = 32,
             trigger_dy = 28,
 
@@ -308,9 +292,9 @@ function enemies:spawn_from_plan(plan, plat, difficulty, height_from_ground)
     end
 end
 
--- -------------------------
+-- -------------------------------------------------
 -- Update / Draw
--- -------------------------
+-- -------------------------------------------------
 
 function enemies:update(player)
     local cam_y = (cam and cam.pos_y) or 0
@@ -323,7 +307,6 @@ function enemies:update(player)
             del(self.enemies_list, enemie)
 
         elseif is_below_screen(enemie, cam_y, screen_h) then
-            -- wichtig: sonst blockt max_alive ewig
             del(self.enemies_list, enemie)
 
         else
@@ -348,7 +331,6 @@ function enemies:update(player)
                 end
 
             elseif enemie.kind == "bat" then
-                -- Cleanup: wenn "Ankerplattform" deutlich unter Screen ist => bat auch weg
                 if enemie.plat and enemie.plat.pos_y > (cam_y + screen_h + 16) then
                     del(self.enemies_list, enemie)
                 else
@@ -356,31 +338,27 @@ function enemies:update(player)
                     local ex, ey = enemy_center(enemie)
 
                     if enemie.state == "patrol" then
-                        -- horizontal patrol
                         enemie.pos_x = enemie.pos_x + enemie.dir * enemie.speed
                         if enemie.pos_x < enemie.x1 then enemie.pos_x = enemie.x1; enemie.dir = 1 end
                         if enemie.pos_x > enemie.x2 then enemie.pos_x = enemie.x2; enemie.dir = -1 end
 
-                        -- simple flutter wave
                         enemie.wave_t = enemie.wave_t + 0.05
                         enemie.pos_y = enemie.base_y + sin(enemie.wave_t) * 2
 
-                        -- trigger near player -> pause then charge to stored position
                         local dx = abs(px - ex)
                         local dy = abs(py - ey)
                         if dx < enemie.trigger_dx and dy < enemie.trigger_dy then
                             enemie.state = "pause"
-                            enemie.timer = 60 -- ~1s
+                            enemie.timer = 60
                             enemie.target_x = px
                             enemie.target_y = py
                         end
 
                     elseif enemie.state == "pause" then
-                        -- stay still (telegraph)
                         enemie.timer = enemie.timer - 1
                         if enemie.timer <= 0 then
                             enemie.state = "charge"
-                            enemie.timer = 30 -- max charge time
+                            enemie.timer = 30
                         end
 
                     elseif enemie.state == "charge" then
@@ -397,7 +375,6 @@ function enemies:update(player)
                             enemie.pos_y = enemie.pos_y + (vy/d) * enemie.charge_speed
                             enemie.timer = enemie.timer - 1
                             if enemie.timer <= 0 then
-                                -- falls verfehlt: neuer Startpunkt
                                 enemie.state = "patrol"
                                 reset_bat_patrol_around_current(enemie)
                             end
@@ -417,14 +394,11 @@ function enemies:draw()
             local w = enemie.width
             local h = enemie.height
 
-            local dir = enemie.direction or -1 -- -1 links, +1 rechts
+            local dir = enemie.direction or -1
             local facing_right = dir > 0
 
-            -- body
             rectfill(x, y, x + w - 1, y + h - 1, 4)
 
-            -- mehr stacheln oben (kleines "kamm"-muster)
-            -- (du kannst die farbe 0 oder 5 nehmen – 0 ist schwarz, 5 ist dunkelgrau)
             for sx = 0, w - 1, 2 do
                 pset(x + sx, y - 1, 0)
                 if (sx % 4) == 0 then
@@ -432,30 +406,14 @@ function enemies:draw()
                 end
             end
 
-            -- schnauze + auge je nach blickrichtung
             if facing_right then
-                -- schnauze rechts
                 pset(x + w, y + 3, 0)
-
-                -- auge rechts-vorne
-                pset(x + w - 3, y + 2, 7) -- weiß
-                pset(x + w - 3, y + 2, 0) -- pupille (überschreibt weiß -> wenn du pupille + weiß willst: 2 pixel)
-
-                -- bessere Augen-Variante (2px), statt oben:
-                -- pset(x + w - 3, y + 2, 7)
-                -- pset(x + w - 2, y + 2, 0)
-
+                pset(x + w - 3, y + 2, 7)
+                pset(x + w - 3, y + 2, 0)
             else
-                -- schnauze links
                 pset(x - 1, y + 3, 0)
-
-                -- auge links-vorne
                 pset(x + 2, y + 2, 7)
                 pset(x + 2, y + 2, 0)
-
-                -- bessere Augen-Variante (2px):
-                -- pset(x + 2, y + 2, 7)
-                -- pset(x + 1, y + 2, 0)
             end
 
         elseif enemie.kind == "bat" then
@@ -464,21 +422,13 @@ function enemies:draw()
             local w = enemie.width
             local h = enemie.height
 
-            -- ----------------
-            -- body
-            -- ----------------
             rectfill(x, y, x + w - 1, y + h - 1, 2)
 
-            -- eyes
             pset(x + 2, y + 2, 0)
             pset(x + 5, y + 2, 0)
 
-            -- ----------------
-            -- wing animation
-            -- ----------------
             local flap = sin(enemie.wave_t or 0) * 2
 
-            -- state modifiers
             local wing_spread = 4
             if enemie.state == "pause" then
                 wing_spread = 2
@@ -487,9 +437,7 @@ function enemies:draw()
                 wing_spread = 1
                 flap = -1
             end
-            -- ----------------
-            -- left wing
-            -- ----------------
+
             pset(x - 1, y + 2, 0)
             pset(x - 2, y + 2 + flap, 0)
             pset(x - 3, y + 3 + flap, 0)
@@ -506,9 +454,7 @@ function enemies:draw()
             if wing_spread >= 4 then
                 pset(x - 6, y + 4 + flap, 0)
             end
-            -- ----------------
-            -- right wing (mirrors left)
-            -- ----------------
+
             pset(x + w,     y + 2, 0)
             pset(x + w + 1, y + 2 + flap, 0)
             pset(x + w + 2, y + 3 + flap, 0)
@@ -526,7 +472,6 @@ function enemies:draw()
                 pset(x + w + 5, y + 4 + flap, 0)
             end
 
-            -- telegraph marker in pause
             if enemie.state == "pause" then
                 pset(x + 3, y - 3, 8)
             end
@@ -534,9 +479,9 @@ function enemies:draw()
     end
 end
 
--- -------------------------
+-- -------------------------------------------------
 -- Interactions
--- -------------------------
+-- -------------------------------------------------
 
 function enemies:player_hit(player)
     for enemie in all(self.enemies_list) do
